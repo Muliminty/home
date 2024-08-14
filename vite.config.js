@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
     // 
     // base: env.VITE_BASE_URL,
     base: '/home/',
+    build: {
+      outDir: 'docs' // 打包文件的输出目录
+    },
     plugins: [
       react(),
       // replaceHtmlPathPlugin(env.VITE_BASE_URL) // 使用自定义插件
