@@ -7,6 +7,7 @@ import replaceHtmlPathPlugin from './plugin/replaceHtmlPathPlugin'
 export default defineConfig(({ mode }) => {
   // 加载环境变量
   const env = envConfig[mode];
+  console.log('env.VITE_BASE_URL:', env.VITE_BASE_URL);
 
   // 确保 env 对象的存在
   if (!env) {
