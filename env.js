@@ -13,6 +13,14 @@
  */
 
 const env = {
+    admin: {
+        VITE_API_BASE_URL: 'https://admin.api.yourservice.com',
+        VITE_PORT: 5000,
+        OTHER_VARIABLE: 'value_for_admin',
+        VITE_NAME: 'admin环境',
+        VITE_APP_ENV: 'admin',
+        VITE_BASE_URL: '/'
+    },
     development: {
         VITE_API_BASE_URL: 'https://dev.api.yourservice.com',
         VITE_PORT: 3000,
