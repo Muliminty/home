@@ -76,7 +76,7 @@ jobs:
         run: npm ci  # 安装项目依赖
 
       - name: Build project
-        run: npm run build  # 执行构建命令，生成静态文件
+        run: npm run build:prod  # 执行构建命令，生成静态文件
 
       - name: Setup Pages
         uses: actions/configure-pages@v4  # 配置 GitHub Pages
