@@ -15,10 +15,12 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    base: env.VITE_BASE_URL,
+    // 
+    // base: env.VITE_BASE_URL,
+    base: '/home/',
     plugins: [
       react(),
-      replaceHtmlPathPlugin(env.VITE_BASE_URL) // 使用自定义插件
+      // replaceHtmlPathPlugin(env.VITE_BASE_URL) // 使用自定义插件
     ],
   }
 })
