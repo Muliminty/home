@@ -1,11 +1,12 @@
 {
-  "name": "vite-project",
+  "name": "home",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "start:admin": "vite --mode admin",
     "serve:admin": "node src/admin-server/server.cjs",
+    
     "start:dev": "vite --mode development",
     "start:prod": "vite --mode production",
     "build:dev": "vite build --mode development",
