@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   // 返回完整的 Vite 配置对象
   return {
     // 配置基础路径，用于解决资源加载问题，基于环境变量配置。
-    base: env.VITE_BASE_URL,
+    // base: env.VITE_BASE_URL,
     plugins: [
       // 添加 React 插件，确保 JSX 语法和其他 React 特性能够正常工作。
       react(),
