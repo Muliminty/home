@@ -6,7 +6,6 @@
   "scripts": {
     "start:admin": "vite --mode admin",
     "serve:admin": "node src/admin-server/server.cjs",
-    
     "start:dev": "vite --mode development",
     "start:prod": "vite --mode production",
     "build:dev": "vite build --mode development",
@@ -17,7 +16,8 @@
   "dependencies": {
     "express": "^4.19.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

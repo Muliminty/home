@@ -1,14 +1,12 @@
-import './App.css';
+import React from 'react';
+import AppRouter from './router';
 
-function App() {
+const App = () => {
   return (
-    <div className="container">
-      <div style={{textAlign:'left'}}>
-        <h1 className="title">Muliminty</h1>
-        <p className="subtext">希望我们都能保持清醒和有意义的生活😁</p>
-      </div>
+    <div className="App">
+      <AppRouter />
     </div>
   );
-}
+};
 
 export default App;
