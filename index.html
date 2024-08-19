@@ -128,7 +128,7 @@
 <body>
   <div id="loading-container">
     <!-- <div class="spinner"></div> -->
-    <div class="loader">
+    <!-- <div class="loader">
       <div class="loader-inner">
         <div class="loader-line-wrap">
           <div class="loader-line"></div>
@@ -146,19 +146,20 @@
           <div class="loader-line"></div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
-  <div id="root" style="display: none;"></div>
+  <!-- <div id="root" style="display: none;"></div> -->
+  <div id="root"></div>
   <script type="module">
     // 模拟页面加载
-    document.addEventListener('DOMContentLoaded', function () {
-      const loadingContainer = document.getElementById('loading-container');
-      const root = document.getElementById('root');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   const loadingContainer = document.getElementById('loading-container');
+    //   const root = document.getElementById('root');
 
-      loadingContainer.style.display = 'none';
-      root.style.display = 'block';
+    //   loadingContainer.style.display = 'none';
+    //   root.style.display = 'block';
 
-    });
+    // });
   </script>
   <script type="module" src="/src/home/main.jsx"></script>
 </body>
