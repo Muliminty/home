@@ -1,19 +1,24 @@
 {
     "version": 2,
     "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "dist"
+        {
+            "src": "package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
         }
-      }
     ],
     "routes": [
-      {
-        "src": "/home/(.*)",
-        "dest": "/$1"
-      }
+        {
+            "src": "/home/(.*)",
+            "dest": "/$1"
+        }
+    ],
+    "rewrites": [
+        {
+            "src": "/home/(.*)",
+            "destination": "/index.html"
+        }
     ]
-  }
-  
+}
