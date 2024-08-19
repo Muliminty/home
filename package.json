@@ -11,7 +11,7 @@
     "build:dev": "vite build --mode development",
     "build:prod": "vite build --mode production",
     "lint": "eslint .",
-    "serve": "vite preview"
+    "serve": "vite preview --port 80"
   },
   "dependencies": {
     "express": "^4.19.2",
