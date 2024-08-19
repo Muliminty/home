@@ -1,6 +1,6 @@
-import './App.css';
+import './style.css';
 
-function App() {
+function Home() {
     return (
         <div className="container">
             <div style={{ textAlign: 'left' }}>
@@ -11,4 +11,4 @@ function App() {
     );
 }
 
-export default App;
+export default Home;
