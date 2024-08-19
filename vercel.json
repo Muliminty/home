@@ -11,12 +11,8 @@
     ],
     "routes": [
         {
-            "src": "/home/(.*)",
+            "src": "/(.*)",
             "dest": "/$1"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/index.html"
         }
     ]
 }
