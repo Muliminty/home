@@ -1,184 +1,31 @@
-import './style.scss'
-const Loading = () => {
+import './style.scss';
 
-    return (
-        <div className='loading'>
-            <div class="container">
+const Cube = ({ className }) => (
+    <div className={`cube ${className}`}>
+        <div className="face top"></div>
+        <div className="face left"></div>
+        <div className="face right"></div>
+    </div>
+);
 
-                <div class="h1Container">
+const CubeContainer = ({ heightClass }) => (
+    <div className={`${heightClass}Container`}>
+        {['w1', 'w2', 'w3'].map(widthClass =>
+            [1, 2, 3].map(depthClass => (
+                <Cube key={`${heightClass}-${widthClass}-${depthClass}`} className={`${heightClass} ${widthClass} l${depthClass}`} />
+            ))
+        )}
+    </div>
+);
 
-                    <div class="cube h1 w1 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w1 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w1 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w2 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w2 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w2 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w3 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w3 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h1 w3 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-                </div>
-
-                <div class="h2Container">
-
-                    <div class="cube h2 w1 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w1 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w1 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w2 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w2 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w2 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w3 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w3 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h2 w3 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-                </div>
-
-                <div class="h3Container">
-
-                    <div class="cube h3 w1 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w1 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w1 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w2 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w2 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w2 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w3 l1">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w3 l2">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-
-                    <div class="cube h3 w3 l3">
-                        <div class="face top"></div>
-                        <div class="face left"></div>
-                        <div class="face right"></div>
-                    </div>
-                </div>
-
-            </div>
+const Loading = () => (
+    <div className='loading'>
+        <div className="container">
+            <CubeContainer heightClass="h1" />
+            <CubeContainer heightClass="h2" />
+            <CubeContainer heightClass="h3" />
         </div>
-    );
-};
+    </div>
+);
 
 export default Loading;

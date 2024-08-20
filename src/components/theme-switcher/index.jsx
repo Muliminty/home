@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './style.module.scss';
+import styles from './style.module.scss';
 
 const ThemeSwitcher = () => {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -14,7 +14,7 @@ const ThemeSwitcher = () => {
     };
 
     return (
-        <div onClick={toggleTheme}>
+        <div className={styles['theme']} onClick={toggleTheme}>
             {theme === 'light' ? '🌑' : '☀️'}
         </div>
     );
