@@ -2,13 +2,13 @@ import { defineConfig } from 'vite'; // 从 Vite 导入 defineConfig 函数，�
 import react from '@vitejs/plugin-react'; // 导入 React 插件，用于支持 React 的 JSX 语法。
 import envConfig from './env'; // 导入环境变量配置。
 import replaceHtmlPathPlugin from './plugin/replaceHtmlPathPlugin'; // 导入自定义插件，用于替换 HTML 文件中的路径。
-import { resolve } from 'path'
+import path from 'path';
 // 使用 defineConfig 来定义 Vite 配置，支持导入 mode 和其他参数。
 export default defineConfig(({ mode }) => {
   // 获取对应模式下的环境变量配置，默认为 'development' 模式。
   const env = envConfig[mode || 'development'];
   console.log('env.VITE_BASE_URL:', env.VITE_BASE_URL);
-
+  console.log('__dirname', __dirname)
   // 判断是否为 admin 模式，用于动态切换配置。
   const isAdmin = mode === 'admin';
 
@@ -48,9 +48,10 @@ export default defineConfig(({ mode }) => {
       // 配置开发服务器启动时自动打开的页面，根据是否为 admin 模式打开不同的页面。
       open: isAdmin ? '/admin.html' : '/index.html',
     },
-    alias: {
-      '@/home': resolve(__dirname, 'src/home'), // 配置路径别名
-      '@': resolve(__dirname, 'src'), // 如果需要更多别名，可以添加
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
+      }
     },
   };
 });

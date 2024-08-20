@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'; // 导入 Link 组件
 import styles from './style.module.scss';
+// import ThemeSwitcher from '@/components/theme-switcher/index'
 
 function Home() {
     return (

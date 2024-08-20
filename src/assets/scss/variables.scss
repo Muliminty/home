@@ -1,0 +1,26 @@
+/* src/styles/_variables.scss */
+:root {
+    --background-color-light: #fff;
+    --text-color-light: #000;
+    --button-background-light: #007bff;
+    --button-text-color-light: #fff;
+
+    --background-color-dark: #121212;
+    --text-color-dark: #e0e0e0;
+    --button-background-dark: #1d72b8;
+    --button-text-color-dark: #fff;
+}
+
+[data-theme='light'] {
+    --background-color: var(--background-color-light);
+    --text-color: var(--text-color-light);
+    --button-background: var(--button-background-light);
+    --button-text-color: var(--button-text-color-light);
+}
+
+[data-theme='dark'] {
+    --background-color: var(--background-color-dark);
+    --text-color: var(--text-color-dark);
+    --button-background: var(--button-background-dark);
+    --button-text-color: var(--button-text-color-dark);
+}

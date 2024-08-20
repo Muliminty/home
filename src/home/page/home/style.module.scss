@@ -12,7 +12,7 @@
 .title {
   font-size: 3rem;
   font-weight: bold;
-  color: #333;
+  // color: #333;
   margin: 0;
   opacity: 0;
   transform: translateY(20px);
@@ -30,10 +30,9 @@
 /* Subtext styling */
 .subtext {
   font-size: 1.2rem;
-  color: #666;
+  // color: #666;
   margin-top: 10px;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s 0.5s forwards;
 }
-

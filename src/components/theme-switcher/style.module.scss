@@ -1,0 +1,16 @@
+@import '@/assets/scss/variables.scss';
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button {
+    background-color: var(--button-background);
+    color: var(--button-text-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
