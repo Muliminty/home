@@ -2,7 +2,8 @@
 import React from 'react';
 import Loading from '../../components/Loading/index';
 const About = () => {
-    return <div>
+
+    return <div onClick={() => { throw new Error('Oops! Something went wrong.') }}>
         About Page
         {/* <Loading /> */}
     </div>;
