@@ -43,7 +43,7 @@ const env = {
         OTHER_VARIABLE: 'value_for_production',
         VITE_NAME: 'prod环境',
         VITE_APP_ENV: 'prod',
-        VITE_BASE_URL: '/home/'
+        VITE_BASE_URL: '/'
     }
 };
 

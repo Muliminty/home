@@ -1,1 +1,0 @@
-import{r as s,j as t}from"./index-main-DDZ7ZrlY.js";const a=()=>{const[o,e]=s.useState(!1),r=()=>{throw new Error("Oops! Something went wrong.")};return t.jsxs("div",{onClick:()=>{e(!o)},children:["About Page",o&&t.jsx(r,{})]})};export{a as default};
