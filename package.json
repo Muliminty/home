@@ -10,7 +10,7 @@
     "start:prod": "vite --mode production",
     "build:dev": "vite build --mode development",
     "build:prod": "vite build --mode production",
-    "vercel-build": "vite build --mode development",
+    "vercel-build": "vite build --mode production",
     "lint": "eslint .",
     "serve": "vite preview --port 80"
   },
