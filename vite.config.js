@@ -53,5 +53,7 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src')
       }
     },
+    assetsInclude: ['**/*.md'], // 将 .md 文件包含为资产
   };
+
 });
