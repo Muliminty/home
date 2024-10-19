@@ -28,15 +28,15 @@ export default defineConfig(({ mode }) => {
       react(),
       // 使用自定义插件 replaceHtmlPathPlugin，以环境变量为参数，替换 HTML 文件中的路径。
       replaceHtmlPathPlugin(env.VITE_BASE_URL),
-      {
-        name: 'copy-database',
-        closeBundle: async () => {
-          // 复制数据库文件夹到 dist
-          const src = path.resolve(__dirname, 'database');
-          const dest = path.resolve(__dirname, 'dist', 'database');
-          await fs.copy(src, dest);
-        }
-      }
+      // {
+      //   name: 'copy-database',
+      //   closeBundle: async () => {
+      //     // 复制数据库文件夹到 dist
+      //     const src = path.resolve(__dirname, 'database');
+      //     const dest = path.resolve(__dirname, 'dist', 'database');
+      //     await fs.copy(src, dest);
+      //   }
+      // }
     ],
     build: {
       // 配置 Rollup 的构建选项。
