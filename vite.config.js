@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'; // 导入 React 插件，用于支持 
 import envConfig from './env'; // 导入环境变量配置。
 import replaceHtmlPathPlugin from './plugin/replaceHtmlPathPlugin'; // 导入自定义插件，用于替换 HTML 文件中的路径。
 import path from 'path';
+import fs from 'fs-extra';
+
 // 使用 defineConfig 来定义 Vite 配置，支持导入 mode 和其他参数。
 export default defineConfig(({ mode }) => {
   // 获取对应模式下的环境变量配置，默认为 'development' 模式。
@@ -25,7 +27,16 @@ export default defineConfig(({ mode }) => {
       // 添加 React 插件，确保 JSX 语法和其他 React 特性能够正常工作。
       react(),
       // 使用自定义插件 replaceHtmlPathPlugin，以环境变量为参数，替换 HTML 文件中的路径。
-      replaceHtmlPathPlugin(env.VITE_BASE_URL)
+      replaceHtmlPathPlugin(env.VITE_BASE_URL),
+      {
+        name: 'copy-database',
+        closeBundle: async () => {
+          // 复制数据库文件夹到 dist
+          const src = path.resolve(__dirname, 'database');
+          const dest = path.resolve(__dirname, 'dist', 'database');
+          await fs.copy(src, dest);
+        }
+      }
     ],
     build: {
       // 配置 Rollup 的构建选项。

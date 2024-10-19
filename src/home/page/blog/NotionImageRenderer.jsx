@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NotionImageRenderer = ({ alt, src }) => {
+const NotionImageRenderer = ({ alt = 'Image', src }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -17,7 +17,7 @@ const NotionImageRenderer = ({ alt, src }) => {
             maxWidth: '100%',
             borderRadius: '8px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer', // 添加手型光标以表示图片可点击
+            cursor: 'pointer',
           }}
         />
         {alt && <p style={{ fontStyle: 'italic', color: '#6c757d' }}>{alt}</p>}
@@ -48,13 +48,13 @@ const NotionImageRenderer = ({ alt, src }) => {
               borderRadius: '8px',
               overflow: 'hidden',
             }}
-            onClick={e => e.stopPropagation()} // 阻止点击事件冒泡到模态框背景
+            onClick={e => e.stopPropagation()}
           >
             <img
               src={src}
               alt={alt}
               style={{
-                width: '130%',
+                width: '100%', // 改为100%以避免溢出
                 height: 'auto',
               }}
             />

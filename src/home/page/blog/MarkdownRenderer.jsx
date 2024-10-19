@@ -4,8 +4,10 @@ import remarkGfm from 'remark-gfm';
 import NotionImageRenderer from './NotionImageRenderer'
 
 
-const MarkdownRenderer = ({ path }) => {
+const MarkdownRenderer = ({ path = '/database/blog/测试目录2/22.md' }) => {
   const [content, setContent] = useState('');
+  const database = import.meta.glob('/database/**/*');
+  console.log('database: ', database);
 
   useEffect(() => {
     fetch(path)  // 从 public 目录加载文件
@@ -22,7 +24,6 @@ const MarkdownRenderer = ({ path }) => {
   return <ReactMarkdown
     children={content}
     remarkPlugins={[remarkGfm]}
-
     components={{
       img: (props) => <NotionImageRenderer {...props} />,
     }} />;

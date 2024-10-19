@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  overflow: hidden;
+}
+
+.nav {
+  flex: 1;
+  /* 左侧导航占据1/4宽度 */
+  padding: 16px;
+  border-right: 1px solid #ddd;
+
+  overflow-y: scroll;
+  height: 100vh;
+  /* 添加右边框以分隔 */
+}
+
+.navTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+}
+
+.navItem {
+  margin: 10px 0;
+  cursor: pointer;
+
+  &:hover {
+    // text-decoration: underline;
+    /* 添加悬停效果 */
+  }
+}
+
+.content {
+  flex: 3;
+  /* 右侧内容占据3/4宽度 */
+  padding: 16px;
+  overflow-y: scroll;
+  height: 100vh;
+}
