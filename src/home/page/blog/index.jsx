@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-
 import MarkdownRenderer from './MarkdownRenderer';
 import styles from './style.module.scss';
 import { buildDirectoryTree } from '@/utils'; // 导入工具函数
+
 const Blog = () => {
-    const [ContentPath, setContentPath] = useState('/database/blog//关于本项目.md');
+    const [contentPath, setContentPath] = useState('/database/blog/关于本项目.md');
     return (
         <div className={styles.container}>
             <Nav onClick={(path) => {
                 console.log('path: ', path);
-
-                setContentPath(path)
+                setContentPath(path);
             }} />
-            < Content path={ContentPath} />
+            <Content path={contentPath} />
         </div>
     );
 };
@@ -22,9 +21,9 @@ const Nav = (props) => {
     const blogPostsTree = buildDirectoryTree(database);
     const BlogFolder = blogPostsTree[0].children.filter(item => item.name === 'blog')[0] || [];
 
-
-    // 记录每个文件夹的展开状态
+    // 记录每个文件夹的展开状态和当前选中项
     const [openFolders, setOpenFolders] = useState({});
+    const [selectedPath, setSelectedPath] = useState('/database/blog/关于本项目.md');
 
     // 切换文件夹展开状态
     const toggleOpen = (folderName) => {
@@ -37,6 +36,10 @@ const Nav = (props) => {
     // 递归渲染导航项
     const renderNavItems = (items, parent) => {
         return items.map((item, index) => {
+            const currentPath = `/database/blog/${parent?.name ? parent?.name + '/' : ''}${item.name}`;
+            console.log('currentPath: ', currentPath);
+            const isSelected = currentPath === selectedPath;
+
             return (
                 <li key={index} className={styles.navItem}>
                     {item.type === 'folder' ? (
@@ -51,10 +54,15 @@ const Nav = (props) => {
                             )}
                         </>
                     ) : (
-                        <div onClick={() => {
-                            props.onClick(`/database/blog/${parent?.name ? parent?.name : ''}/${item.name}`)
-                        }}>{item.name}</div>
-
+                        <div
+                            onClick={() => {
+                                props.onClick(currentPath);
+                                setSelectedPath(currentPath); // 设置当前选中路径
+                            }}
+                            className={isSelected ? styles.selected : ''}
+                        >
+                            {item.name}
+                        </div>
                     )}
                 </li>
             );
@@ -71,10 +79,7 @@ const Nav = (props) => {
     );
 };
 
-
 const Content = (props) => {
-
-
     if (!props.path) {
         return <div className={styles.content}>暂无数据</div>;
     }

@@ -35,6 +35,13 @@
   }
 }
 
+.selected {
+  background-color: #e0f7fa;
+  /* 高亮背景色 */
+  font-weight: bold;
+  /* 加粗文本 */
+}
+
 .content {
   flex: 3;
   /* 右侧内容占据3/4宽度 */

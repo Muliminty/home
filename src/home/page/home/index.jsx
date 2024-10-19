@@ -15,10 +15,10 @@ function Home() {
 
                 <ul>
                     <li>
-                        <Link to="/blog">+ blog test</Link>
+                        <Link to="/blog">+ blog</Link>
                     </li>
                     <li>
-                        <Link to="/about">+ about test</Link>
+                        <Link to="/about">+ about</Link>
                     </li>
                 </ul>
             </div>
