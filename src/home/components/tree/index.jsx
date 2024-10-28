@@ -7,7 +7,9 @@ const TreeNode = ({ label, children, item, onClick }) => {
 
     const handleClick = () => {
         setIsOpen(!isOpen); // 切换展开状态
-        onClick(item); // 调用传入的 onClick 函数
+        if (item.type === "file") {
+            onClick(item); // 调用传入的 onClick 函数
+        }
     };
 
     return (
@@ -17,7 +19,7 @@ const TreeNode = ({ label, children, item, onClick }) => {
                 {item.type === "directory" && (
                     <span className={`${style.arrow} ${isOpen ? style.open : ''}`}>
                         {/* 箭头符号 */}
-                        {isOpen ? '▼' : '►'} {/* 使用箭头符号表示展开/折叠 */}
+                        {/* {isOpen ? '▼' : '►'} 使用箭头符号表示展开/折叠 */}
                     </span>
                 )}
                 {label}

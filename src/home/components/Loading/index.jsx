@@ -18,8 +18,8 @@ const CubeContainer = ({ heightClass }) => (
     </div>
 );
 
-const Loading = () => (
-    <div className='loading'>
+const Loading = (props) => (
+    <div className='loading' style={{ ...props.style }}>
         <div className="container">
             <CubeContainer heightClass="h1" />
             <CubeContainer heightClass="h2" />

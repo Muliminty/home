@@ -1,0 +1,45 @@
+// @import './variables.scss';
+
+.note {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.note-content {
+  display: flex;
+  margin-top: 15px;
+  height: calc(100vh - 50px - 15px);
+
+}
+
+.menu {
+  width: 300px;
+  overflow-y: scroll;
+  padding: 0 15px;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  height: 100%;
+  padding: 24px;
+  overflow-y: scroll;
+
+
+}
+
+
+.header {
+  padding: 0 15px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow); // 使用主题阴影
+
+  h3 {
+    cursor: pointer;
+  }
+
+}

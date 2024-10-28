@@ -19,16 +19,18 @@
     height: 10px;
     border: solid black;
     border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    transform: rotate(-45deg);
     margin-right: 5px;
     transition: transform 0.3s ease;
     position: absolute;
     left: 0;
-    top: 3px;
+    top: 4px;
 }
 
 .tree-label .arrow.open {
-    transform: rotate(135deg);
+    transform: rotate(45deg);
+    top: 3px;
+
     /* 展开时箭头旋转 */
 }
 
@@ -40,7 +42,7 @@
 }
 
 .tree-children.open {
-    max-height: 500px;
+    max-height: max-content;
     /* 一个足够大的值来容纳子项 */
     opacity: 1;
 }

@@ -15,14 +15,17 @@ function Home() {
 
                 <ul>
                     <li>
-                        <Link to="/blog">+ blog</Link>
+                        <Link to='/Note'>+ Note</Link>
                     </li>
+
+                    {/* <li>
+                        <Link to="/blog">+ blog</Link>
+                    </li> */}
+
                     <li>
                         <Link to="/about">+ about</Link>
                     </li>
-                    <li>
-                        <Link to='/Note'>+ Note</Link>
-                    </li>
+
                 </ul>
             </div>
 
