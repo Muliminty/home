@@ -58,11 +58,21 @@ export default defineConfig(({ mode }) => {
     server: {
       // 配置开发服务器启动时自动打开的页面，根据是否为 admin 模式打开不同的页面。
       open: isAdmin ? '/admin.html' : '/index.html',
+      proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:3000', // 指向你的 Node.js 服务
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''), // 重写 /api 前缀
+        },
+      },
+      // 确保 history API 支持，例如前端的页面刷新不会导致 404
+      historyApiFallback: true,
     },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src')
-      }
+      },
+
     },
     assetsInclude: ['**/*.md'], // 将 .md 文件包含为资产
   };
