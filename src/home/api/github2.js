@@ -11,11 +11,13 @@ const githubApi = axios.create({
     }
 });
 
+// const ApiGatewayServer = '/github'
+const ApiGatewayServer = '/localFile'
 
 // 1. 获取仓库信息
 export const getRepoInfo = async (owner, repo) => {
     try {
-        const response = await githubApi.post('/github/repo', {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getRepoInfo'
@@ -30,7 +32,7 @@ export const getRepoInfo = async (owner, repo) => {
 // 2. 获取文件内容
 export const getFileContent = async (owner, repo, filePath) => {
     try {
-        const response = await githubApi.post('/github/repo', {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             filePath,
@@ -46,7 +48,7 @@ export const getFileContent = async (owner, repo, filePath) => {
 // 3. 获取提交历史
 export const getCommitHistory = async (owner, repo) => {
     try {
-        const response = await githubApi.post('/github/repo', {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getCommitHistory'
@@ -61,7 +63,7 @@ export const getCommitHistory = async (owner, repo) => {
 // 4. 获取指定文件夹下的 Markdown 文件
 export const getMarkdownFiles = async (owner, repo, folderPath) => {
     try {
-        const response = await githubApi.post('/github/repo', {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             folderPath,
@@ -77,7 +79,7 @@ export const getMarkdownFiles = async (owner, repo, folderPath) => {
 // 5. 获取仓库树形结构
 export const getRepoTree = async (owner, repo) => {
     try {
-        const response = await githubApi.post('/github/repo', {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getRepoTree'

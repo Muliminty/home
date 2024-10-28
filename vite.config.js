@@ -64,6 +64,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true, // 更改原点
           rewrite: (path) => path.replace(/^\/github/, '/github'), // 保留 /github 前缀
         },
+        '/localFile': {
+          target: 'http://localhost:3000', // 后端服务器地址
+          changeOrigin: true, // 更改原点
+          rewrite: (path) => path.replace(/^\/localFile/, '/localFile'), // 保留 /github 前缀
+        },
       },
       // 确保 history API 支持，例如前端的页面刷新不会导致 404
       historyApiFallback: true // 确保路径会被重写到index.html

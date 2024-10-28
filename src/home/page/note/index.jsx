@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { getRepoInfo, getFileContent, getCommitHistory, getMarkdownFiles, getRepoTree } from '@/home/api/github2';
 
+import Tree from '@/home/components/tree'
+
 // 仓库信息
 const owner = 'Muliminty'; // 仓库拥有者
 const repo = 'Muliminty-Note'; // 仓库名称
@@ -25,14 +27,23 @@ const Note = () => {
     };
 
     useEffect(() => {
+        // checkRateLimit()
         fetchRepoTree();
     }, [])
 
     return (
-        <div>Note</div>
+        <div>
+            <Menu dataSource={repoTree} />
+        </div>
     )
 }
 
 
+const Menu = ({ dataSource = [] }) => {
 
+    return <div>
+
+        <Tree dataSource={dataSource} />
+    </div>
+}
 export default Note
