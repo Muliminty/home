@@ -12,7 +12,7 @@
     "build:prod": "vite build --mode production",
     "vercel-build": "vite build --mode production",
     "lint": "eslint .",
-    "serve": "vite preview --port 80"
+    "serve": "vite preview --port 9000"
   },
   "dependencies": {
     "axios": "^1.7.4",

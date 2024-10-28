@@ -4,7 +4,6 @@ import routesConfig from './routesConfig';
 import Loading from '../components/Loading';
 const basename = import.meta.env.BASE_URL || '/';
 const AppRouter = () => {
-    console.log("basename:", basename)
     return <Router basename={basename}>
         <Suspense fallback={<Loading />}>
             <Routes>

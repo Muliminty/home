@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer from '../../components/MarkdownRenderer/MarkdownRenderer';
 import styles from './style.module.scss';
 import { buildDirectoryTree } from '@/utils'; // 导入工具函数
 
