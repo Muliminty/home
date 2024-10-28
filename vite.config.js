@@ -59,14 +59,14 @@ export default defineConfig(({ mode }) => {
       // 配置开发服务器启动时自动打开的页面，根据是否为 admin 模式打开不同的页面。
       open: isAdmin ? '/admin.html' : '/index.html',
       proxy: {
-        '/api': {
-          target: 'http://127.0.0.1:3000', // 指向你的 Node.js 服务
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''), // 重写 /api 前缀
+        '/github': {
+          target: 'http://localhost:3000', // 后端服务器地址
+          changeOrigin: true, // 更改原点
+          rewrite: (path) => path.replace(/^\/github/, '/github'), // 保留 /github 前缀
         },
       },
       // 确保 history API 支持，例如前端的页面刷新不会导致 404
-      historyApiFallback: true,
+      historyApiFallback: true // 确保路径会被重写到index.html
     },
     resolve: {
       alias: {

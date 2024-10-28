@@ -83,13 +83,22 @@ const APITest = () => {
         }
     };
 
-    // useEffect(() => {
-    //     // 初始加载所有数据
-    //     fetchRepoInfo();
-    //     fetchRepoTree();
-    //     fetchCommitHistory();
-    //     fetchMarkdownFiles();
-    // }, []);
+    const [isDataFetched, setIsDataFetched] = useState(false);
+
+    const handleFetchData = () => {
+        fetchRepoInfo();
+        fetchRepoTree();
+        fetchCommitHistory();
+        fetchMarkdownFiles();
+        setIsDataFetched(true);  // 设置为已加载数据
+    };
+
+    useEffect(() => {
+        // 根据状态变量来判断是否要加载数据
+        if (!isDataFetched) {
+            handleFetchData();
+        }
+    }, [isDataFetched]);
 
     return (
         <div>

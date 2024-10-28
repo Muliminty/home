@@ -1,16 +1,12 @@
 import axios from 'axios';
 
-// 从环境变量中获取 Notion API Token 和 Database ID
-const notionToken = import.meta.env.VITE_NOTION_TOKEN;
-const databaseId = import.meta.env.VITE_NOTION_DATABASE_ID;
-
-
 
 const githubApi = axios.create({
-    baseURL: '/api',// 自动使用 Vite 代理
+    baseURL: '/',// 自动使用 Vite 代理
+    // baseURL: 'http://127.0.0.1:3000/api', // 不使用代理
     timeout: 60 * 1000, // 请求超时时间
     headers: {
-        'Authorization': `Bearer ${notionToken}`,
+        // 'Authorization': `Bearer ${notionToken}`,
         'Content-Type': 'application/json',
     }
 });

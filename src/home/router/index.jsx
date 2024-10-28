@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routesConfig from './routesConfig';
 import Loading from '../components/Loading';
 const basename = import.meta.env.BASE_URL || '/';
-const AppRouter = () => (
-    <Router basename={basename}>
-        <Suspense fallback={<Loading/>}>
+const AppRouter = () => {
+    console.log("basename:", basename)
+    return <Router basename={basename}>
+        <Suspense fallback={<Loading />}>
             <Routes>
                 {routesConfig.map((route, index) => (
                     <Route
@@ -14,9 +15,10 @@ const AppRouter = () => (
                         element={route.element}
                     />
                 ))}
+                <Route path="*" component={<>404</>} />
             </Routes>
         </Suspense>
     </Router>
-);
+}
 
 export default AppRouter;
