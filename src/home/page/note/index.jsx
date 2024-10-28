@@ -14,19 +14,44 @@ const Note = () => {
     const [data, setData] = useState('暂无数据');
     const [loading, setLoading] = useState(false);
 
-    // 获取仓库树形结构
+
     const fetchRepoTree = async () => {
         try {
             setLoading(true);
             const data = await getRepoTree(owner, repo);
-            console.log("data:", data)
-            setRepoTree(data);
+
+            // 过滤函数
+            const filterData = (items) => {
+                return items
+                    .filter(item => {
+                        // 过滤掉不需要的文件
+                        const isMarkdown = item.name.endsWith('.md');
+                        const isIgnored = [
+                            '.gitignore',
+                            '.git',
+                            '.obsidian',
+                            '.vscode',
+                            'test.txt',
+                            'README.md'
+                        ].includes(item.name);
+                        return !isIgnored;
+                    })
+
+                // .filter(item => item.children || item.type === 'file'); // 过滤掉空目录
+            };
+
+            const filteredData = filterData(data);
+            console.log("filteredData:", filteredData);
+            console.log("data:", data);
+            setRepoTree(filteredData);
         } catch (err) {
             // setError("获取仓库树形结构失败");
+            console.error(err);
         } finally {
             setLoading(false);
         }
     };
+
 
     // 获取文件内容
     const fetchFileContent = async (folderPath) => {
@@ -92,6 +117,14 @@ const MarkdownRenderer = ({ data }) => {
         remarkPlugins={[remarkGfm]}
         components={{
             img: (props) => <NotionImageRenderer {...props} />,
+            code: ({ node, inline, className, children, ...props }) => {
+                const language = className ? className.replace('language-', '') : '';
+                return (
+                    <pre className={`code-block ${language}`} {...props}>
+                        <code>{children}</code>
+                    </pre>
+                );
+            },
         }} />;
 };
 export default Note

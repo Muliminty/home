@@ -21,7 +21,7 @@ function Home() {
                         <Link to="/about">+ about</Link>
                     </li>
                     <li>
-                        <Link to='/Note'>Note</Link>
+                        <Link to='/Note'>+ Note</Link>
                     </li>
                 </ul>
             </div>

@@ -1,2 +1,30 @@
 @import '@/assets/style/base.scss';
 @import '@/assets/style/theme.scss';
+
+
+pre {
+    background-color: #2d2d2d;
+
+}
+
+.code-block {
+    background-color: #2d2d2d;
+    /* 修改背景色 */
+    color: #f8f8f2;
+    /* 修改字体颜色 */
+    padding: 1em;
+    /* 添加内边距 */
+    border-radius: 4px;
+    /* 添加圆角 */
+    overflow: auto;
+    /* 处理溢出 */
+
+    code {
+        background-color: #2d2d2d;
+
+    }
+}
+
+
+
+/* 可以根据需要添加更多语言的样式 */
