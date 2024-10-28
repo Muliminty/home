@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import NotionImageRenderer from './NotionImageRenderer'
+import NotionImageRenderer from '../../../components/ReactMarkdown/NotionImageRenderer'
 
 
 const MarkdownRenderer = ({ path = '/database/blog/测试目录2/22.md' }) => {
