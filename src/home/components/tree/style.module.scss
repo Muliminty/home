@@ -17,7 +17,7 @@
     display: inline-block;
     width: 10px;
     height: 10px;
-    border: solid black;
+    border: solid var(--text-color);
     border-width: 0 2px 2px 0;
     transform: rotate(-45deg);
     margin-right: 5px;
