@@ -93,12 +93,13 @@ const Note = () => {
      * @param {Object} filePath - 文件路径对象。
      */
     const fetchFileContent = async (filePath) => {
-        console.log('filePath: ', filePath);
+        console.log("获取文件内容", filePath);
         try {
             setLoading(true);
 
             const content = await getFileContent(owner, repo, filePath.path);
-            setFileContent(content);
+            const replaceImagePaths_content = replaceImagePaths(content, filePath.parentLabel)
+            setFileContent(replaceImagePaths_content);
         } catch (error) {
             setFileContent('加载失败');
 
@@ -108,6 +109,27 @@ const Note = () => {
 
         }
     };
+
+    /**
+     * 解析 Markdown 内容并替换图片相对路径为绝对路径
+     * @param {string} markdownContent - 原始的 Markdown 内容
+     * @param {string} parentPath - 父文件夹名称
+     * @returns {string} - 处理后的 Markdown 内容
+     */
+    function replaceImagePaths(markdownContent, parentPath) {
+        const baseUrl = `https://raw.githubusercontent.com/Muliminty/Muliminty-Note/refs/heads/master/${parentPath}/`;
+
+        // 使用正则表达式查找 Markdown 中的图片路径
+        const updatedContent = markdownContent.replace(/!\[\]\((.*?)\)/g, (match, relativePath) => {
+            // 从相对路径中提取文件名
+            const fileName = relativePath.split('/').pop(); // 获取路径最后一部分，即文件名
+            // 拼接绝对路径
+            const absolutePath = baseUrl + relativePath;
+            return `![${fileName}](${absolutePath})`; // 返回替换后的 Markdown 图片语法
+        });
+
+        return updatedContent;
+    }
 
     /**
      * 回到根路由。

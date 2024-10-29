@@ -2,18 +2,21 @@ import React, { useState } from "react";
 import style from './style.module.scss'; // 使用CSS Modules导入样式
 
 // 树节点组件
-const TreeNode = ({ label, children, item, onClick }) => {
+const TreeNode = ({ label, parentLabel, children, item, onClick }) => {
     const [isOpen, setIsOpen] = useState(false); // 控制节点展开/折叠
 
     const handleClick = () => {
         setIsOpen(!isOpen); // 切换展开状态
         if (item.type === "file") {
-            onClick(item); // 调用传入的 onClick 函数
+            onClick({ ...item, parentLabel }); // 调用传入的 onClick 函数
         }
     };
 
     return (
         <div className={style["tree-node"]}>
+            {/* 打印父级的 label */}
+            {/* {parentLabel && <div className={style["parent-label"]}>父级: {parentLabel}</div>} */}
+
             {/* 点击展开/折叠节点 */}
             <div className={style["tree-label"]} onClick={handleClick}>
                 {item.type === "directory" && (
@@ -34,19 +37,20 @@ const TreeNode = ({ label, children, item, onClick }) => {
 };
 
 // 树结构组件
-const Tree = ({ dataSource = [], onClick }) => {
+const Tree = ({ dataSource = [], onClick, parentLabel = null }) => {
     return (
         <div className={style.tree}>
             {dataSource.map((item, index) => (
                 <TreeNode
                     key={index}
                     label={item.name}
+                    parentLabel={parentLabel} // 传递父级的 label
                     item={item}
                     onClick={onClick} // 将 onClick 传递给 TreeNode
                 >
                     {/* 递归渲染子节点 */}
                     {item.children && item.children.length > 0 ? (
-                        <Tree dataSource={item.children} onClick={onClick} />
+                        <Tree dataSource={item.children} onClick={onClick} parentLabel={item.name} />
                     ) : null}
                 </TreeNode>
             ))}
