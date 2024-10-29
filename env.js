@@ -22,7 +22,7 @@ const env = {
         VITE_BASE_URL: '/'
     },
     development: {
-        VITE_API_BASE_URL: 'https://dev.api.yourservice.com',
+        VITE_API_BASE_URL: 'http://localhost:3000',
         VITE_PORT: 3000,
         OTHER_VARIABLE: 'value_for_dev',
         VITE_NAME: 'dev环境',
@@ -38,7 +38,7 @@ const env = {
         VITE_BASE_URL: '/'
     },
     production: {
-        VITE_API_BASE_URL: 'https://api.yourservice.com',
+        VITE_API_BASE_URL: 'http://43.136.95.42:3000',
         VITE_PORT: 3002,
         OTHER_VARIABLE: 'value_for_production',
         VITE_NAME: 'prod环境',

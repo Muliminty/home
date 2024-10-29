@@ -34,6 +34,7 @@ const Note = () => {
             const filteredTree = filterRepoTree(data);
             setRepoTree(filteredTree);
         } catch (error) {
+            setFileContent("## 敬请期待")
             console.error("获取仓库树形结构失败", error);
         } finally {
             setLoading(false);
