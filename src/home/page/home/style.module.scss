@@ -5,7 +5,18 @@
   justify-content: center;
   height: 100vh;
   text-align: center;
+  flex-direction: column;
   // background-color: antiquewhite;
+}
+
+.recordContainer {
+  margin-top: 30px; // 与其他内容分开
+  text-align: center; // 居中显示备案号
+}
+
+.recordText {
+  font-size: 0.9em; // 小一号的字体
+  color: #888; // 使用灰色以降低视觉冲击
 }
 
 /* Main title styling */

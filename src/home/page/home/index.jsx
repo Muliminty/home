@@ -27,8 +27,12 @@ function Home() {
                     </li>
 
                 </ul>
-            </div>
 
+
+            </div>
+            <div className={styles.recordContainer}>
+                <p className={styles.recordText}>闽ICP备2024074976号</p>
+            </div>
         </div>
     );
 }
