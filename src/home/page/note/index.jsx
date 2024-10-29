@@ -93,12 +93,10 @@ const Note = () => {
      * @param {Object} filePath - 文件路径对象。
      */
     const fetchFileContent = async (filePath) => {
-        console.log("获取文件内容", filePath);
         try {
             setLoading(true);
-
             const content = await getFileContent(owner, repo, filePath.path);
-            const replaceImagePaths_content = replaceImagePaths(content, filePath.parentLabel)
+            const replaceImagePaths_content = replaceImagePaths(content, filePath.fullPath)
             setFileContent(replaceImagePaths_content);
         } catch (error) {
             setFileContent('加载失败');
@@ -128,7 +126,7 @@ const Note = () => {
             return `![${fileName}](${absolutePath})`; // 返回替换后的 Markdown 图片语法
         });
 
-        return updatedContent;
+        return `${updatedContent}?raw=true`;
     }
 
     /**
