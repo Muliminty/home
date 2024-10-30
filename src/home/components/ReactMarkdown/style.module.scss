@@ -1,28 +1,51 @@
 .MarkdownRenderer {
+  // pre {
+  //   background-color: var(--code-background) !important;
+  //   color: var(--text-color) !important;
+  //   margin: 0;
 
-  pre {
+  //   code {
+  //     background-color: var(--code-background) !important;
+  //     color: var(--text-color) !important;
+  //     padding: 16px !important;
+  //   }
+
+
+  // }
+
+  .code-inline {
     background-color: var(--code-background) !important;
-
-    code {
-      background-color: var(--code-background) !important;
-
-    }
+    border-radius: 4px; // 圆角
+    padding: 2px 4px; // 内边距
+    font-family: 'Courier New', Courier, monospace; // 字体样式
   }
 
-  .code-block {
-    background-color: #2d2d2d;
-    /* 修改背景色 */
-    color: #f8f8f2;
-    /* 修改字体颜色 */
-    padding: 1em;
-    /* 添加内边距 */
+  // :global(.token) {
+  //   background: unset !important;
+  // }
+
+  .code-block-container {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: var(--code-background) !important;
+    color: var(--text-color) !important;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
     border-radius: 4px;
-    /* 添加圆角 */
-    overflow: auto;
-    /* 处理溢出 */
+    transition: background-color 0.3s;
 
-    code {
-      background-color: #2d2d2d;
+    z-index: 10;
+
+    &:hover {
+      background-color: #e0e0e0; // 悬停效果
     }
   }
+
 }
