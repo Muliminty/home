@@ -126,7 +126,7 @@ const Note = () => {
             return `![${fileName}](${absolutePath})`; // 返回替换后的 Markdown 图片语法
         });
 
-        return `${updatedContent}?raw=true`;
+        return `${updatedContent}`;
     }
 
     /**
