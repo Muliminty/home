@@ -1,52 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-    a11yDark,
-    solarizedlight
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { a11yDark, solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import styles from './style.module.scss';
 
-const CodeBlock = ({ node, inline, className = '', children, ...props }) => {
-    const language = className.replace('language-', '').trim(); // 去掉多余空格
-    const isInline = language === ''; // 判断是否是行内代码
+const CodeBlock = ({ node, inline, className = '', children, theme, ...props }) => {
+    const language = className.replace('language-', '').trim();
+    const isInline = language === '';
 
     const [style, setStyle] = useState(a11yDark); // 默认主题
 
-    // 监测主题变化
+    // 监听 theme 的变化并更新
     useEffect(() => {
-        const theme = localStorage.getItem('theme') || 'light'; // 从缓存中获取主题
-        setStyle(theme === 'dark' ? a11yDark : solarizedlight); // 根据主题选择样式
-    }, [localStorage.getItem('theme')]); // 监听主题变化
+        setStyle(theme === 'dark' ? a11yDark : solarizedlight);
+    }, [theme]); // 依赖于 theme
 
-    const [copyText, setCopyText] = useState('复制'); // 按钮初始文案
+    const [copyText, setCopyText] = useState('复制');
 
     const handleCopy = () => {
         const textToCopy = children;
 
-        // 先尝试使用现代API
         if (navigator.clipboard) {
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
-                    setCopyText('复制成功'); // 复制成功后更改按钮文案
-                    setTimeout(() => setCopyText('复制'), 2000); // 2秒后恢复原文案
+                    setCopyText('复制成功');
+                    setTimeout(() => setCopyText('复制'), 2000);
                 })
                 .catch(err => {
                     console.error('复制失败: ', err);
                 });
         } else {
-            // 备用方案
             const textArea = document.createElement('textarea');
             textArea.value = textToCopy;
             document.body.appendChild(textArea);
             textArea.select();
             try {
-                document.execCommand('copy'); // 使用execCommand进行复制
-                setCopyText('复制成功'); // 复制成功后更改按钮文案
-                setTimeout(() => setCopyText('复制'), 2000); // 2秒后恢复原文案
+                document.execCommand('copy');
+                setCopyText('复制成功');
+                setTimeout(() => setCopyText('复制'), 2000);
             } catch (err) {
                 console.error('复制失败: ', err);
             } finally {
-                document.body.removeChild(textArea); // 移除临时textarea
+                document.body.removeChild(textArea);
             }
         }
     };

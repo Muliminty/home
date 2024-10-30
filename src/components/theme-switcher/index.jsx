@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useTheme } from '../../home/context/ThemeContext';
 import styles from './style.module.scss';
 
 const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-    };
+    const { theme, toggleTheme } = useTheme();
 
     return (
         <div className={styles['theme']} onClick={toggleTheme}>

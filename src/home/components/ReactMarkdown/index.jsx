@@ -2,10 +2,12 @@ import NotionImageRenderer from '@/home/components/ReactMarkdown/NotionImageRend
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import CodeBlock from "./CodeBlock.jsx"; // 如果要使用 CodeBlock，请确保正确配置
+import CodeBlock from "./CodeBlock.jsx";
 import styles from './style.module.scss';
+import { useTheme } from '../../context/ThemeContext.jsx'; // 引入主题上下文
 
 export const MarkdownRenderer = ({ data }) => {
+  const { theme } = useTheme(); // 使用上下文中的主题
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export const MarkdownRenderer = ({ data }) => {
         remarkPlugins={[remarkGfm]}
         components={{
           img: (props) => <NotionImageRenderer {...props} />,
-          code:  (props) => <CodeBlock {...props} />,
+          code: (props) => <CodeBlock {...props} theme={theme} />, // 传递当前主题
         }}
       />
     </div>
