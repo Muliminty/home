@@ -18,18 +18,37 @@ const CodeBlock = ({ node, inline, className = '', children, ...props }) => {
         setStyle(theme === 'dark' ? a11yDark : solarizedlight); // 根据主题选择样式
     }, [localStorage.getItem('theme')]); // 监听主题变化
 
-
     const [copyText, setCopyText] = useState('复制'); // 按钮初始文案
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(children)
-            .then(() => {
+        const textToCopy = children;
+
+        // 先尝试使用现代API
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    setCopyText('复制成功'); // 复制成功后更改按钮文案
+                    setTimeout(() => setCopyText('复制'), 2000); // 2秒后恢复原文案
+                })
+                .catch(err => {
+                    console.error('复制失败: ', err);
+                });
+        } else {
+            // 备用方案
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy'); // 使用execCommand进行复制
                 setCopyText('复制成功'); // 复制成功后更改按钮文案
                 setTimeout(() => setCopyText('复制'), 2000); // 2秒后恢复原文案
-            })
-            .catch(err => {
+            } catch (err) {
                 console.error('复制失败: ', err);
-            });
+            } finally {
+                document.body.removeChild(textArea); // 移除临时textarea
+            }
+        }
     };
 
     if (isInline) {
