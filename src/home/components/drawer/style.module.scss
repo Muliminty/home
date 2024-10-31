@@ -1,0 +1,63 @@
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    /* 初始状态，隐藏在屏幕外 */
+    width: 300px;
+    height: 100%;
+    background-color: var(--background-color);
+    box-shadow: var(--shadow);
+    transition: right 0.3s ease;
+    /* 添加动画效果 */
+
+    z-index: 20;
+
+    &.open {
+        right: 0;
+        /* 打开时，移动到视口内 */
+    }
+
+    .drawer-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        // background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        /* 确保在抽屉下面 */
+    }
+
+    .drawer-header {
+        height: 40px;
+    }
+
+    .drawer-body {
+        height: calc(100% - 40px);
+    }
+
+    .drawer-content {
+        position: relative;
+        z-index: 2;
+        /* 确保在遮罩上面 */
+        padding: 20px;
+        height: calc(100%);
+    }
+
+    .close-button {
+
+        span {
+            display: inline-block; // 确保可以应用 transform
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            transform-origin: center; // 设置旋转中心为居中
+
+            &:hover {
+                transform: scale(1.5) rotate(15deg);
+            }
+        }
+    }
+
+
+
+}

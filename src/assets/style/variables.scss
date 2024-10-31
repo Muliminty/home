@@ -8,15 +8,17 @@
     --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1); // 浅色主题阴影
     --code-background-light: #f8f8f8;
     --code-text-color-light: #333;
+    --divider-light: rgba(60, 60, 60, .12);
 
     /* 深色主题 */
-    --background-color-dark: #121212;
+    --background-color-dark: #242424;
     --text-color-dark: #e0e0e0;
     --button-background-dark: #1d72b8;
     --button-text-color-dark: #fff;
     --shadow-dark: 0 2px 10px rgba(48, 48, 48, 0.565); // 深色主题阴影
     --code-background-dark: #2d2d2d;
     --code-text-color-dark: #333;
+    --divider-dark: rgba(84, 84, 84, .48);
 
     /* 选中和悬浮颜色 */
     --selected-background-light: rgba(0, 123, 255, 0.2);
@@ -36,6 +38,7 @@
     --code-text-color: var(--code-text-color-light);
     --selected-background: var(--selected-background-light);
     --hover-background: var(--hover-background-light);
+    --divider: var(--divider-light);
 }
 
 /* 深色主题变量 */
@@ -49,4 +52,5 @@
     --code-text-color: var(--code-text-color-dark);
     --selected-background: var(--selected-background-dark);
     --hover-background: var(--hover-background-dark);
+    --divider: var(--divider-dark);
 }

@@ -18,6 +18,7 @@
   overflow-y: scroll;
   padding: 0 15px;
   height: 100%;
+  // margin-left: -20px;
 }
 
 .content {
@@ -37,6 +38,7 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--shadow); // 使用主题阴影
+  border-bottom: 1px solid var(--divider);
 
   h3 {
     cursor: pointer;
@@ -44,19 +46,36 @@
 
 }
 
+.toggle-drawer {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--divider);
+
+  padding: 0 15px;
+
+  .toggle-drawer-btn {
+    cursor: pointer;
+  }
+}
+
 // 手机（最大宽度 600px）
 @media (max-width: 600px) {
-  .menu {
+  .menu-container-pc {
     display: none;
   }
 }
 
 // 平板（最大宽度 900px）
 @media (max-width: 900px) {
-  .menu {
+  .menu-container-pc {
     display: none;
   }
 }
 
 // PC（最小宽度 901px）
-@media (min-width: 901px) {}
+@media (min-width: 901px) {
+  .toggle-drawer {
+    display: none;
+  }
+}

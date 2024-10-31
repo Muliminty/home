@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'; // 导入 Link 组件
 import styles from './style.module.scss';
 // import ThemeSwitcher from '@/components/theme-switcher/index'
 import ThemeSwitcher from '@/components/theme-switcher/index';
+import HandwrittenText from '@/home/components/textAnimation/HandwrittenText'
 
 function Home() {
     return (
@@ -9,7 +10,7 @@ function Home() {
             <div style={{ textAlign: 'left' }}>
                 <h1 className={styles['title']}>
                     <ThemeSwitcher />
-                    Muliminty
+                    <HandwrittenText />
                 </h1>
                 <p className={styles['subtext']}>希望我们都能保持清醒和有意义的生活😁</p>
 

@@ -20,7 +20,6 @@ const Note = () => {
     const [fileContent, setFileContent] = useState('## 选择你感兴趣的内容吧');
     const [loading, setLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null); // 新增选中状态
-    console.log('selectedId: ', selectedId);
     const navigate = useNavigate(); // 获取 navigate 函数
 
     useEffect(() => {
@@ -35,7 +34,7 @@ const Note = () => {
             setRepoTree(filteredTree);
         } catch (error) {
             setFileContent("## 敬请期待")
-            console.error("获取仓库树形结构失败", error);
+
         } finally {
             setLoading(false);
         }
@@ -80,7 +79,7 @@ const Note = () => {
             setFileContent(replaceImagePaths_content);
         } catch (error) {
             setFileContent('加载失败');
-            console.error("获取文件内容失败", error);
+
         } finally {
             setLoading(false);
         }
@@ -101,17 +100,35 @@ const Note = () => {
     const handleGoHome = () => {
         navigate('/');
     };
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
 
+    const toggleDrawer = () => {
+        setDrawerOpen(!isDrawerOpen);
+    };
     return (
         <div className={styles['note']}>
             <Header onGoHome={handleGoHome} />
+            <div className={styles['toggle-drawer']}>
+                <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>Menu</span>
+            </div>
             <div className={styles['note-content']}>
-                <Menu dataSource={repoTree} onClick={fetchFileContent} selectedId={selectedId} onSelect={setSelectedId} />
-                {loading ? <Loading style={{ width: '100%', height: "100%" }} /> : <Content data={fileContent} />}
+                {<Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
+                    <div style={{ marginLeft: '-20px' }}>
+                        <Menu dataSource={repoTree} onClick={fetchFileContent} selectedId={selectedId} onSelect={setSelectedId} />
+                    </div>
+                    {/* <Tree dataSource={repoTree} onClick={fetchFileContent} selectedId={selectedId} onSelect={setSelectedId} /> */}
+                </Drawer>}
+                <div className={styles['menu-container-pc']}>
+                    <Menu dataSource={repoTree} onClick={fetchFileContent} selectedId={selectedId} onSelect={setSelectedId} />
+                </div>
+
+                {loading ? <Loading style={{ width: '100%', height: "100%" }} /> : <Content data={fileContent} toggleDrawer={toggleDrawer} />}
             </div>
         </div>
     );
 };
+
+
 
 /**
  * Header 组件，包含标题和主题切换器。
@@ -135,10 +152,12 @@ const Menu = ({ dataSource = [], onClick, selectedId, onSelect }) => (
     </div>
 );
 
-const Content = ({ data }) => (
-    <div className={styles['content']}>
-        {data ? <MarkdownRenderer data={data} /> : <div>暂无数据</div>}
-    </div>
-);
+const Content = ({ data }) => {
+    return <>
+        <div className={styles['content']}>
+            {data ? <MarkdownRenderer data={data} /> : <div>暂无数据</div>}
+        </div>
+    </>
+}
 
 export default Note;
