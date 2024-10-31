@@ -1,5 +1,6 @@
-/* src/styles/_variables.scss */
+/* 主题变量定义 */
 :root {
+    /* 浅色主题 */
     --background-color-light: #fff;
     --text-color-light: #000;
     --button-background-light: #007bff;
@@ -8,6 +9,7 @@
     --code-background-light: #f8f8f8;
     --code-text-color-light: #333;
 
+    /* 深色主题 */
     --background-color-dark: #121212;
     --text-color-dark: #e0e0e0;
     --button-background-dark: #1d72b8;
@@ -16,26 +18,35 @@
     --code-background-dark: #2d2d2d;
     --code-text-color-dark: #333;
 
+    /* 选中和悬浮颜色 */
+    --selected-background-light: rgba(0, 123, 255, 0.2);
+    --hover-background-light: rgba(0, 123, 255, 0.1);
+    --selected-background-dark: rgba(29, 114, 184, 0.4);
+    --hover-background-dark: rgba(29, 114, 184, 0.3);
 }
 
+/* 浅色主题变量 */
 [data-theme='light'] {
     --background-color: var(--background-color-light);
     --text-color: var(--text-color-light);
     --button-background: var(--button-background-light);
     --button-text-color: var(--button-text-color-light);
     --shadow: var(--shadow-light); // 使用浅色主题阴影
-
     --code-background: var(--code-background-light);
     --code-text-color: var(--code-text-color-light);
+    --selected-background: var(--selected-background-light);
+    --hover-background: var(--hover-background-light);
 }
 
+/* 深色主题变量 */
 [data-theme='dark'] {
     --background-color: var(--background-color-dark);
     --text-color: var(--text-color-dark);
     --button-background: var(--button-background-dark);
     --button-text-color: var(--button-text-color-dark);
     --shadow: var(--shadow-dark); // 使用深色主题阴影
-
     --code-background: var(--code-background-dark);
     --code-text-color: var(--code-text-color-dark);
+    --selected-background: var(--selected-background-dark);
+    --hover-background: var(--hover-background-dark);
 }

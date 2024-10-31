@@ -4,6 +4,7 @@
 
 .tree-node {
     margin-left: 20px;
+
 }
 
 .tree-label {
@@ -11,6 +12,12 @@
     font-weight: bold;
     position: relative;
     padding-left: 20px;
+
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: var(--hover-background);
+    }
 }
 
 .tree-label .arrow {
@@ -45,4 +52,8 @@
     max-height: max-content;
     /* 一个足够大的值来容纳子项 */
     opacity: 1;
+}
+
+.selected {
+    background-color: var(--selected-background);
 }
