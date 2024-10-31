@@ -112,7 +112,7 @@ const Note = () => {
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>Menu</span>
             </div>
             <div className={styles['note-content']}>
-                {<Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
+                {<Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} className='drawer-menu'>
                     <div style={{ marginLeft: '-20px' }}>
                         <Menu dataSource={repoTree} onClick={fetchFileContent} selectedId={selectedId} onSelect={setSelectedId} />
                     </div>
