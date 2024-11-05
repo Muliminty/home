@@ -1,8 +1,8 @@
 import React from 'react';
+import ErrorBoundary from '@/components/error-boundary/index';
 import AppRouter from './router';
 import './App.scss';
-import ErrorBoundary from '@/components/error-boundary/index';
-
+import 'react-photo-view/dist/react-photo-view.css';
 const App = () => {
   return (
     <div className="App">
