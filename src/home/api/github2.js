@@ -41,11 +41,11 @@ githubApi.interceptors.request.use(
 githubApi.interceptors.response.use(
     (response) => {
         // 对响应数据做些什么
-        console.log('Response:', {
-            url: response.config.url,
-            status: response.status,
-            data: response.data,
-        });
+        // console.log('Response:', {
+        //     url: response.config.url,
+        //     status: response.status,
+        //     data: response.data,
+        // });
         return response;
     },
     (error) => {
@@ -137,3 +137,16 @@ export const getRepoTree = async (owner, repo) => {
         throw error;
     }
 };
+
+// 根据关键词查询文件
+export const searchMarkdownFilesByName = async (keyword) => {
+    try {
+        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+            keyword,
+            type: 'searchMarkdownFilesByName'
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error searching files:', error);
+    }
+}
