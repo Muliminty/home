@@ -1,4 +1,5 @@
 import NotionImageRenderer from '@/home/components/ReactMarkdown/NotionImageRenderer';
+import LinkButton from '@/home/components/linkButton/index.jsx';
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -22,6 +23,9 @@ export const MarkdownRenderer = ({ data }) => {
         components={{
           img: (props) => <NotionImageRenderer {...props} />,
           code: (props) => <CodeBlock {...props} theme={theme} />, // 传递当前主题
+          a: (props) => {
+            return <LinkButton text={props.children} {...props} />
+          },
         }}
       />
     </div>

@@ -1,0 +1,50 @@
+:root {
+  --text: #2B3044;
+  --line: #9caaff;
+  --line-active: #275EFE;
+}
+
+
+.linkButton {
+  display: inline-block;
+  font-size: 18px;
+  color: var(--text-color);
+  position: relative; /* 确保SVG在文本上方 */
+  padding-bottom: 10px; /* 为了给svg腾出空间 */
+
+  a {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    transition: margin 0.25s;
+
+    span {
+      display: inline-block; /* 确保文本是行内块级元素 */
+    }
+
+    svg {
+      width: 100%; /* 保持SVG宽度为100% */
+      height: 40px;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%) translateY(7px); /* X轴居中，Y轴微调 */
+      fill: none;
+      stroke: var(--stroke, var(--line));
+      stroke-linecap: round;
+      stroke-width: 2px;
+      stroke-dasharray: var(--offset, 69px) 278px;
+      stroke-dashoffset: 361px;
+      transition: stroke 0.25s ease var(--stroke-delay, 0s), stroke-dasharray 0.35s;
+    }
+
+    &:focus,
+    &:active,
+    &:hover {
+      --stroke: var(--line-active);
+      --stroke-delay: 0.1s;
+      --offset: 180px;
+    }
+  }
+}
