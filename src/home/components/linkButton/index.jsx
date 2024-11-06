@@ -35,7 +35,9 @@ const LinkButton = ({ text = 'link', onClick, ...props }) => {
   const strokeWidth = Math.max(2, svgWidth / 35);  // 动态调整 stroke-width，保证线条不过粗
 
   return (
-    <p className="linkButton" onClick={onClick} {...props}>
+    <p className="linkButton" onClick={() => {
+      window.open(props.href)
+    }} {...props}>
       <a href="#">
         <span ref={textRef}>
           {text}
@@ -46,8 +48,8 @@ const LinkButton = ({ text = 'link', onClick, ...props }) => {
             strokeWidth={strokeWidth}  // 使用动态计算的 stroke-width
             fill="none"
             stroke="var(--stroke, var(--line))"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </a>
