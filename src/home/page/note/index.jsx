@@ -71,7 +71,7 @@ const Note = () => {
     };
 
     const shouldIncludeItem = (item) => {
-        const ignoredFiles = ['.gitignore', '.git', '.obsidian', '.vscode', 'test.txt', 'README.md', '剪藏'];
+        const ignoredFiles = ['.gitignore', '.git', '.obsidian', '.vscode', 'test.txt', 'README.md', '剪藏', '归档'];
         return !ignoredFiles.includes(item.name);
     };
 
