@@ -8,17 +8,26 @@
 
 .note-content {
   display: flex;
-  margin-top: 15px;
   height: calc(100vh - 50px - 15px);
 
 }
 
 .menu {
   width: 300px;
-  overflow-y: scroll;
   padding: 0 15px;
-  height: 100%;
-  // margin-left: -20px;
+  border-right: 1px solid var(--divider);
+
+  :global {
+    .ant-menu-title-content {
+      // word-break: break-word;
+      // /* 当文本过长时在词语之间自动换行 */
+      // white-space: normal;
+      /* 允许文本自动换行 */
+    }
+  }
+
+
+
 }
 
 

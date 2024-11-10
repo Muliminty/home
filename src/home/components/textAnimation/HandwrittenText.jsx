@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './HandwrittenText.module.scss'; // 引入 CSS 模块
 
 const HandwrittenText = () => {

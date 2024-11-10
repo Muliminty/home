@@ -3,7 +3,6 @@ import { searchMarkdownFilesByName } from '@/home/api/github2';
 import Modal from "@/home/components/modal";
 import { useState } from "react";
 import { MarkdownRenderer } from "../../components/ReactMarkdown";
-import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 import styles from './style.module.scss';
 
 /**
@@ -18,7 +17,6 @@ export const Header = ({ fetchFileContent }) => {
   const [loading, setLoading] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const navigate = useNavigate(); // 获取 navigate 函数
 
 
   // 处理输入框的变化
