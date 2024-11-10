@@ -14,3 +14,26 @@ button {
     cursor: pointer;
     border-radius: 4px;
 }
+
+// antd 主题
+
+.ant-menu {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+}
+
+.ant-menu-title-content {
+    color: var(--text-color);
+
+}
+
+:where(.css-dev-only-do-not-override-apn68).ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-apn68).ant-menu-light>.ant-menu .ant-menu-item-selected {
+    background-color: var(--selected-background) !important;
+
+}
+
+.ant-menu-submenu-arrow {
+    color: var(--text-color) !important;
+}

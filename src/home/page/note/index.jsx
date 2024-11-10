@@ -86,15 +86,32 @@ const Note = () => {
         return node;
     };
 
+
+    function extractMiddlePath(filePath, basePath, fileName) {
+        // 将反斜杠进行转义，避免正则匹配问题
+        const escapedBasePath = basePath.replace(/\\/g, "\\\\");
+        const escapedFileName = fileName.replace(/\\/g, "\\\\");
+        // 创建正则表达式，以匹配中间路径
+        const regex = new RegExp(`^${escapedBasePath}(.*)${escapedFileName}$`);
+        // 执行正则匹配，提取中间部分
+        const match = filePath.match(regex);
+        return match ? match[1] : null;
+    }
+
+
+
+
     const fetchFileContent = async (filePath) => {
-        console.log('filePath: ', filePath);
+        const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\";
+        const item = filePath.item
+        const name = item.props.name
+        const fullPath = extractMiddlePath(filePath.key, basePath, name)
         try {
             setFileContent("## 加载中")
             setLoading(true);
-            const content = await getFileContent(owner, repo, filePath.path);
-            setUrlParams({ path: filePath.path, fullPath: filePath.fullPath })
-            const replaceImagePaths_content = replaceImagePaths(content, filePath.fullPath);
-
+            const content = await getFileContent(owner, repo, filePath.key);
+            setUrlParams({ path: filePath.key, fullPath: fullPath })
+            const replaceImagePaths_content = replaceImagePaths(content, fullPath);
             setFileContent(replaceImagePaths_content);
         } catch (error) {
             setFileContent('加载失败');
