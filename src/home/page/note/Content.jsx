@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { MarkdownRenderer } from "../../components/ReactMarkdown";
 import styles from './style.module.scss';
 import { Header } from "./Header";
+import Loading from '@/home/components/Loading';
 
-export const Content = ({ data, handleGoHome, fetchFileContent }) => {
+export const Content = ({ data, handleGoHome, fetchFileContent, loading }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -17,15 +18,18 @@ export const Content = ({ data, handleGoHome, fetchFileContent }) => {
   }, [data]);
 
   return (
-    <div className={styles['content']}>
+    <div className={styles['content_box']}>
       <Header onGoHome={handleGoHome} fetchFileContent={fetchFileContent} />
-      {data ? (
-        <div className={`${styles['fadeIn']} ${isVisible ? styles['visible'] : ''}`}>
-          <MarkdownRenderer data={data} />
-        </div>
-      ) : (
-        <div>暂无数据</div>
-      )}
+      {loading ? <Loading style={{ width: '100%', height: "100%" }} /> : <div className={styles['content']}>
+        {data ? (
+          <div className={`${styles['fadeIn']} ${isVisible ? styles['visible'] : ''}`}>
+            <MarkdownRenderer data={data} />
+          </div>
+        ) : (
+          <div>暂无数据</div>
+        )}
+      </div>}
+
     </div>
   );
 };

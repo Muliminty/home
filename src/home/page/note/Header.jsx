@@ -1,6 +1,5 @@
 import ThemeSwitcher from '@/components/theme-switcher/index';
 import { searchMarkdownFilesByName } from '@/home/api/github2';
-import Loading from '@/home/components/Loading';
 import Modal from "@/home/components/modal";
 import { useState } from "react";
 import { MarkdownRenderer } from "../../components/ReactMarkdown";
@@ -44,13 +43,13 @@ export const Header = ({ fetchFileContent }) => {
 
   return (
     <div className={styles['header']}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      {/* <div style={{ display: 'flex', alignItems: 'center' }}>
         <h3 onClick={handleGoHome} style={{ cursor: 'pointer', marginRight: '10px' }}>
           Muliminty
         </h3>
 
         <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={openModal}>搜索文章</a>
-      </div>
+      </div> */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div>
@@ -63,11 +62,10 @@ export const Header = ({ fetchFileContent }) => {
               placeholder="请输入搜索关键词" />
             <a onClick={handleSearch} style={{ width: '100px', marginLeft: '10px', cursor: 'pointer' }}>开始搜索</a>
           </div>
-
+          {/* 
           <div>
             {loading ? <Loading style={{ width: '98%', height: "300px", transform: 'scale(0.5)' }} /> :
               <>
-                {/* 搜索结果列表  */}
                 {searchResults.length > 0 ? (
                   <ul className={styles['search-results']}>
                     {searchResults.map((fileInfo, index) => {
@@ -99,7 +97,7 @@ export const Header = ({ fetchFileContent }) => {
                   <p className={styles['no-results']}>没有找到匹配的文件。</p>
                 )}</>}
 
-          </div>
+          </div> */}
 
         </div>
       </Modal>

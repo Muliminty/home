@@ -106,6 +106,7 @@ const Note = () => {
         const item = filePath.item
         const name = item.props.name
         const fullPath = extractMiddlePath(filePath.key, basePath, name)
+        console.log('fullPath: ', fullPath);
         try {
             setFileContent("## 加载中")
             setLoading(true);
@@ -120,17 +121,25 @@ const Note = () => {
         }
     };
 
-    function replaceImagePaths(markdownContent, parentPath) {
-        const baseUrl = `https://raw.githubusercontent.com/Muliminty/Muliminty-Note/refs/heads/master/${parentPath}/`;
 
-        const updatedContent = markdownContent.replace(/!\[\]\((.*?)\)/g, (match, relativePath) => {
-            const fileName = relativePath.split('/').pop();
-            const absolutePath = baseUrl + relativePath;
-            return `![${fileName}](${absolutePath})`;
+    function replaceImagePaths(markdownContent, parentPath) {
+        // 将反斜杠替换为正斜杠
+        const normalizedParentPath = parentPath.replace(/\\/g, '/');
+
+        // 基础 URL
+        const baseUrl = `https://raw.githubusercontent.com/Muliminty/Muliminty-Note/refs/heads/master/${encodeURIComponent(normalizedParentPath)}/`;
+
+        // 替换图片路径
+        const updatedContent = markdownContent.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, altText, relativePath) => {
+            // 确保相对路径的部分被正确编码
+            const encodedPath = relativePath.split('/').map(encodeURIComponent).join('/');
+            const absolutePath = baseUrl + encodedPath;
+            return `![${altText}](${absolutePath})`;
         });
 
-        return `${updatedContent}`;
+        return updatedContent;
     }
+
 
 
     const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -142,7 +151,6 @@ const Note = () => {
 
     return (
         <div className={styles['note']}>
-
             <div className={styles['toggle-drawer']}>
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
             </div>
@@ -167,9 +175,9 @@ const Note = () => {
                             return { ...urlParams, selectedId: key }
                         })
                     }} />
-                </div>
+                </div><Content loading={loading} data={fileContent} toggleDrawer={toggleDrawer} fetchFileContent={fetchFileContent} />
 
-                {loading ? <Loading style={{ width: '100%', height: "100%" }} /> : <Content data={fileContent} toggleDrawer={toggleDrawer} fetchFileContent={fetchFileContent} />}
+
             </div>
         </div>
     );
