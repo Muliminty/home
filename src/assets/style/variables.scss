@@ -25,6 +25,12 @@
     --hover-background-light: rgba(0, 123, 255, 0.1);
     --selected-background-dark: rgba(29, 114, 184, 0.4);
     --hover-background-dark: rgba(29, 114, 184, 0.3);
+
+
+    // 背景线条颜色
+    --container-border-color-light: #E1E1E1;
+    --container-border-color-dark: rgba(114, 114, 114, 0.3);
+
 }
 
 /* 浅色主题变量 */
@@ -39,6 +45,7 @@
     --selected-background: var(--selected-background-light);
     --hover-background: var(--hover-background-light);
     --divider: var(--divider-light);
+    --container-border-color:var(--container-border-color-light);
 }
 
 /* 深色主题变量 */
@@ -53,4 +60,6 @@
     --selected-background: var(--selected-background-dark);
     --hover-background: var(--hover-background-dark);
     --divider: var(--divider-dark);
+    --container-border-color:var(--container-border-color-dark);
+
 }

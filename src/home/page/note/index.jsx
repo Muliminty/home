@@ -155,9 +155,12 @@ const Note = () => {
 
     return (
         <div className={styles['note']}>
-            <Splitter   >
-                <Splitter.Panel defaultSize="30%" min="20%" max="40%">
-                    <div className={styles['menu-container-pc']}>
+            <div className={styles['toggle-drawer']}>
+                <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
+            </div>
+            <Splitter >
+                <Splitter.Panel defaultSize="20%" min="20%" max="40%" className={styles['menu-container-l']}>
+                    <div className={styles['menu-container-l']}>
                         <MenuLayout
                             dataSource={repoTree}
                             onClick={fetchFileContent}
@@ -169,7 +172,8 @@ const Note = () => {
                         />
                     </div>
                 </Splitter.Panel>
-                <Splitter.Panel>
+                <Splitter.Panel className={styles['menu-container-r']}>
+
                     <Content
                         loading={loading}
                         data={fileContent}
@@ -178,6 +182,19 @@ const Note = () => {
                     />
                 </Splitter.Panel>
             </Splitter>
+            <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
+                <div style={{ marginLeft: '-20px' }}>
+                    <MenuLayout
+                        dataSource={repoTree}
+                        onClick={fetchFileContent}
+                        selectedId={selectedId}
+                        onSelect={(key) => {
+                            setSelectedId(key);
+                            setUrlParams({ ...urlParams, selectedId: key });
+                        }}
+                    />
+                </div>
+            </Drawer>
             {/* <div className={styles['toggle-drawer']}>
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
             </div>
@@ -195,7 +212,7 @@ const Note = () => {
                         />
                     </div>
                 </Drawer>
-                <div className={styles['menu-container-pc']}>
+                <div className={styles['menu-container-l']}>
                     <MenuLayout
                         dataSource={repoTree}
                         onClick={fetchFileContent}

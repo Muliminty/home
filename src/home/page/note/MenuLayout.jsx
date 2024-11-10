@@ -12,9 +12,9 @@ export const MenuLayout = ({ dataSource = [], onClick, selectedId, onSelect }) =
   const handleGoHome = () => {
     navigate('/');
   };
-  return <div className={styles['menu']}>
-    <div onClick={handleGoHome} style={{ cursor: 'pointer', height: '50px' }}>
-      <HandwrittenText scale={'0.3'} />
+  return <div className={`${styles['menu']}`}>
+    <div onClick={handleGoHome} className={styles['menu-title']} style={{ cursor: 'pointer', height: '50px' }}>
+      <HandwrittenText scale={'0.4'} />
     </div>
     <div style={{
       height: 'calc(100vh - 50px)',

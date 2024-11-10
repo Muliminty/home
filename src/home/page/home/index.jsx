@@ -3,6 +3,7 @@ import styles from './style.module.scss';
 // import ThemeSwitcher from '@/components/theme-switcher/index'
 import ThemeSwitcher from '@/components/theme-switcher/index';
 import HandwrittenText from '@/home/components/textAnimation/HandwrittenText'
+import GlitchLoader from '@/home/components/textAnimation/GlitchLoader'
 
 function Home() {
     return (
@@ -10,8 +11,10 @@ function Home() {
             <div style={{ textAlign: 'left' }}>
                 <h1 className={styles['title']}>
                     <ThemeSwitcher />
-                    <HandwrittenText scale={1} />
+                    {/* <HandwrittenText scale={1} /> */}
+                    <GlitchLoader text='Muliminty' />
                 </h1>
+
                 <p className={styles['subtext']}>希望我们都能保持清醒和有意义的生活😁</p>
 
                 <ul>
