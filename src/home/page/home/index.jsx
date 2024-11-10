@@ -10,7 +10,7 @@ function Home() {
             <div style={{ textAlign: 'left' }}>
                 <h1 className={styles['title']}>
                     <ThemeSwitcher />
-                    <HandwrittenText />
+                    <HandwrittenText scale={1} />
                 </h1>
                 <p className={styles['subtext']}>希望我们都能保持清醒和有意义的生活😁</p>
 

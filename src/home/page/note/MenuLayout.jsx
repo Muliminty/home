@@ -14,7 +14,7 @@ export const MenuLayout = ({ dataSource = [], onClick, selectedId, onSelect }) =
   };
   return <div className={styles['menu']}>
     <div onClick={handleGoHome} style={{ cursor: 'pointer', height: '50px' }}>
-      <HandwrittenText />
+      <HandwrittenText scale={'0.3'} />
     </div>
     <div style={{
       height: 'calc(100vh - 50px)',
@@ -22,9 +22,7 @@ export const MenuLayout = ({ dataSource = [], onClick, selectedId, onSelect }) =
     }}>
       <Menu
         mode="inline"
-        style={{
-          width: 256,
-        }}
+
         items={dataSource}
         onClick={onClick}
       />

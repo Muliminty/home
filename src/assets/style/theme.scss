@@ -1,11 +1,13 @@
 @import './variables.scss';
 
+// 主体样式：定义页面背景色和文字颜色，并添加过渡效果
 body {
     background-color: var(--background-color);
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
 }
 
+// 按钮样式：背景色、文字颜色、圆角及其他样式
 button {
     background-color: var(--button-background);
     color: var(--button-text-color);
@@ -15,25 +17,22 @@ button {
     border-radius: 4px;
 }
 
-// antd 主题
-
-.ant-menu {
-    background-color: var(--background-color) !important;
-    color: var(--text-color) !important;
-    border: none !important;
+// antd 主题样式：定义通用背景色、文字颜色，并去除边框
+.ant-menu,
+.ant-splitter {
+    background-color: var(--background-color) !important; // 背景色，重要属性覆盖默认值
+    color: var(--text-color) !important; // 文字颜色，重要属性覆盖默认值
+    border: none !important; // 移除默认边框样式
 }
 
-.ant-menu-title-content {
-    color: var(--text-color);
-
+// antd 菜单标题内容和箭头颜色
+.ant-menu-title-content,
+.ant-menu-submenu-arrow {
+    color: var(--text-color) !important; // 设置文字和箭头颜色，确保与主题颜色一致
 }
 
+// antd 选中项背景色：适用于特定类名的选中状态
 :where(.css-dev-only-do-not-override-apn68).ant-menu-light .ant-menu-item-selected,
 :where(.css-dev-only-do-not-override-apn68).ant-menu-light>.ant-menu .ant-menu-item-selected {
-    background-color: var(--selected-background) !important;
-
-}
-
-.ant-menu-submenu-arrow {
-    color: var(--text-color) !important;
+    background-color: var(--selected-background) !important; // 选中项背景色，强调选中状态
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getRepoTree, getFileContent } from '@/home/api/github2';
 import styles from './style.module.scss';
 import Drawer from '@/home/components/drawer';
+import { Flex, Splitter, Typography } from 'antd';
 import useUpdateQueryParams from '@/home/hooks/useUpdateQueryParams';
 import useQueryParams from '@/home/hooks/useQueryParams';
 import { Content } from "./Content";
@@ -154,7 +155,30 @@ const Note = () => {
 
     return (
         <div className={styles['note']}>
-            <div className={styles['toggle-drawer']}>
+            <Splitter   >
+                <Splitter.Panel defaultSize="30%" min="20%" max="40%">
+                    <div className={styles['menu-container-pc']}>
+                        <MenuLayout
+                            dataSource={repoTree}
+                            onClick={fetchFileContent}
+                            selectedId={selectedId}
+                            onSelect={(key) => {
+                                setSelectedId(key);
+                                setUrlParams({ ...urlParams, selectedId: key });
+                            }}
+                        />
+                    </div>
+                </Splitter.Panel>
+                <Splitter.Panel>
+                    <Content
+                        loading={loading}
+                        data={fileContent}
+                        toggleDrawer={toggleDrawer}
+                        fetchFileContent={fetchFileContent}
+                    />
+                </Splitter.Panel>
+            </Splitter>
+            {/* <div className={styles['toggle-drawer']}>
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
             </div>
             <div className={styles['note-content']}>
@@ -188,7 +212,7 @@ const Note = () => {
                     toggleDrawer={toggleDrawer}
                     fetchFileContent={fetchFileContent}
                 />
-            </div>
+            </div> */}
         </div>
     );
 };

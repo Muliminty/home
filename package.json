@@ -19,6 +19,7 @@
     "axios": "^1.7.4",
     "express": "^4.19.2",
     "fs-extra": "^11.2.0",
+    "pixi.js": "^8.5.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
@@ -30,7 +31,8 @@
     "rehype-react": "^8.0.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
-    "remark-parse": "^11.0.0"
+    "remark-parse": "^11.0.0",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
