@@ -44,6 +44,9 @@ button {
 }
 
 // antd 菜单标题内容和箭头颜色
+.ant-splitter-bar-collapse-bar,
+.ant-splitter-bar-collapse-bar-start,
+.ant-splitter-bar-collapse-bar-end,
 :where(.css-dev-only-do-not-override-apn68).ant-splitter-horizontal>.ant-splitter-bar .ant-splitter-bar-collapse-bar-start,
 :where(.css-dev-only-do-not-override-apn68).ant-splitter-horizontal>.ant-splitter-bar .ant-splitter-bar-collapse-bar-end,
 :where(.css-dev-only-do-not-override-apn68).ant-splitter>.ant-splitter-bar .ant-splitter-bar-collapse-bar:active {

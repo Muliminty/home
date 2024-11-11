@@ -42,14 +42,17 @@ const Note = () => {
             const filteredTree = await fetchRepoTree();
 
             if (queryParams.name && queryParams.selectedId) {
+
+                setSelectedId(queryParams.selectedId);
+                const parent = findParentKeys(filteredTree, queryParams.selectedId);
+                console.log('parent:------ ', parent);
+                setOpenKeys(parent);
+
                 fetchFileContent({
                     key: queryParams.selectedId,
                     item: { props: { name: queryParams.name } },
-                });
-                setSelectedId(queryParams.selectedId);
+                }, filteredTree);
 
-                const parent = findParentKeys(filteredTree, queryParams.selectedId);
-                setOpenKeys(parent);
             } else {
                 setFileContent("## 选择你感兴趣的内容吧");
             }
@@ -166,7 +169,7 @@ const Note = () => {
     }
 
     // 获取并显示 Markdown 文件内容
-    const fetchFileContent = async (filePath) => {
+    const fetchFileContent = async (filePath, filteredTree) => {
 
         const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
@@ -175,7 +178,10 @@ const Note = () => {
         const key = decodeFromBase64(filePath.key);
         const fullPath = extractMiddlePath(key, basePath, name);
 
-        const parent = findParentKeys(repoTree, filePath.key);
+        const parent = findParentKeys(filteredTree || repoTree, filePath.key);
+        console.log('repoTree: ', repoTree);
+        console.log('parent: ', parent);
+        console.log('openKeys: ', openKeys);
 
 
         try {
@@ -223,7 +229,7 @@ const Note = () => {
         <div className={styles['note']}>
             < div className={styles['note-content-pc']}>
                 <Splitter >
-                    <Splitter.Panel collapsible defaultSize="30%" min="20%" max="40%" className={styles['menu-container-l']}>
+                    <Splitter.Panel collapsible defaultSize="20%" max="40%" className={styles['menu-container-l']}>
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
                                 dataSource={repoTree}
