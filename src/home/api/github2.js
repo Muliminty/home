@@ -20,14 +20,14 @@ const githubApi = axios.create({
 githubApi.interceptors.request.use(
     (config) => {
         // 在请求发送之前做些什么
-        console.log('Request:', {
-            url: config.url,
-            method: config.method,
-            headers: config.headers,
-            data: config.data,
-            ApiGatewayServer,
-            mode
-        });
+        // console.log('Request:', {
+        //     url: config.url,
+        //     method: config.method,
+        //     headers: config.headers,
+        //     data: config.data,
+        //     ApiGatewayServer,
+        //     mode
+        // });
         return config;
     },
     (error) => {

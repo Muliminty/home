@@ -45,7 +45,7 @@ const Note = () => {
 
                 setSelectedId(queryParams.selectedId);
                 const parent = findParentKeys(filteredTree, queryParams.selectedId);
-                console.log('parent:------ ', parent);
+
                 setOpenKeys(parent);
 
                 fetchFileContent({
@@ -170,22 +170,14 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-
         const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
         const key = decodeFromBase64(filePath.key);
         const fullPath = extractMiddlePath(key, basePath, name);
-
         const parent = findParentKeys(filteredTree || repoTree, filePath.key);
-        console.log('repoTree: ', repoTree);
-        console.log('parent: ', parent);
-        console.log('openKeys: ', openKeys);
-
-
         try {
-            setFileContent("## 加载中");
             setLoading(true);
             const content = await getFileContent(owner, repo, key);
             setUrlParams({ selectedId: filePath.key, name });
@@ -233,7 +225,7 @@ const Note = () => {
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
                                 dataSource={repoTree}
-                                onClick={fetchFileContent}
+                                onClick={(v) => { fetchFileContent(v) }}
                                 selectedKeys={[selectedId]}
                                 openKeys={openKeys}
                                 onOpenChange={onOpenChange}
@@ -242,11 +234,11 @@ const Note = () => {
                     </Splitter.Panel>
                     <Splitter.Panel className={styles['menu-container-r']}>
                         <Content
+                            key={1}
                             loading={loading}
                             data={fileContent}
                             toggleDrawer={toggleDrawer}
                             fetchFileContent={fetchFileContent}
-
                         />
                     </Splitter.Panel>
                 </Splitter>
@@ -255,7 +247,7 @@ const Note = () => {
                 <div style={{ marginLeft: '-20px' }}>
                     <MenuLayout
                         dataSource={repoTree}
-                        onClick={fetchFileContent}
+                        onClick={(v) => { fetchFileContent(v) }}
                         selectedKeys={[selectedId]}
                         openKeys={openKeys}
                         onOpenChange={onOpenChange}
@@ -265,12 +257,11 @@ const Note = () => {
 
             < div className={styles['note-content-phone']}>
                 <Content
+                    key={2}
                     loading={loading}
                     data={fileContent}
                     toggleDrawer={toggleDrawer}
                     fetchFileContent={fetchFileContent}
-
-
                 />
             </div>
         </div>
