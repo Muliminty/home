@@ -5,7 +5,11 @@ import HandwrittenText from '@/home/components/textAnimation/HandwrittenText'
 import styles from './style.module.scss';
 import { Menu } from 'antd';
 
-export const MenuLayout = ({ dataSource = [], onClick, selectedId, onSelect }) => {
+export const MenuLayout = ({ dataSource = [], onClick, selectedKeys,
+
+  ...props
+}) => {
+
 
   const navigate = useNavigate(); // 获取 navigate 函数
 
@@ -21,8 +25,9 @@ export const MenuLayout = ({ dataSource = [], onClick, selectedId, onSelect }) =
       overflowY: 'scroll'
     }}>
       <Menu
+        {...props}
         mode="inline"
-
+        selectedKeys={selectedKeys}
         items={dataSource}
         onClick={onClick}
       />

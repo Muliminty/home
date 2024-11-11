@@ -24,9 +24,11 @@ const Note = () => {
     const [loading, setLoading] = useState(false); // 加载状态
     const [selectedId, setSelectedId] = useState(null); // 当前选中的文件 ID
     const [urlParams, setUrlParams] = useState({
-        path: new URLSearchParams(window.location.search).get('path') || '',
-        selectedId: new URLSearchParams(window.location.search).get('selectedId') || '',
+        // path: new URLSearchParams(window.location.search).get('path') || '',
+        // selectedId: new URLSearchParams(window.location.search).get('selectedId') || '',
     });
+
+    const [openKeys, setOpenKeys] = useState([]); // 展开的目录项
 
     // 使用自定义 Hook 更新 URL 参数
     useUpdateQueryParams(urlParams);
@@ -36,18 +38,23 @@ const Note = () => {
 
     // 在 URL 参数变化时重新加载数据
     useEffect(() => {
-        fetchRepoTree();
+        const fn = async () => {
+            const filteredTree = await fetchRepoTree();
 
-        if (queryParams.path) {
-            fetchFileContent({
-                key: queryParams.key,
-                fullPath: queryParams.fullPath,
-                item: { props: { name: queryParams.name } },
-            });
-            setSelectedId(queryParams.selectedId);
-        } else {
-            setFileContent("## 选择你感兴趣的内容吧");
+            if (queryParams.name && queryParams.selectedId) {
+                fetchFileContent({
+                    key: queryParams.selectedId,
+                    item: { props: { name: queryParams.name } },
+                });
+                setSelectedId(queryParams.selectedId);
+
+                const parent = findParentKeys(filteredTree, queryParams.selectedId);
+                setOpenKeys(parent);
+            } else {
+                setFileContent("## 选择你感兴趣的内容吧");
+            }
         }
+        fn()
     }, [queryParams]);
 
     // 获取仓库目录树
@@ -57,6 +64,8 @@ const Note = () => {
             const data = await getRepoTree(owner, repo);
             const filteredTree = filterRepoTree(data);
             setRepoTree(filteredTree);
+
+            return filteredTree
         } catch (error) {
             setFileContent("## 敬请期待");
         } finally {
@@ -107,24 +116,77 @@ const Note = () => {
         return match ? match[1] : null;
     }
 
+    function decodeFromBase64(encodedStr) {
+        return decodeURIComponent(atob(encodedStr));  // 使用 decodeURIComponent 代替 unescape
+    }
+
+
+    /**
+     * 查找指定节点的所有父节点 key
+     * @param {Array} tree - 树结构根节点
+     * @param {string} targetKey - 目标节点的 key
+     * @return {Array} - 返回目标节点所有父节点的 key
+     */
+    function findParentKeys(tree, targetKey) {
+
+
+        const path = []; // 用于存储路径中的节点 key
+
+        function dfs(node, ancestors) {
+            // 当前节点的 key 加入 ancestors，形成路径
+            ancestors.push(node.key);
+
+            // 如果找到目标节点，则返回 true，结束递归
+            if (node.key === targetKey) {
+                path.push(...ancestors.slice(0, -1)); // 不包含目标节点本身
+                return true;
+            }
+
+            // 如果有子节点，则对每个子节点递归调用 dfs
+            if (node.children) {
+                for (const child of node.children) {
+                    if (dfs(child, ancestors)) return true;
+                }
+            }
+
+            // 如果当前路径没有找到，回溯，移除当前节点的 key
+            ancestors.pop();
+            return false;
+        }
+
+        // 遍历根节点数组
+        for (const rootNode of tree) {
+            if (dfs(rootNode, [])) break;
+        }
+
+        return path;
+    }
+    const onOpenChange = (openKeys) => {
+        setOpenKeys(openKeys);
+    }
+
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath) => {
+
         const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
-        const fullPath = extractMiddlePath(filePath.key, basePath, name);
+        const key = decodeFromBase64(filePath.key);
+        const fullPath = extractMiddlePath(key, basePath, name);
+
+        const parent = findParentKeys(repoTree, filePath.key);
 
 
         try {
             setFileContent("## 加载中");
             setLoading(true);
-            const content = await getFileContent(owner, repo, filePath.key);
-            setUrlParams({ key: filePath.key, fullPath, name });
+            const content = await getFileContent(owner, repo, key);
+            setUrlParams({ selectedId: filePath.key, name });
             const updatedContent = replaceImagePaths(content, fullPath);
             setFileContent(updatedContent);
+            setSelectedId(filePath.key);
         } catch (error) {
-
             setFileContent('加载失败');
         } finally {
             setLoading(false);
@@ -158,9 +220,6 @@ const Note = () => {
 
     return (
         <div className={styles['note']}>
-            <div className={styles['toggle-drawer']}>
-                <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
-            </div>
             < div className={styles['note-content-pc']}>
                 <Splitter >
                     <Splitter.Panel defaultSize="20%" min="20%" max="40%" className={styles['menu-container-l']}>
@@ -168,21 +227,19 @@ const Note = () => {
                             <MenuLayout
                                 dataSource={repoTree}
                                 onClick={fetchFileContent}
-                                selectedId={selectedId}
-                                onSelect={(key) => {
-                                    setSelectedId(key);
-                                    setUrlParams({ ...urlParams, selectedId: key });
-                                }}
+                                selectedKeys={[selectedId]}
+                                openKeys={openKeys}
+                                onOpenChange={onOpenChange}
                             />
                         </div>
                     </Splitter.Panel>
                     <Splitter.Panel className={styles['menu-container-r']}>
-
                         <Content
                             loading={loading}
                             data={fileContent}
                             toggleDrawer={toggleDrawer}
                             fetchFileContent={fetchFileContent}
+
                         />
                     </Splitter.Panel>
                 </Splitter>
@@ -192,11 +249,9 @@ const Note = () => {
                     <MenuLayout
                         dataSource={repoTree}
                         onClick={fetchFileContent}
-                        selectedId={selectedId}
-                        onSelect={(key) => {
-                            setSelectedId(key);
-                            setUrlParams({ ...urlParams, selectedId: key });
-                        }}
+                        selectedKeys={[selectedId]}
+                        openKeys={openKeys}
+                        onOpenChange={onOpenChange}
                     />
                 </div>
             </Drawer>
@@ -207,43 +262,10 @@ const Note = () => {
                     data={fileContent}
                     toggleDrawer={toggleDrawer}
                     fetchFileContent={fetchFileContent}
+
+
                 />
             </div>
-            {/* <div className={styles['toggle-drawer']}>
-                <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
-            </div>
-            <div className={styles['note-content']}>
-                <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
-                    <div style={{ marginLeft: '-20px' }}>
-                        <MenuLayout
-                            dataSource={repoTree}
-                            onClick={fetchFileContent}
-                            selectedId={selectedId}
-                            onSelect={(key) => {
-                                setSelectedId(key);
-                                setUrlParams({ ...urlParams, selectedId: key });
-                            }}
-                        />
-                    </div>
-                </Drawer>
-                <div className={styles['menu-container-l']}>
-                    <MenuLayout
-                        dataSource={repoTree}
-                        onClick={fetchFileContent}
-                        selectedId={selectedId}
-                        onSelect={(key) => {
-                            setSelectedId(key);
-                            setUrlParams({ ...urlParams, selectedId: key });
-                        }}
-                    />
-                </div>
-                <Content
-                    loading={loading}
-                    data={fileContent}
-                    toggleDrawer={toggleDrawer}
-                    fetchFileContent={fetchFileContent}
-                />
-            </div> */}
         </div>
     );
 };

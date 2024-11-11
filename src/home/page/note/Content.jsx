@@ -5,7 +5,7 @@ import { Header } from "./Header";
 // import Loading from '@/home/components/Loading';
 import { Skeleton } from 'antd';
 
-const Loading = ({ style }) => {
+const Loading = ({ style, }) => {
   return (
     <div style={style}>
       <Skeleton active /> <br />
@@ -19,7 +19,7 @@ const Loading = ({ style }) => {
   );
 }
 
-export const Content = ({ data, handleGoHome, fetchFileContent, loading }) => {
+export const Content = ({ data, handleGoHome, fetchFileContent, loading, toggleDrawer, searchClick }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -35,7 +35,12 @@ export const Content = ({ data, handleGoHome, fetchFileContent, loading }) => {
   return (
     <div className={`${styles['content_box']} container `}>
 
-      <Header onGoHome={handleGoHome} fetchFileContent={fetchFileContent} />
+
+      <Header onGoHome={handleGoHome} fetchFileContent={fetchFileContent} searchClick={searchClick} />
+
+      <div className={styles['toggle-drawer']}>
+        <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>menu</span>
+      </div>
 
       {loading ? <Loading style={{
         width: '100%', height: "80vh", padding: '24px', overflow: 'hidden',

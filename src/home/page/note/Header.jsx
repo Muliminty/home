@@ -4,13 +4,14 @@ import Modal from "@/home/components/modal";
 import { useState } from "react";
 import { MarkdownRenderer } from "../../components/ReactMarkdown";
 import styles from './style.module.scss';
+import Loading from '@/home/components/Loading';
 
 /**
  * Header 组件，包含标题和主题切换器。
  * @param {Object} props - 组件属性。
  * @param {Function} props.onGoHome - 回到根路由的函数。
  */
-export const Header = ({ fetchFileContent }) => {
+export const Header = ({ fetchFileContent, searchClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyword, setKeyword] = useState(''); // 关键字状态
   const [searchResults, setSearchResults] = useState([]); // 搜索结果状态
@@ -24,9 +25,7 @@ export const Header = ({ fetchFileContent }) => {
     setKeyword(event.target.value);
   };
 
-  const handleGoHome = () => {
-    navigate('/');
-  };
+
   // 执行搜索
   const handleSearch = async () => {
     if (keyword.trim()) {
@@ -41,13 +40,13 @@ export const Header = ({ fetchFileContent }) => {
 
   return (
     <div className={styles['header']}>
-      {/* <div style={{ display: 'flex', alignItems: 'center' }}>
-        <h3 onClick={handleGoHome} style={{ cursor: 'pointer', marginRight: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {/* <h3 onClick={handleGoHome} style={{ cursor: 'pointer', marginRight: '10px' }}>
           Muliminty
-        </h3>
+        </h3> */}
 
         <a style={{ cursor: 'pointer', marginRight: '10px' }} onClick={openModal}>搜索文章</a>
-      </div> */}
+      </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div>
@@ -60,7 +59,7 @@ export const Header = ({ fetchFileContent }) => {
               placeholder="请输入搜索关键词" />
             <a onClick={handleSearch} style={{ width: '100px', marginLeft: '10px', cursor: 'pointer' }}>开始搜索</a>
           </div>
-          {/* 
+
           <div>
             {loading ? <Loading style={{ width: '98%', height: "300px", transform: 'scale(0.5)' }} /> :
               <>
@@ -71,11 +70,14 @@ export const Header = ({ fetchFileContent }) => {
                         return <></>;
                       }
                       return (
-
                         <li key={index} className={styles['search-item']} onClick={async () => {
-                          console.log('fileInfo: ', fileInfo);
-                          await fetchFileContent({ ...fileInfo });
+                          await fetchFileContent({
+                            ...fileInfo,
+                            item: { props: { name: fileInfo.name } },
+                            key: fileInfo.path,
+                          });
                           closeModal();
+                          searchClick(fileInfo)
                         }}>
                           <h4 className="file-name">
                             {fileInfo.name}
@@ -95,12 +97,12 @@ export const Header = ({ fetchFileContent }) => {
                   <p className={styles['no-results']}>没有找到匹配的文件。</p>
                 )}</>}
 
-          </div> */}
+          </div>
 
         </div>
-      </Modal>
+      </Modal >
 
       <ThemeSwitcher />
-    </div>
+    </div >
   );
 };

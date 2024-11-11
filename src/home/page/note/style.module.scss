@@ -42,6 +42,7 @@
 
 .content_box {
   // width: calc(100% - 300px);
+  padding-top: 0;
 }
 
 .content {
@@ -74,6 +75,7 @@
   justify-content: space-between;
   box-shadow: var(--shadow); // 使用主题阴影
   border-bottom: 1px solid var(--divider);
+  background: var(--background-color);
 
   h3 {
     cursor: pointer;
@@ -159,7 +161,8 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--divider);
-
+  width: 100%;
+  background: var(--background-color);
   padding: 0 15px;
 
   .toggle-drawer-btn {
@@ -177,6 +180,7 @@
     display: block;
   }
 
+  .menu-title,
   .note-content-pc {
     display: none;
   }
@@ -201,6 +205,7 @@
     display: block;
   }
 
+  .menu-title,
   .note-content-pc {
     display: none;
   }
