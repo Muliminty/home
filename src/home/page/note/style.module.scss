@@ -50,19 +50,6 @@
   height: 100%;
   padding: 24px;
   overflow-y: scroll;
-
-  .fadeIn {
-    opacity: 0;
-    transform: translateY(-20px);
-    /* 初始位置稍微上移 */
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .visible {
-    opacity: 1;
-    transform: translateY(0);
-    /* 恢复到原始位置 */
-  }
 }
 
 
@@ -152,6 +139,7 @@
     text-align: center;
     font-size: 1.2rem;
     color: #888;
+    margin-top: 15px;
   }
 }
 
@@ -244,5 +232,21 @@
       overflow-x: hidden !important;
     }
 
+  }
+}
+
+.animation {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

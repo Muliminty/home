@@ -56,7 +56,15 @@ export const Header = ({ fetchFileContent, searchClick }) => {
               type="text"
               value={keyword}
               onChange={handleInputChange}
-              placeholder="请输入搜索关键词" />
+              placeholder="请输入搜索关键词"
+              // 回车
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch(); // 执行查询函数
+                }
+              }}
+            />
+
             <a onClick={handleSearch} style={{ width: '100px', marginLeft: '10px', cursor: 'pointer' }}>开始搜索</a>
           </div>
 
