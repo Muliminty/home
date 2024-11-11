@@ -5,8 +5,8 @@ import HandwrittenText from '@/home/components/textAnimation/HandwrittenText'
 import styles from './style.module.scss';
 import { Menu } from 'antd';
 
-export const MenuLayout = ({ dataSource = [], onClick, selectedKeys,
-
+export const MenuLayout = ({
+  dataSource = [], onClick, selectedKeys,
   ...props
 }) => {
 
@@ -20,6 +20,7 @@ export const MenuLayout = ({ dataSource = [], onClick, selectedKeys,
     <div onClick={handleGoHome} className={styles['menu-title']} style={{ cursor: 'pointer', height: '50px' }}>
       <HandwrittenText scale={'0.4'} />
     </div>
+
     <div style={{
       height: 'calc(100vh - 50px)',
       overflowY: 'scroll'

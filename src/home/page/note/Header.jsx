@@ -74,7 +74,7 @@ export const Header = ({ fetchFileContent, searchClick }) => {
                           await fetchFileContent({
                             ...fileInfo,
                             item: { props: { name: fileInfo.name } },
-                            key: fileInfo.path,
+                            key: fileInfo.key,
                           });
                           closeModal();
                           searchClick(fileInfo)

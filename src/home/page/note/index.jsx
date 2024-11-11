@@ -186,6 +186,7 @@ const Note = () => {
             const updatedContent = replaceImagePaths(content, fullPath);
             setFileContent(updatedContent);
             setSelectedId(filePath.key);
+            setOpenKeys(() => [...parent, ...openKeys]);
         } catch (error) {
             setFileContent('加载失败');
         } finally {
@@ -222,7 +223,7 @@ const Note = () => {
         <div className={styles['note']}>
             < div className={styles['note-content-pc']}>
                 <Splitter >
-                    <Splitter.Panel defaultSize="20%" min="20%" max="40%" className={styles['menu-container-l']}>
+                    <Splitter.Panel collapsible defaultSize="30%" min="20%" max="40%" className={styles['menu-container-l']}>
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
                                 dataSource={repoTree}
