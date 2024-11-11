@@ -34,7 +34,9 @@ export const Content = ({ data, handleGoHome, fetchFileContent, loading }) => {
 
   return (
     <div className={`${styles['content_box']} container `}>
+
       <Header onGoHome={handleGoHome} fetchFileContent={fetchFileContent} />
+
       {loading ? <Loading style={{
         width: '100%', height: "80vh", padding: '24px', overflow: 'hidden',
       }} /> : <div className={styles['content']}>

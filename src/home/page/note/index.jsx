@@ -109,10 +109,12 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath) => {
-        const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
+        const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
+        // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
         const fullPath = extractMiddlePath(filePath.key, basePath, name);
+
 
         try {
             setFileContent("## 加载中");
@@ -122,6 +124,7 @@ const Note = () => {
             const updatedContent = replaceImagePaths(content, fullPath);
             setFileContent(updatedContent);
         } catch (error) {
+
             setFileContent('加载失败');
         } finally {
             setLoading(false);
@@ -158,30 +161,32 @@ const Note = () => {
             <div className={styles['toggle-drawer']}>
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
             </div>
-            <Splitter >
-                <Splitter.Panel defaultSize="20%" min="20%" max="40%" className={styles['menu-container-l']}>
-                    <div className={styles['menu-container-l']}>
-                        <MenuLayout
-                            dataSource={repoTree}
-                            onClick={fetchFileContent}
-                            selectedId={selectedId}
-                            onSelect={(key) => {
-                                setSelectedId(key);
-                                setUrlParams({ ...urlParams, selectedId: key });
-                            }}
-                        />
-                    </div>
-                </Splitter.Panel>
-                <Splitter.Panel className={styles['menu-container-r']}>
+            < div className={styles['note-content-pc']}>
+                <Splitter >
+                    <Splitter.Panel defaultSize="20%" min="20%" max="40%" className={styles['menu-container-l']}>
+                        <div className={styles['menu-container-l']}>
+                            <MenuLayout
+                                dataSource={repoTree}
+                                onClick={fetchFileContent}
+                                selectedId={selectedId}
+                                onSelect={(key) => {
+                                    setSelectedId(key);
+                                    setUrlParams({ ...urlParams, selectedId: key });
+                                }}
+                            />
+                        </div>
+                    </Splitter.Panel>
+                    <Splitter.Panel className={styles['menu-container-r']}>
 
-                    <Content
-                        loading={loading}
-                        data={fileContent}
-                        toggleDrawer={toggleDrawer}
-                        fetchFileContent={fetchFileContent}
-                    />
-                </Splitter.Panel>
-            </Splitter>
+                        <Content
+                            loading={loading}
+                            data={fileContent}
+                            toggleDrawer={toggleDrawer}
+                            fetchFileContent={fetchFileContent}
+                        />
+                    </Splitter.Panel>
+                </Splitter>
+            </div>
             <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
                 <div style={{ marginLeft: '-20px' }}>
                     <MenuLayout
@@ -195,6 +200,15 @@ const Note = () => {
                     />
                 </div>
             </Drawer>
+
+            < div className={styles['note-content-phone']}>
+                <Content
+                    loading={loading}
+                    data={fileContent}
+                    toggleDrawer={toggleDrawer}
+                    fetchFileContent={fetchFileContent}
+                />
+            </div>
             {/* <div className={styles['toggle-drawer']}>
                 <span className={styles['toggle-drawer-btn']} onClick={toggleDrawer}>MenuLayout</span>
             </div>

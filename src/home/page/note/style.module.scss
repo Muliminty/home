@@ -6,11 +6,14 @@
   overflow: hidden;
 }
 
-.note-content {
-  display: flex;
-  height: calc(100vh - 50px - 15px);
-
+.note-content-phone {
+  display: none;
 }
+
+.note-content-pc {
+  display: block;
+}
+
 
 .menu {
   // width: 300px;
@@ -170,6 +173,14 @@
 
 // 手机（最大宽度 600px）
 @media (max-width: 600px) {
+  .note-content-phone {
+    display: block;
+  }
+
+  .note-content-pc {
+    display: none;
+  }
+
   .menu-container-l {
     display: none;
   }
@@ -185,6 +196,15 @@
 
 // 平板（最大宽度 900px）
 @media (max-width: 900px) {
+
+  .note-content-phone {
+    display: block;
+  }
+
+  .note-content-pc {
+    display: none;
+  }
+
   .menu-container-l {
     display: none;
   }
