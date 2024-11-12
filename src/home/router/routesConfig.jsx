@@ -6,6 +6,7 @@ const About = lazy(() => import('../page/about/index.jsx')); // 使用相对路�
 const Blog = lazy(() => import('../page/blog/index.jsx')); // 使用相对路径
 const APITest = lazy(() => import('../page/apiTest/index.jsx')); // 使用相对路径
 const Note = lazy(() => import('../page/note/index.jsx')); // 使用相对路径
+const Memos = lazy(() => import('../page/memos/index.jsx')); // 使用相对路径
 const routesConfig = [
   {
     path: '/',
@@ -23,6 +24,14 @@ const routesConfig = [
   {
     path: '/Note',
     element: <Note />,
+  },
+  {
+    path: '/Memos',
+    element: <Memos />,
+  },
+  {
+    path: '/APITest',
+    element: <APITest />,
   }
 ];
 
