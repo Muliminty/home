@@ -1,17 +1,4 @@
 .MarkdownRenderer {
-  // pre {
-  //   background-color: var(--code-background) !important;
-  //   color: var(--text-color) !important;
-  //   margin: 0;
-
-  //   code {
-  //     background-color: var(--code-background) !important;
-  //     color: var(--text-color) !important;
-  //     padding: 16px !important;
-  //   }
-
-
-  // }
 
   .code-inline {
     background-color: var(--code-background) !important;
@@ -20,9 +7,6 @@
     font-family: 'Courier New', Courier, monospace; // 字体样式
   }
 
-  // :global(.token) {
-  //   background: unset !important;
-  // }
 
   .code-block-container {
     position: relative;
@@ -47,5 +31,48 @@
       background-color: #e0e0e0; // 悬停效果
     }
   }
+
+
+  .custom-ul {
+    list-style: none;
+  }
+
+  .custom-list-item {
+    display: flex;
+    align-items: flex-start;
+    /* 确保项目符号与文本顶端对齐 */
+    gap: 8px;
+    /* 控制项目符号与文本的间距 */
+    margin: 4px 0;
+
+    .list-icon {
+      flex-shrink: 0;
+      color: #0070f3;
+      /* 图标的宽度，确保不同层级对齐 */
+      text-align: center;
+      /* 控制图标位置 */
+    }
+
+    .list-content {
+      flex-grow: 1;
+    }
+  }
+
+  .list-level-0 {
+    padding-left: 20px;
+  }
+
+  .list-level-1 {
+    padding-left: 30px;
+  }
+
+  .list-level-2 {
+    padding-left: 40px;
+  }
+
+  .list-level-3 {
+    padding-left: 50px;
+  }
+
 
 }
