@@ -29,8 +29,7 @@
 }
 
 .content {
-  height: calc(70vh - 30px);
-  overflow-y: scroll;
+ 
 }
 
 .postCard {
@@ -40,7 +39,7 @@
   padding: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   &:hover {
     transform: translateY(-2px);
   }
