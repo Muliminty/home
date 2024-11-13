@@ -77,25 +77,28 @@ const Memos = () => {
     if (imageCount === 0) return 150
 
     if (imageCount <= 3 && imageCount > 0) {
-      return 150 + 150
+      return 150 + 80
     }
     if (imageCount <= 6 && imageCount > 3) {
-      return 150 + 300
+      return 150 + 80 + 80
     }
     if (imageCount <= 9 && imageCount > 6) {
-      return 150 + 600
+      return 150 + 80 + 80 + 80
     }
   };
 
   return (
     <div className={styles.feedContainer}>
-      <div className={styles.header}>333</div>
+      <div className={styles.header}>广告位招租</div>
       <div className={styles.content}>
         <List
           height={listHeight} // 高度设置为视口高度，减去 header 和其他内容
           itemCount={posts.length}
           itemSize={(index) => {
             const post = posts[index].data;
+
+            //这里需要根据不同的元素单独计算 
+
             const h = getItemHeight(post.images.length || 0) // 根据图片数量动态计算每项高度
             console.log(index, h);
             return h

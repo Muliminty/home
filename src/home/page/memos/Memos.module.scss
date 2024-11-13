@@ -2,14 +2,16 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 600px;
+  height: 100vh;
+  max-width: 375px;
   margin: 0 auto;
 }
 
 .header {
   height: 30vh;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 50vw;
+  min-width: 375px;
+  margin-left: calc(50% - 25vw);
   background-color: var(--background-color);
 
   display: flex;
@@ -28,8 +30,18 @@
   }
 }
 
+@media (max-width: 600px) {
+  .header {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    font-size: 1.5em;
+  }
+}
+
 .content {
- 
+  height: calc(70vh);
+  overflow: hidden;
+
 }
 
 .postCard {
@@ -40,6 +52,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   margin-bottom: 50px;
+
   &:hover {
     transform: translateY(-2px);
   }
