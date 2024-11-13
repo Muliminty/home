@@ -9,7 +9,7 @@ import { api, ApiGatewayServer } from './apiConfig';
  */
 export const getRepoInfo = async (owner, repo) => {
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             owner,
             repo,
             type: 'getRepoInfo'
@@ -31,7 +31,7 @@ export const getRepoInfo = async (owner, repo) => {
 export const getFileContent = async (owner, repo, filePath) => {
     console.log('filePath: ', filePath);
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             owner,
             repo,
             filePath,
@@ -52,7 +52,7 @@ export const getFileContent = async (owner, repo, filePath) => {
  */
 export const getCommitHistory = async (owner, repo) => {
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             owner,
             repo,
             type: 'getCommitHistory'
@@ -73,7 +73,7 @@ export const getCommitHistory = async (owner, repo) => {
  */
 export const getMarkdownFiles = async (owner, repo, folderPath) => {
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             owner,
             repo,
             folderPath,
@@ -94,7 +94,7 @@ export const getMarkdownFiles = async (owner, repo, folderPath) => {
  */
 export const getRepoTree = async (owner, repo) => {
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             owner,
             repo,
             type: 'getRepoTree'
@@ -113,7 +113,7 @@ export const getRepoTree = async (owner, repo) => {
  */
 export const searchMarkdownFilesByName = async (keyword) => {
     try {
-        const response = await api.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
             keyword,
             type: 'searchMarkdownFilesByName'
         });

@@ -4,7 +4,7 @@ import axios from 'axios';
 // 根据环境变量设置不同的 API 地址
 const mode = import.meta.env.MODE; // 获取当前模式
 const apiUrl = mode === 'production' ? 'http://muliminty.online:3000' : 'http://localhost:3000';
-const ApiGatewayServer = `${apiUrl}/localFile`;
+const ApiGatewayServer = `${apiUrl}`;
 
 // 创建 axios 实例
 const api = axios.create({
