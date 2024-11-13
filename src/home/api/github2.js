@@ -1,70 +1,15 @@
-import envConfig from '..//../../env.js'; // 导入环境变量配置。
-import axios from 'axios';
+// apiRequests.js
+import { api, ApiGatewayServer } from './apiConfig';
 
-const mode = import.meta.env.MODE; // 获取当前模式
-
-// 根据模式设置不同的 API 地址
-const apiUrl = mode === 'production' ? 'http://muliminty.online:3000' : 'http://localhost:3000';
-
-const ApiGatewayServer = `${apiUrl}/localFile`;
-
-const githubApi = axios.create({
-    baseURL: '/', // 自动使用 Vite 代理
-    timeout: 60 * 1000, // 请求超时时间
-    headers: {
-        'Content-Type': 'application/json',
-    }
-});
-
-// 添加请求拦截器
-githubApi.interceptors.request.use(
-    (config) => {
-        // 在请求发送之前做些什么
-        // console.log('Request:', {
-        //     url: config.url,
-        //     method: config.method,
-        //     headers: config.headers,
-        //     data: config.data,
-        //     ApiGatewayServer,
-        //     mode
-        // });
-        return config;
-    },
-    (error) => {
-        // 请求错误时做些什么
-        console.error('Request error:', error);
-        return Promise.reject(error);
-    }
-);
-
-// 添加响应拦截器
-githubApi.interceptors.response.use(
-    (response) => {
-        // 对响应数据做些什么
-        // console.log('Response:', {
-        //     url: response.config.url,
-        //     status: response.status,
-        //     data: response.data,
-        // });
-        return response;
-    },
-    (error) => {
-        // 对响应错误做些什么
-        console.error('Response error:', {
-            url: error.config?.url,
-            status: error.response?.status,
-            data: error.response?.data,
-        });
-        return Promise.reject(error);
-    }
-);
-
-// ApiGatewayServer
-
-// 1. 获取仓库信息
+/**
+ * 获取仓库信息
+ * @param {string} owner - 仓库拥有者
+ * @param {string} repo - 仓库名
+ * @returns {Promise<Object>} - 返回仓库信息
+ */
 export const getRepoInfo = async (owner, repo) => {
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getRepoInfo'
@@ -76,10 +21,17 @@ export const getRepoInfo = async (owner, repo) => {
     }
 };
 
-// 2. 获取文件内容
+/**
+ * 获取文件内容
+ * @param {string} owner - 仓库拥有者
+ * @param {string} repo - 仓库名
+ * @param {string} filePath - 文件路径
+ * @returns {Promise<string>} - 返回文件内容
+ */
 export const getFileContent = async (owner, repo, filePath) => {
+    console.log('filePath: ', filePath);
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             filePath,
@@ -92,10 +44,15 @@ export const getFileContent = async (owner, repo, filePath) => {
     }
 };
 
-// 3. 获取提交历史
+/**
+ * 获取提交历史
+ * @param {string} owner - 仓库拥有者
+ * @param {string} repo - 仓库名
+ * @returns {Promise<Object>} - 返回提交历史数据
+ */
 export const getCommitHistory = async (owner, repo) => {
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getCommitHistory'
@@ -107,10 +64,16 @@ export const getCommitHistory = async (owner, repo) => {
     }
 };
 
-// 4. 获取指定文件夹下的 Markdown 文件
+/**
+ * 获取指定文件夹下的 Markdown 文件
+ * @param {string} owner - 仓库拥有者
+ * @param {string} repo - 仓库名
+ * @param {string} folderPath - 文件夹路径
+ * @returns {Promise<Array>} - 返回文件夹下的 Markdown 文件
+ */
 export const getMarkdownFiles = async (owner, repo, folderPath) => {
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             folderPath,
@@ -123,10 +86,15 @@ export const getMarkdownFiles = async (owner, repo, folderPath) => {
     }
 };
 
-// 5. 获取仓库树形结构
+/**
+ * 获取仓库树形结构
+ * @param {string} owner - 仓库拥有者
+ * @param {string} repo - 仓库名
+ * @returns {Promise<Object>} - 返回仓库树形结构
+ */
 export const getRepoTree = async (owner, repo) => {
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             owner,
             repo,
             type: 'getRepoTree'
@@ -138,15 +106,20 @@ export const getRepoTree = async (owner, repo) => {
     }
 };
 
-// 根据关键词查询文件
+/**
+ * 根据关键词查询文件
+ * @param {string} keyword - 搜索的关键词
+ * @returns {Promise<Object>} - 返回搜索结果
+ */
 export const searchMarkdownFilesByName = async (keyword) => {
     try {
-        const response = await githubApi.post(`${ApiGatewayServer}/repo`, {
+        const response = await api.post(`${ApiGatewayServer}/repo`, {
             keyword,
             type: 'searchMarkdownFilesByName'
         });
         return response.data;
     } catch (error) {
         console.error('Error searching files:', error);
+        throw error;
     }
-}
+};

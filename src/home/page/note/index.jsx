@@ -65,6 +65,8 @@ const Note = () => {
         setLoading(true);
         try {
             const data = await getRepoTree(owner, repo);
+            console.log('data: ', data);
+
             const filteredTree = filterRepoTree(data);
             setRepoTree(filteredTree);
 
@@ -119,9 +121,13 @@ const Note = () => {
         return match ? match[1] : null;
     }
 
-    function decodeFromBase64(encodedStr) {
-        return decodeURIComponent(atob(encodedStr));  // 使用 decodeURIComponent 代替 unescape
+    // 将 Base64 编码的字符串解码回原始字符串
+    function decodeFromBase64(base64String) {
+        const decodedString = atob(base64String); // 解码 Base64 字符串
+        return decodeURIComponent(escape(decodedString)); // 转回 UTF-8 字符串
     }
+
+
 
 
     /**
@@ -170,16 +176,20 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
+        console.log('filePath: ', filePath);
         const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
-        const key = decodeFromBase64(filePath.key);
-        const fullPath = extractMiddlePath(key, basePath, name);
+
+        const path = item.props.path || decodeFromBase64(filePath.key)
+        console.log('path: ', path);
+        const fullPath = extractMiddlePath(path, basePath, name);
         const parent = findParentKeys(filteredTree || repoTree, filePath.key);
         try {
             setLoading(true);
-            const content = await getFileContent(owner, repo, key);
+            const content = await getFileContent(owner, repo, path);
+
             setUrlParams({ selectedId: filePath.key, name });
             const updatedContent = replaceImagePaths(content, fullPath);
             setFileContent(updatedContent);
