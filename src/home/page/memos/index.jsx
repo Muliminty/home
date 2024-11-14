@@ -97,7 +97,13 @@ const Memos = () => {
         className={`${styles.postCard}`} key={post.id} style={newStyle} >
         {/* <img src={user} className={styles.avatar} /> */}
         <div className={styles.postContent}
-          onClick={() => handleViewAll(index)}
+          onClick={(e) => {
+            const no = ['ant-image-mask', 'ant-image-preview-img', 'ant-image-preview-wrap', 'ant-image-mask-info']
+            if (no.includes(e.target.className)) {
+              return
+            }
+            handleViewAll(index)
+          }}
         >
           <div style={{ flex: 1 }}>
             <div className={styles.username}>{post.title || 'Muliminty'}</div>
