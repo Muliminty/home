@@ -1,19 +1,33 @@
 .feedContainer {
   display: flex;
   flex-direction: column;
+  color: var(--text-color);
   gap: 12px;
   height: 100vh;
   max-width: 375px;
   margin: 0 auto;
 }
 
-.header {
-  height: 30vh;
-  width: 50vw;
-  min-width: 375px;
-  margin-left: calc(50% - 25vw);
-  background-color: var(--background-color);
+.content>div {
+  /* 强制元素产生滚动条 */
+  overflow: auto;
+}
 
+/* 隐藏滚动条 */
+.content>div::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Edge */
+}
+
+.content>div {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+.header {
+  background-color: var(--background-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,18 +44,16 @@
   }
 }
 
-@media (max-width: 600px) {
-  .header {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    font-size: 1.5em;
-  }
-}
+// @media (max-width: 600px) {
+//   .header {
+//     width: 100vw;
+//     margin-left: calc(50% - 50vw);
+//     font-size: 1.5em;
+//   }
+// }
 
 .content {
-  height: calc(70vh);
   overflow: hidden;
-
 }
 
 .postCard {
@@ -74,12 +86,13 @@
 
 .username {
   font-weight: bold;
-  color: #333333;
+  // color: #333333;
 }
 
 .content {
   margin: 8px 0;
-  color: #555555;
+  margin-top: 0;
+  // color: #555555;
   line-height: 1.6;
 }
 
@@ -87,6 +100,8 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
+  text-align: center;
   font-size: 0.85em;
   color: #999999;
 }
@@ -106,6 +121,66 @@
   cursor: pointer;
   object-fit: cover;
 }
+
+.drawer-view-all {
+  width: 375px;
+  margin: 0 auto;
+
+  .drawer-view-all-content {
+    flex: 1;
+    overflow-y: scroll;
+    height: 100%;
+  }
+
+  .drawer-view-all-content {
+    /* 强制元素产生滚动条 */
+    overflow: auto;
+  }
+
+  /* 隐藏滚动条 */
+  .drawer-view-all-content ::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+  }
+
+  .drawer-view-all-content {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+  }
+
+  :global {
+    .ant-drawer-body {
+      display: flex;
+      flex-direction: column;
+
+      justify-content: flex-start;
+
+
+      .ant-drawer-body>dev {
+        /* 强制元素产生滚动条 */
+        overflow: auto;
+      }
+
+      /* 隐藏滚动条 */
+      .ant-drawer-body>dev ::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Edge */
+      }
+
+      .ant-drawer-body>dev {
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE 10+ */
+      }
+
+    }
+  }
+}
+
+
 
 @media (max-width: 480px) {
   .postCard {

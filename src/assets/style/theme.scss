@@ -7,18 +7,9 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-// 按钮样式：背景色、文字颜色、圆角及其他样式
-button {
-    background-color: var(--button-background);
-    color: var(--button-text-color);
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-}
 
 // antd 主题样式：定义通用背景色、文字颜色，并去除边框
-
+.ant-drawer-content,
 .ant-menu,
 .ant-splitter {
     background-color: var(--background-color) !important; // 背景色，重要属性覆盖默认值
@@ -26,7 +17,7 @@ button {
     border: none !important; // 移除默认边框样式
 }
 
-
+.ant-drawer-close,
 .ant-menu-title-content,
 .ant-menu-submenu-arrow {
     color: var(--text-color) !important; // 设置文字和箭头颜色，确保与主题颜色一致
@@ -61,6 +52,10 @@ button {
 :where(.css-dev-only-do-not-override-apn68)[class*=" ant-splitter"] [class*=" ant-splitter"] {
     color: var(--text-color) !important; // 文字颜色，重要属性覆盖默认值
 
+}
+
+.ant-btn {
+    color: var(--text-color) !important;
 }
 
 // 特殊样式
