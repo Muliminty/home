@@ -99,38 +99,29 @@ const Memos = () => {
         <div className={styles.postContent}
           onClick={() => handleViewAll(index)}
         >
-          <div className={styles.username}>Mulimintyy</div>
-          <div style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: "hidden" }}>
-            <div style={{ height: 35, overflowY: "hidden" }}><MarkdownRenderer data={post.content} /></div>
-            {/* 渲染Markdown内容 */}
+          <div style={{ flex: 1 }}>
+            <div className={styles.username}>{post.title || 'Muliminty'}</div>
+            <div style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: "hidden" }}>
+              <div style={{ height: 35, overflowY: "hidden" }}><MarkdownRenderer data={post.content} /></div>
+            </div>
+
+            <Image.PreviewGroup
+              items={[
+                ...post.images
+              ]}
+            >
+              <div className={styles.imageGrid}>
+                {post.images.map((image, index) => {
+                  if (index >= 3) return null; // 限制最多显示9张图片
+                  return <Image src={image}
+                  />
+                })}
+              </div>
+            </Image.PreviewGroup>
           </div>
 
-          <Image.PreviewGroup
-            items={[
-              ...post.images
-            ]}
-          >
-            <div className={styles.imageGrid}>
-              {post.images.map((image, index) => {
-                if (index >= 3) return null; // 限制最多显示9张图片
-                return <Image src={image}
-                />
-              })}
-            </div>
-          </Image.PreviewGroup>
-          {/* <PhotoProvider>
-            <div className={styles.imageGrid}>
-              {post.images.map((image, index) => {
-                if (index >= 3) return null; // 限制最多显示9张图片
-                return <PhotoView key={index} src={image}>
-                  <img src={image} alt={`post-${post.id}-${index}`} className={styles.thumbnail} />
-                </PhotoView>
-              })}
-            </div>
-          </PhotoProvider> */}
           <div className={styles.timestamp}>
             <div>{post.date}</div>
-            <Button type='link' onClick={() => handleViewAll(index)}>查看</Button>
           </div>
         </div>
       </div>
