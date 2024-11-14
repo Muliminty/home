@@ -93,9 +93,12 @@ const Memos = () => {
       showDrawer();
     }
     return (
-      <div className={`${styles.postCard} ${styles.animation}`} key={post.id} style={newStyle} >
+      <div
+        className={`${styles.postCard}`} key={post.id} style={newStyle} >
         {/* <img src={user} className={styles.avatar} /> */}
-        <div className={styles.postContent}>
+        <div className={styles.postContent}
+          onClick={() => handleViewAll(index)}
+        >
           <div className={styles.username}>Mulimintyy</div>
           <div style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: "hidden" }}>
             <div style={{ height: 35, overflowY: "hidden" }}><MarkdownRenderer data={post.content} /></div>
@@ -151,7 +154,17 @@ const Memos = () => {
         width={375}
         height={window.innerHeight * 0.9}
         onClose={onClose} open={open}>
-        <div className={styles['drawer-view-all-content']} >
+        <div className={styles['drawer-view-all-content']} onClick={(e) => {
+          const no = ['ant-image-mask', 'ant-image-preview-img', 'ant-image-preview-wrap', 'ant-image-mask-info']
+          if (no.includes(e.target.className)
+            || e.target.className.includes("MarkdownRenderer")
+            || e.target.className.includes("imageGrid")
+          ) {
+            return
+          }
+          console.log('className: ', e.target.className);
+          onClose()
+        }} >
           <MarkdownRenderer data={post.content} />
           {post?.images && <Image.PreviewGroup
             items={[
@@ -169,7 +182,7 @@ const Memos = () => {
         </div>
 
         <div>{post.date}</div>
-      </Drawer>
+      </Drawer >
 
       <div className={styles.content}>
         <List
@@ -190,7 +203,7 @@ const Memos = () => {
           {renderRow}
         </List>
       </div>
-    </div>
+    </div >
   );
 };
 
