@@ -93,7 +93,7 @@ const Memos = () => {
       showDrawer();
     }
     return (
-      <div className={styles.postCard} key={post.id} style={newStyle} >
+      <div className={`${styles.postCard} ${styles.animation}`} key={post.id} style={newStyle} >
         {/* <img src={user} className={styles.avatar} /> */}
         <div className={styles.postContent}>
           <div className={styles.username}>Mulimintyy</div>
