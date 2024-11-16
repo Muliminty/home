@@ -4,7 +4,6 @@ import { useTheme } from '@/home/context/ThemeContext';
 
 const ThemeSwitcherCard = () => {
   const { theme, toggleTheme } = useTheme();
-  console.log('theme: ', theme);
 
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
 

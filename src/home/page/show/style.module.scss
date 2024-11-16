@@ -133,3 +133,112 @@
   font-size: 1rem;
   margin-bottom: 1.5rem;
 }
+
+/* 容器和公共样式 */
+.showContainer {
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.separator {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 栅格布局容器 */
+.gridContainer {
+  display: grid;
+  gap: 16px;
+  /* 默认间距 */
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  /* 默认列宽 */
+  grid-auto-rows: 120px;
+  /* 默认行高 */
+  grid-auto-flow: dense;
+  /* 紧凑布局 */
+  margin-bottom: 20px;
+  transition: all 0.5s ease-in-out;
+  /* 为容器添加过渡动画 */
+}
+
+/* Grid 项目的基础样式 */
+.gridItem {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  /* 为每个 gridItem 添加过渡动画 */
+}
+
+/* 当排序时，应用不同的动画 */
+.sorting {
+  opacity: 0;
+  /* 排序时逐渐消失 */
+  transform: translateY(-10px);
+  /* 向上移动 */
+}
+
+/* 大尺寸卡片 */
+.gridItemLarge {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* 关于卡片 */
+.gridItemAbout {
+  grid-column: span 5;
+  grid-row: span 2;
+  font-size: calc(1rem + 2vw);
+  /* 动态字体大小 */
+  font-size: clamp(12px, calc(1rem + 2vw), 20px);
+  /* 保证字体大小在合理范围内 */
+}
+
+/* 图片卡片 */
+.gridItemImage {
+  grid-column: span 4;
+  grid-row: span 1;
+  padding: 0 20px;
+}
+
+.gridItemImageContent {
+  width: 90%;
+  object-fit: contain;
+}
+
+/* 主题切换卡片 */
+.gridItemThemeSwitcher {
+  grid-column: span 2;
+  grid-row: span 3;
+}
+
+/* About 组件样式 */
+.aboutContainer {
+  text-align: start;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+.aboutTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aboutText {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cardContent {
+  width: 100%;
+  height: 100%;
+}
