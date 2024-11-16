@@ -5,6 +5,7 @@ import { useTheme } from '@/home/context/ThemeContext';
 import CardHover from './CardHover.jsx';
 import About from './About'; // 引入 About 组件
 import GalleryManager from './GalleryManager'; // 引入 GalleryManager 组件
+import 'animate.css'; // 引入 animate.css
 
 const Show = () => {
   const { theme } = useTheme(); // 获取当前的主题
@@ -34,6 +35,7 @@ const Show = () => {
 
   const [items, setItems] = useState(initialItems); // 当前显示的项目
   const [sorting, setSorting] = useState(false); // 用于触发排序
+  const [animatedItems, setAnimatedItems] = useState([]); // 动画延迟状态
 
   // 监听 theme 变化，动态更新背景色
   const [bgColor, setBgColor] = useState(theme === 'dark' ? '#26242d' : '#fff');
@@ -41,6 +43,27 @@ const Show = () => {
   useEffect(() => {
     setBgColor(theme === 'dark' ? '#26242d' : '#fff');
   }, [theme]);
+
+  useEffect(() => {
+    // 为每个卡片设置不同的动画延迟和动画类型
+    const timeouts = items.map((_, index) => index * 200); // 每个卡片之间的延迟时间 (200ms)
+
+    const animationTypes = [
+      'animate__fadeIn',
+      'animate__zoomIn',
+      'animate__slideInUp',
+      'animate__fadeInLeft',
+      'animate__fadeInRight'
+    ]; // 可以根据需要扩展动画效果类型
+
+    const delayedItems = items.map((item, index) => ({
+      ...item,
+      animationDelay: `${timeouts[index]}ms`, // 设置动画延迟
+      animationType: animationTypes[index % animationTypes.length], // 给每个卡片分配不同的动画
+    }));
+
+    setAnimatedItems(delayedItems);
+  }, [items]);
 
   const handleSort = () => {
     setSorting(true);
@@ -67,20 +90,19 @@ const Show = () => {
   return (
     <div className={styles.showContainer}>
       <div className={styles.separator}>------------------------</div>
-
-      {/* <button onClick={handleSort}>排序</button> 添加排序按钮 */}
-
+      <div onClick={handleSort}>排序</div>
       <div className={styles.gridContainer}>
         {/* 渲染每个项 */}
-        {items.map(({ id, type, content, width, height, style }) => (
+        {animatedItems.map(({ id, type, content, width, height, style, animationDelay, animationType }) => (
           <div
             key={id} // 强制 React 在排序时重新渲染
-            className={`${styles.gridItem} ${sorting ? styles.sorting : ''}`} // 添加排序过渡效果类
+            className={`${styles.gridItem} ${sorting ? styles.sorting : ''} animate__animated ${animationType}`}
             style={{
               ...style,
               ...(type === 'themeSwitcher' && { backgroundColor: bgColor }), // 只有 'themeSwitcher' 时才添加背景色
               gridColumn: `span ${width}`,
               gridRow: `span ${height}`,
+              animationDelay, // 设置动画延迟
             }}
           >
             <div className={styles.cardContent}>
