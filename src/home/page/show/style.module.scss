@@ -1,6 +1,7 @@
 /* 容器和公共样式 */
 .showContainer {
   width: 80vw;
+  max-width: 1200px;
   padding: 2rem;
   margin: 0 auto;
   box-sizing: border-box;
@@ -56,6 +57,7 @@
     grid-template-columns: 1fr;
     /* 只有一列 */
     gap: 6px;
+
   }
 
   /* 适配屏幕宽度为 320px 以下的超超小手机屏幕 */
@@ -63,8 +65,61 @@
     grid-template-columns: 1fr;
     /* 只有一列 */
     gap: 4px;
+
   }
 }
+
+@media (max-width: 900px) {
+  .gridContainer {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    /* 设置合理的网格间距 */
+  }
+
+  /* 主题切换卡片 */
+  .gridItemThemeSwitcher {
+    grid-column: span 3 !important;
+    grid-row: span 3 !important;
+  }
+
+  .gridItemImage {
+    grid-column: span 6 !important;
+    grid-row: span 2 !important;
+  }
+
+  .gridItemAbout {
+    grid-column: span 6 !important;
+    grid-row: span 3 !important;
+  }
+}
+
+
+/* 适配屏幕宽度为 600px 以下的手机屏幕 */
+@media (max-width: 600px) {
+  .gridContainer {
+    display: block;
+
+    .gridItem {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+  }
+}
+
+/* 适配屏幕宽度为 375px 以下的超小手机屏幕 */
+@media (max-width: 375px) {
+  .gridContainer {
+    display: block;
+
+    .gridItem {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+  }
+}
+
 
 /* Grid 项目的基础样式 */
 .gridItem {
