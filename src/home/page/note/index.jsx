@@ -221,7 +221,7 @@ const Note = () => {
         <div className={styles['note']}>
             < div className={styles['note-content-pc']}>
                 <Splitter >
-                    <Splitter.Panel collapsible defaultSize="20%" max="40%" className={styles['menu-container-l']}>
+                    <Splitter.Panel defaultSize="20%" min='20%' max="40%" className={styles['menu-container-l']}>
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
                                 dataSource={repoTree}

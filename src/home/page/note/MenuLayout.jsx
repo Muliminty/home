@@ -11,7 +11,7 @@ export const MenuLayout = ({
   ...props
 }) => {
   const [openKeys, setOpenKeys] = useState(props.openKeys || []);
-  const [isFold, setIsFold] = useState(false); // 控制折叠状态
+  const [isFold, setIsFold] = useState(true); // 控制折叠状态
   const navigate = useNavigate(); // 获取 navigate 函数
 
   useEffect(() => {
