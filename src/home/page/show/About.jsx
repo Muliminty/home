@@ -6,7 +6,7 @@ const About = () => {
     <div className={styles.aboutContainer}>
       <h4 className={styles.aboutTitle}>About</h4>
       <p className={styles.aboutText}>
-        I am a front-end developer from Xiamen, passionate about coding and exploring the endless possibilities of technology.
+        I am a front-end developer from Xiamen with a passion for coding.
       </p>
       <p className={styles.aboutText}>
         In my spare time, I constantly learn and practice new programming techniques, incorporating them into my personal website to blend technology and creativity.

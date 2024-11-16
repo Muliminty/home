@@ -86,7 +86,6 @@ const StyledWrapper = styled.div`
     width: 100%;
     background-color: inherit;
    // box-shadow: 0 4px 35px rgba(0, 0, 0, 0.1);
-    border-radius: 40px;
     display: flex;
     flex-direction: column;
   }
@@ -164,7 +163,7 @@ const StyledWrapper = styled.div`
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 100px;
     position: relative;
-    margin: 1.8rem 0 4rem 0;
+    margin: 4rem 0;
     cursor: pointer;
   }
 
