@@ -11,7 +11,7 @@ const Show = lazy(() => import('../page/show/index.jsx')); // 个人展示页面
 const routesConfig = [
   {
     path: '/',
-    element: <Home />,
+    element: <Show />,
     exact: true,
   },
   {
