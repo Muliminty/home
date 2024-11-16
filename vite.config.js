@@ -25,7 +25,11 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_URL,
     plugins: [
       // 添加 React 插件，确保 JSX 语法和其他 React 特性能够正常工作。
-      react(),
+      react({
+        babel: {
+          plugins: ['babel-plugin-styled-components'],
+        },
+      }),
       // 使用自定义插件 replaceHtmlPathPlugin，以环境变量为参数，替换 HTML 文件中的路径。
       replaceHtmlPathPlugin(env.VITE_BASE_URL),
       {
@@ -81,6 +85,14 @@ export default defineConfig(({ mode }) => {
 
     },
     assetsInclude: ['**/*.md'], // 将 .md 文件包含为资产
+
+    compilerOptions: {
+      "jsx": "react-jsx"
+    },
+    include: [
+      "node_modules/styled-components",
+      "src"
+    ]
   };
 
 });
