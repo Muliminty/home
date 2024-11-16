@@ -170,8 +170,8 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-        const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
-        // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
+        // const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
+        const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
         const key = decodeFromBase64(filePath.key);

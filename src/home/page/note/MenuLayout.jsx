@@ -1,38 +1,68 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
-import HandwrittenText from '@/home/components/textAnimation/HandwrittenText'
-
-import styles from './style.module.scss';
-import { Menu } from 'antd';
+import { useNavigate } from "react-router-dom"; // 导入 useNavigate
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Menu } from "antd";
+import styles from "./style.module.scss";
 
 export const MenuLayout = ({
-  dataSource = [], onClick, selectedKeys,
+  dataSource = [], // 数据源，包含菜单项
+  onClick,
+  selectedKeys,
   ...props
 }) => {
-
-
+  const [openKeys, setOpenKeys] = useState(props.openKeys || []);
+  const [isFold, setIsFold] = useState(false); // 控制折叠状态
   const navigate = useNavigate(); // 获取 navigate 函数
 
+  useEffect(() => {
+    setOpenKeys(props.openKeys || []);
+  }, [props.openKeys]);
+
   const handleGoHome = () => {
-    navigate('/');
+    navigate("/");
   };
-  return <div className={`${styles['menu']}`}>
-    <div onClick={handleGoHome} className={styles['menu-title']} style={{ cursor: 'pointer', height: '50px' }}>
-      <HandwrittenText scale={'0.4'} />
-    </div>
 
-    <div style={{
-      height: 'calc(100vh - 50px)',
-      overflowY: 'scroll'
-    }}>
-      <Menu
-        {...props}
-        mode="inline"
-        selectedKeys={selectedKeys}
-        items={dataSource}
-        onClick={onClick}
-      />
-    </div>
-  </div>
+  const handleToggleAll = () => {
+    if (isFold) {
+      // 全部展开：将所有一级菜单的 key 放入 openKeys
+      const allKeys = dataSource.map((item) => item.key);
+      setOpenKeys(allKeys);
+    } else {
+      // 全部折叠：清空 openKeys
+      setOpenKeys([]);
+    }
+    setIsFold(!isFold); // 切换折叠状态
+  };
 
-}
+  return (
+    <div className={`${styles["menu"]}`}>
+      <div className={styles["menu-title"]}>
+        <div onClick={handleGoHome} className={styles["menu-title-home"]}>HOME</div>
+        <div onClick={handleToggleAll}>
+          <span>
+            {isFold ? "全部展开" : "全部折叠"}
+          </span>
+          <span>
+            {isFold ? (
+              <MenuUnfoldOutlined onClick={handleToggleAll} />
+            ) : (
+              <MenuFoldOutlined onClick={handleToggleAll} />
+            )}
+          </span>
+        </div>
+      </div>
+
+      <div className={styles["menu-content"]}>
+        <Menu
+          {...props}
+          openKeys={openKeys}
+          mode="inline"
+          selectedKeys={selectedKeys}
+          items={dataSource}
+          onClick={onClick}
+          onOpenChange={(keys) => setOpenKeys(keys)} // 响应用户手动展开/折叠操作
+        />
+      </div>
+    </div>
+  );
+};
