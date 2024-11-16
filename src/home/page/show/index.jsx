@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './style.module.scss';
 import ThemeSwitcherCard from '@/home/components/theme-switcher-card';
 import { useTheme } from '@/home/context/ThemeContext';
@@ -7,7 +7,7 @@ import About from './About'; // 引入 About 组件
 import GalleryManager from './GalleryManager'; // 引入 GalleryManager 组件
 
 const Show = () => {
-  const { theme } = useTheme();
+  const { theme } = useTheme(); // 获取当前的主题
 
   // 自定义卡片和敬请期待卡片的初始数据
   const initialItems = [
@@ -15,12 +15,8 @@ const Show = () => {
     { id: 2, type: 'about', content: <About />, width: 6, height: 2 },
     {
       id: 3, type: 'themeSwitcher',
-      style: {
-        backgroundColor: theme === 'dark' ? '#26242d' : '#fff',
-      },
       content: <ThemeSwitcherCard />, width: 2, height: 3
     },
-
     {
       id: 4, type: 'image',
       width: 4, height: 1,
@@ -37,8 +33,14 @@ const Show = () => {
   ];
 
   const [items, setItems] = useState(initialItems); // 当前显示的项目
-
   const [sorting, setSorting] = useState(false); // 用于触发排序
+
+  // 监听 theme 变化，动态更新背景色
+  const [bgColor, setBgColor] = useState(theme === 'dark' ? '#26242d' : '#fff');
+
+  useEffect(() => {
+    setBgColor(theme === 'dark' ? '#26242d' : '#fff');
+  }, [theme]);
 
   const handleSort = () => {
     setSorting(true);
@@ -49,7 +51,6 @@ const Show = () => {
 
     // 根据随机 id 对原数组重新排序
     const sortedItems = newItems.map(item => {
-      // 给每个 item 分配新的随机 id
       const newId = shuffledIds.shift();
       return {
         ...item,  // 保持原有的 content、width、height 等属性
@@ -57,16 +58,11 @@ const Show = () => {
       };
     });
 
-    console.log('sortedItems: ', sortedItems);
-
-    // 将排序后的 items 设置回状态，并按 id 升序排序
-    setItems(sortedItems.sort((a, b) => a.id - b.id));
+    setItems(sortedItems.sort((a, b) => a.id - b.id)); // 直接更新排序后的数据
 
     // 排序完成后，移除过渡动画类
     setTimeout(() => setSorting(false), 500); // 过渡时间需要和CSS中的动画持续时间一致
   };
-
-
 
   return (
     <div className={styles.showContainer}>
@@ -76,18 +72,17 @@ const Show = () => {
 
       <div className={styles.gridContainer}>
         {/* 渲染每个项 */}
-        {items.map(({ id, type, content, width, height, style }) => {
-
-          return <div
+        {items.map(({ id, type, content, width, height, style }) => (
+          <div
             key={id} // 强制 React 在排序时重新渲染
             className={`${styles.gridItem} ${sorting ? styles.sorting : ''}`} // 添加排序过渡效果类
             style={{
               ...style,
+              ...(type === 'themeSwitcher' && { backgroundColor: bgColor }), // 只有 'themeSwitcher' 时才添加背景色
               gridColumn: `span ${width}`,
               gridRow: `span ${height}`,
             }}
           >
-            {/* 根据不同的类型来渲染内容 */}
             <div className={styles.cardContent}>
               {type === 'custom' && content}
               {type === 'about' && content}
@@ -97,7 +92,7 @@ const Show = () => {
               {type === 'pending' && content}
             </div>
           </div>
-        })}
+        ))}
       </div>
     </div>
   );

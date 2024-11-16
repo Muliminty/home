@@ -61,10 +61,11 @@ const StyledWrapper = styled.div`
     backface-visibility: hidden;
   }
 
-  .title {
-    transform: translateZ(5rem);
-    font-size: 2rem;
-  }
+.title {
+  transform: translateZ(5rem);
+  font-size: clamp(1rem, calc(10vw / 3.75), 30px); /* 最小1rem，最大16px，首选值是基于视口宽度的 */
+}
+
 
   .subtitle {
     transform: translateZ(2rem);
