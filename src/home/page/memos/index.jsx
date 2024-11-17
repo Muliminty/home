@@ -1,209 +1,226 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types'; // 导入 PropTypes
 import { VariableSizeList as List } from 'react-window'; // 使用 VariableSizeList 来支持不同高度
 import styles from './Memos.module.scss';
 import { MarkdownRenderer } from "../../components/ReactMarkdown"; // 导入Markdown渲染器
 import { getMemosList } from '@/home/api/memos';
-import { Image, Button, Drawer } from 'antd';
+import { Image, Drawer } from 'antd';
+import 'animate.css'; // 引入 animate.css 样式
+
 const Memos = () => {
   const [posts, setPosts] = useState([]);
-
-  const [open, setOpen] = useState(false);
-
-  const [post, setPost] = useState({});
-  const showDrawer = () => {
-    setOpen(true);
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    const searchMemosList = async () => {
-      const res = await getMemosList();
-
-
-      // 生成随机帖子数据
-      setPosts([
-        0,
-        ...new Array(1).fill({}).map((_, index) => {
-          // 生成 1 到 9 之间的随机数
-          const randomImageCount = index + 1;
-
-          // 生成指定数量的图片路径
-          const images = new Array(randomImageCount).fill('').map((_, imgIndex) => {
-            return `https://img.picui.cn/free/2024/11/13/6734789491638.png`; // 假设图片命名为 aaa1.jpg, aaa2.jpg 等
-          });
-
-          return {
-            data: {
-              id: index,  // 给每个帖子一个唯一的ID
-              content: `## Post ${index + 1}\n\nThis is the content of post ${index + 1}.\n ## Test`,
-              images: images, // 使用生成的随机图片数组
-              date: new Date().toLocaleString(),
-            }
-          };
-        }),
-        ...res.data,
-        ...new Array(10).fill({}).map((_, index) => {
-          // 生成 1 到 9 之间的随机数
-          const randomImageCount = index + 1;
-
-          // 生成指定数量的图片路径
-          const images = new Array(randomImageCount).fill('').map((_, imgIndex) => {
-            return `https://img.picui.cn/free/2024/11/13/6734789491638.png`; // 假设图片命名为 aaa1.jpg, aaa2.jpg 等
-          });
-
-          return {
-            data: {
-              id: index,  // 给每个帖子一个唯一的ID
-              content: `## Post ${index + 1}\n\nThis is the content of post ${index + 1}.\n ## Test`,
-              images: images, // 使用生成的随机图片数组
-              date: new Date().toLocaleString(),
-            }
-          };
-        })
-      ]); // 更新状态
-    }
-    searchMemosList();
-  }, []);
-
-  const renderRow = ({ index, style }) => {
-    if (index === 0) {
-      return <div className={styles.header} style={{ minHeight: '30vh', ...style }}>广告位招租</div>
-    }
-
-
-    const newStyle = {
-      ...style,
-      top: style.top + (index * 30) + window.innerHeight * 0.3,
-      // top: style.top + (index * 30),
-      // top: imageCount > 0 ? (index * 150) + (index * 100) : (index * 150),
-      // height: undefined
-    }; // 设置固定高度
-
-
-    const post = posts[index].data;  // 获取帖子数据
-    const imageCount = posts[index].data.images.length;
-
-    const handleViewAll = (index) => {
-      const post = posts[index].data;  // 获取帖子数据
-      // 处理查看全部的逻辑
-      console.log('查看全部', post);
-      setPost(post);
-      showDrawer();
-    }
-    return (
-      <div
-        className={`${styles.postCard}`} key={post.id} style={newStyle} >
-        {/* <img src={user} className={styles.avatar} /> */}
-        <div className={styles.postContent}
-          onClick={(e) => {
-            const no = ['ant-image-mask', 'ant-image-preview-img', 'ant-image-preview-wrap', 'ant-image-mask-info']
-            if (no.includes(e.target.className)) {
-              return
-            }
-            handleViewAll(index)
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <div className={styles.username}>{post.title || 'Muliminty'}</div>
-            <div style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: "hidden" }}>
-              <div style={{ height: 35, overflowY: "hidden" }}><MarkdownRenderer data={post.content} /></div>
-            </div>
-
-            <Image.PreviewGroup
-              items={[
-                ...post.images
-              ]}
-            >
-              <div className={styles.imageGrid}>
-                {post.images.map((image, index) => {
-                  if (index >= 3) return null; // 限制最多显示9张图片
-                  return <Image src={image}
-                  />
-                })}
-              </div>
-            </Image.PreviewGroup>
-          </div>
-
-          <div className={styles.timestamp}>
-            <div>{post.date}</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-
-
-  // 计算70vh - 60px
-  // const listHeight = window.innerHeight * 0.7 - 60;
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState({});
+  const itemRefs = useRef([]); // 创建一个数组来存储每个项的 ref
   const listHeight = window.innerHeight - 24;
 
+  const showDrawer = () => setDrawerVisible(true);
+  const closeDrawer = () => setDrawerVisible(false);
 
+  // 获取 Memos 列表并生成测试数据
+  useEffect(() => {
+    const fetchMemos = async () => {
+      const res = await getMemosList();
+
+      const generateRandomImages = (count) => (
+        new Array(count).fill('').map(() => `https://img.picui.cn/free/2024/11/13/6734789491638.png`)
+      );
+
+      const mockPosts = new Array(10).fill({}).map((_, index) => ({
+        data: {
+          id: index,
+          content: `## Post ${index + 1}\n\nThis is the content of post ${index + 1}.\n ## Test`,
+          images: generateRandomImages(index + 1),
+          date: new Date().toLocaleString(),
+        }
+      }));
+
+      setPosts([0, ...mockPosts, ...res.data]);
+    };
+
+    fetchMemos();
+  }, []);
 
   return (
     <div className={styles.feedContainer}>
+      {/* Drawer */}
       <Drawer
         rootClassName={styles['drawer-view-all']}
         title="详情"
         placement='bottom'
         width={375}
         height={window.innerHeight * 0.9}
-        onClose={onClose} open={open}>
-        <div className={styles['drawer-view-all-content']} onClick={(e) => {
-          const no = ['ant-image-mask', 'ant-image-preview-img', 'ant-image-preview-wrap', 'ant-image-mask-info']
-          if (no.includes(e.target.className)
-            || e.target.className.includes("MarkdownRenderer")
-            || e.target.className.includes("imageGrid")
-          ) {
-            return
-          }
-          console.log('className: ', e.target.className);
-          onClose()
-        }} >
-          <MarkdownRenderer data={post.content} />
-          {post?.images && <Image.PreviewGroup
-            items={[
-              ...post?.images
-            ]}
-          >
-            <div className={styles.imageGrid}>
-              {post?.images?.map((image, index) => {
-                return <Image src={image}
-                />
-              })}
-            </div>
-          </Image.PreviewGroup>}
-
+        onClose={closeDrawer}
+        open={drawerVisible}
+      >
+        <div
+          className={styles['drawer-view-all-content']}
+          onClick={(e) => {
+            const excludedClasses = ['ant-image-mask', 'ant-image-preview-img', 'ant-image-preview-wrap', 'ant-image-mask-info'];
+            if (!excludedClasses.includes(e.target.className) && !e.target.className.includes("MarkdownRenderer") && !e.target.className.includes("imageGrid")) {
+              closeDrawer();
+            }
+          }}
+        >
+          <MarkdownRenderer data={selectedPost.content} />
+          {selectedPost?.images && (
+            <Image.PreviewGroup items={selectedPost.images}>
+              <div className={styles.imageGrid}>
+                {selectedPost.images.map((image, index) => <Image key={index} src={image} />)}
+              </div>
+            </Image.PreviewGroup>
+          )}
         </div>
+        <div>{selectedPost.date}</div>
+      </Drawer>
 
-        <div>{post.date}</div>
-      </Drawer >
-
+      {/* 内容区域 */}
       <div className={styles.content}>
         <List
-          height={listHeight} // 高度设置为视口高度，减去 header 和其他内容
+          height={listHeight}
           itemCount={posts.length}
           itemSize={(index) => {
-            try {
-              const imageCount = posts[index].data.images.length;
-              const h = imageCount === 0 ? 150 : 220
-              return h
-            } catch (error) {
-              return 0
-            }
-          }} // itemSize 设置为0，因为我们不需要在这里动态计算每项高度
-          width="100%"  // 宽度占满容器
+            const imageCount = posts[index]?.data?.images?.length || 0;
+            return imageCount === 0 ? 150 : 220;
+          }}
+          width="100%"
         >
-
-          {renderRow}
+          {({ index, style }) => (
+            <Item
+              index={index}
+              style={style}
+              posts={posts}
+              itemRefs={itemRefs}
+              setSelectedPost={setSelectedPost}
+              showDrawer={showDrawer}
+            />
+          )}
         </List>
       </div>
-    </div >
+    </div>
   );
 };
 
+const Item = ({ index, style, posts, itemRefs, setSelectedPost, showDrawer }) => {
+  const itemRef = useRef(null);
+  const post = posts[index]?.data;
+  const imageCount = post?.images?.length || 0;
+
+
+
+  // 处理 "查看详情" 功能
+  const handleViewAll = () => {
+    setSelectedPost(post);
+    showDrawer();
+  };
+
+  // 存储 ref
+  useEffect(() => {
+    itemRefs.current[index] = itemRef.current;
+  }, [index, itemRefs]);
+
+  // IntersectionObserver 动画效果
+  useEffect(() => {
+    const currentRef = itemRef.current;
+    if (!currentRef) return;
+
+    const observerCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          element.classList.add('animate__fadeInUp', 'animate__animated');
+
+          const animateChild = (id, animation) => {
+            const child = element.querySelector(id);
+            if (child) {
+              child.style.animationDuration = '2s';
+              child.classList.add(animation, 'animate__animated');
+            }
+          };
+          animateChild('#aaa', 'animate__fadeInRight');
+          animateChild('#bbb', 'animate__fadeInLeft');
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      rootMargin: '0px',
+      threshold: 0.2,
+    });
+
+    observer.observe(currentRef);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // 特殊情况下直接渲染广告位
+  if (index === 0) {
+    return (
+      <div className={styles.header} style={{ minHeight: '30vh', ...style }}>
+        广告位招租
+      </div>
+    );
+  }
+  // 调整样式
+  const adjustedStyle = {
+    ...style,
+    top: style.top + (index * 30) + window.innerHeight * 0.3 - 160,
+  };
+  return (
+    <div
+      ref={itemRef}
+      className={styles.postCard}
+      style={adjustedStyle}
+    >
+      <div
+        className={styles.postContent}
+        onClick={(e) => {
+          const excludedClasses = [
+            'ant-image-mask',
+            'ant-image-preview-img',
+            'ant-image-preview-wrap',
+            'ant-image-mask-info',
+          ];
+          if (!excludedClasses.includes(e.target.className)) {
+            handleViewAll();
+          }
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <div className={styles.username} id='aaa'>{post?.title || 'Muliminty'}</div>
+          <div
+            style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: 'hidden' }}
+            id='bbb'
+          >
+            <div style={{ height: 35, overflowY: 'hidden' }}>
+              <MarkdownRenderer data={post?.content} />
+            </div>
+          </div>
+          <Image.PreviewGroup items={post?.images}>
+            <div className={styles.imageGrid}>
+              {post?.images.slice(0, 3).map((image, idx) => (
+                <Image key={idx} src={image} />
+              ))}
+            </div>
+          </Image.PreviewGroup>
+        </div>
+        <div className={styles.timestamp}>
+          <div>{post?.date}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// 定义 PropTypes
+Memos.propTypes = {};
+Item.propTypes = {
+  index: PropTypes.number.isRequired,
+  style: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  itemRefs: PropTypes.object.isRequired,
+  setSelectedPost: PropTypes.func.isRequired,
+  showDrawer: PropTypes.func.isRequired,
+};
+
 export default Memos;
-
-
