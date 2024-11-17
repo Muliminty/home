@@ -63,6 +63,11 @@ const Show = () => {
 
       content: <img className={styles.gridItemImageContent} src="https://ghchart.rshah.org/ee827c/Muliminty" alt="GitHub Chart" />,
     },
+    {
+      id: 10, type: 'linkCard',
+      width: 2, height: 2,
+      content: <NoteCard />
+    },
     { id: 5, type: 'galleryManager', content: <GalleryManager />, width: 2, height: 3 },
     {
       id: 6, type: 'linkCard',
@@ -97,11 +102,7 @@ const Show = () => {
       />
     },
 
-    {
-      id: 10, type: 'linkCard',
-      width: 2, height: 2,
-      content: <NoteCard />
-    },
+
 
 
     // ...Array.from({ length: 7 }, (_, i) => ({
@@ -212,6 +213,10 @@ const Show = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className={styles.recordContainer}>
+        <p className={styles.recordText}>闽ICP备2024074976号</p>
       </div>
     </div>
   );

@@ -267,3 +267,13 @@
   width: 100%;
   height: 100%;
 }
+
+.recordContainer {
+  margin-top: 30px; // 与其他内容分开
+  text-align: center; // 居中显示备案号
+}
+
+.recordText {
+  font-size: 0.9em; // 小一号的字体
+  color: #888; // 使用灰色以降低视觉冲击
+}
