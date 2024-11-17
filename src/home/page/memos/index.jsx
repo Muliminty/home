@@ -21,26 +21,19 @@ const Memos = () => {
   useEffect(() => {
     const fetchMemos = async () => {
       const res = await getMemosList();
-
-      const generateRandomImages = (count) => (
-        new Array(count).fill('').map(() => `https://img.picui.cn/free/2024/11/13/6734789491638.png`)
-      );
-
-      const mockPosts = new Array(10).fill({}).map((_, index) => ({
-        data: {
-          id: index,
-          content: `## Post ${index + 1}\n\nThis is the content of post ${index + 1}.\n ## Test`,
-          images: generateRandomImages(index + 1),
-          date: new Date().toLocaleString(),
+      const data = res.data.map((e) => {
+        if (e.data.images) {
+          e.data.images = e.data.images.map((i) => {
+            return `https://github.com/Muliminty/memos-database/blob/main${i}?raw=true`;
+          })
         }
-      }));
-
-      setPosts([0, ...mockPosts, ...res.data]);
+        return e
+      }) || [];
+      setPosts([0, ...data]);
     };
 
     fetchMemos();
   }, []);
-
   return (
     <div className={styles.feedContainer}>
       {/* Drawer */}
@@ -66,7 +59,7 @@ const Memos = () => {
           {selectedPost?.images && (
             <Image.PreviewGroup items={selectedPost.images}>
               <div className={styles.imageGrid}>
-                {selectedPost.images.map((image, index) => <Image key={index} src={image} />)}
+                {selectedPost.images.map((image, index) => <Image key={index} src={`${image}`} />)}
               </div>
             </Image.PreviewGroup>
           )}
@@ -80,8 +73,10 @@ const Memos = () => {
           height={listHeight}
           itemCount={posts.length}
           itemSize={(index) => {
-            const imageCount = posts[index]?.data?.images?.length || 0;
-            return imageCount === 0 ? 150 : 220;
+            // const imageCount = posts[index]?.data?.images?.length || 0;
+            return 130
+            // return imageCount === 0 ? 150 : 220;
+
           }}
           width="100%"
         >
@@ -164,7 +159,7 @@ const Item = ({ index, style, posts, itemRefs, setSelectedPost, showDrawer }) =>
   // 调整样式
   const adjustedStyle = {
     ...style,
-    top: style.top + (index * 30) + window.innerHeight * 0.3 - 160,
+    top: style.top + (index * 30) + window.innerHeight * 0.3 - 120,
   };
   return (
     <div
@@ -187,7 +182,10 @@ const Item = ({ index, style, posts, itemRefs, setSelectedPost, showDrawer }) =>
         }}
       >
         <div style={{ flex: 1 }}>
-          <div className={styles.username} id='aaa'>{post?.title || 'Muliminty'}</div>
+          <div className={styles.username} id='aaa'>
+            {post?.images.length > 0 ? '🤳🏽' : '📓'}
+            {post?.title || 'Muliminty'}
+          </div>
           <div
             style={{ minHeight: imageCount > 0 ? 60 : 50, overflowY: 'hidden' }}
             id='bbb'
@@ -196,13 +194,6 @@ const Item = ({ index, style, posts, itemRefs, setSelectedPost, showDrawer }) =>
               <MarkdownRenderer data={post?.content} />
             </div>
           </div>
-          <Image.PreviewGroup items={post?.images}>
-            <div className={styles.imageGrid}>
-              {post?.images.slice(0, 3).map((image, idx) => (
-                <Image key={idx} src={image} />
-              ))}
-            </div>
-          </Image.PreviewGroup>
         </div>
         <div className={styles.timestamp}>
           <div>{post?.date}</div>
@@ -211,6 +202,8 @@ const Item = ({ index, style, posts, itemRefs, setSelectedPost, showDrawer }) =>
     </div>
   );
 };
+// https://github.com/Muliminty/memos-database/blob/main/imgs/Pasted%20image%2020241117181511.png?raw=true
+
 
 // 定义 PropTypes
 Memos.propTypes = {};
