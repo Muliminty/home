@@ -4,6 +4,14 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+
+
+  :global {
+    .ant-splitter {
+      width: 100vw;
+      height: 100vh;
+    }
+  }
 }
 
 .note-content-phone {
@@ -12,18 +20,51 @@
 
 .note-content-pc {
   display: block;
+
+  .menu-container-l {
+    height: 100%;
+  }
 }
 
 
 .menu {
-  // width: 300px;
   padding: 0 15px;
-
   border-right: 1px solid var(--divider);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--background-color);
+  box-shadow: var(--shadow); // 使用主题阴影
+  height: 100%;
 
   .menu-title {
     border-bottom: 1px solid var(--divider);
 
+    >div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 5px 24px;
+      border-radius: 5px;
+
+      // 省略号
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+
+      &:hover {
+        background: var(--hover-background);
+      }
+    }
+  }
+
+
+  .menu-content {
+    overflow-y: scroll;
+    flex: 1;
   }
 
   :global {
@@ -34,9 +75,6 @@
       /* 允许文本自动换行 */
     }
   }
-
-
-
 }
 
 
@@ -186,7 +224,7 @@
 }
 
 // 平板（最大宽度 900px）
-@media (max-width: 900px) {
+@media (max-width: 900px）) {
 
   .note-content-phone {
     display: block;

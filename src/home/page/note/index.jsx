@@ -176,9 +176,8 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-        console.log('filePath: ', filePath);
-        const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
-        // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
+        // const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
+        const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
 
@@ -231,7 +230,7 @@ const Note = () => {
         <div className={styles['note']}>
             < div className={styles['note-content-pc']}>
                 <Splitter >
-                    <Splitter.Panel collapsible defaultSize="20%" max="40%" className={styles['menu-container-l']}>
+                    <Splitter.Panel defaultSize="20%" min='20%' max="40%" className={styles['menu-container-l']}>
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
                                 dataSource={repoTree}
