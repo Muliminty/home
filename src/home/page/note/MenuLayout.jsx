@@ -8,6 +8,7 @@ export const MenuLayout = ({
   dataSource = [], // 数据源，包含菜单项
   onClick,
   selectedKeys,
+  changeOpenKeys,
   ...props
 }) => {
   const [openKeys, setOpenKeys] = useState(props.openKeys || []);
@@ -27,9 +28,11 @@ export const MenuLayout = ({
       // 全部展开：将所有一级菜单的 key 放入 openKeys
       const allKeys = dataSource.map((item) => item.key);
       setOpenKeys(allKeys);
+      changeOpenKeys(allKeys); // 更新外部传入的 openKeys
     } else {
       // 全部折叠：清空 openKeys
-      setOpenKeys([]);
+      changeOpenKeys([]);
+      clearOpenKeys(); // 清空外部传入的 openKeys
     }
     setIsFold(!isFold); // 切换折叠状态
   };

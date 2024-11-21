@@ -176,8 +176,8 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-        // const basePath = "C:\\project\\Muliminty-Note\\专栏\\"; // 本地基础路径
-        const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
+        const basePath = "C:\\project\\Muliminty-Note\\"; // 本地基础路径
+        // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
         const item = filePath.item;
         const name = item?.props.name;
 
@@ -233,6 +233,7 @@ const Note = () => {
                     <Splitter.Panel defaultSize="20%" min='20%' max="40%" className={styles['menu-container-l']}>
                         <div className={styles['menu-container-l']}>
                             <MenuLayout
+                                changeOpenKeys={(key) => { setOpenKeys(key) }}
                                 dataSource={repoTree}
                                 onClick={(v) => { fetchFileContent(v) }}
                                 selectedKeys={[selectedId]}
@@ -255,6 +256,7 @@ const Note = () => {
             <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
                 <div style={{ marginLeft: '-20px' }}>
                     <MenuLayout
+                        changeOpenKeys={(key) => { setOpenKeys(key) }}
                         dataSource={repoTree}
                         onClick={(v) => { fetchFileContent(v) }}
                         selectedKeys={[selectedId]}
