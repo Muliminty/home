@@ -22,6 +22,7 @@ export const MarkdownRenderer = ({ data }) => {
 
   return (
     <div className={`${styles['MarkdownRenderer']} MarkdownRenderer`}>
+
       <ReactMarkdown
         children={content}
         remarkPlugins={[remarkGfm]}
