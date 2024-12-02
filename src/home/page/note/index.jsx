@@ -254,7 +254,7 @@ const Note = () => {
                 </Splitter>
             </div>
             <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}>
-                <div style={{ marginLeft: '-20px' }}>
+                <div style={{ marginLeft: '-20px', height: '100vh',overflowY:'scroll' }}>
                     <MenuLayout
                         changeOpenKeys={(key) => { setOpenKeys(key) }}
                         dataSource={repoTree}
