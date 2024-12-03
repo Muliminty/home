@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getRepoTree, getFileContent } from '@/home/api/github2';
+import { getRepoTree, getFileContent } from '@/home/api/localFile';
 import styles from './style.module.scss';
 import Drawer from '@/home/components/drawer';
 import { Flex, Splitter, Typography } from 'antd';
@@ -65,9 +65,9 @@ const Note = () => {
         setLoading(true);
         try {
             const data = await getRepoTree(owner, repo);
-            console.log('data: ', data);
+            console.log('data: ', data?.data);
 
-            const filteredTree = filterRepoTree(data);
+            const filteredTree = filterRepoTree(data?.data);
             setRepoTree(filteredTree);
 
             return filteredTree
@@ -176,8 +176,10 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-        const basePath = "C:\\project\\Muliminty-Note\\"; // 本地基础路径
+        const basePath = "E:\\NOTE_STORAGE\\Muliminty-Note\\"; // 本地基础路径
+        // const basePath = "C:\\project\\Muliminty-Note\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
+        // E:\NOTE_STORAGE\Muliminty-Note
         const item = filePath.item;
         const name = item?.props.name;
 
@@ -187,14 +189,15 @@ const Note = () => {
         const parent = findParentKeys(filteredTree || repoTree, filePath.key);
         try {
             setLoading(true);
-            const content = await getFileContent(owner, repo, path);
+            const data = await getFileContent(owner, repo, path);
 
             setUrlParams({ selectedId: filePath.key, name });
-            const updatedContent = replaceImagePaths(content, fullPath);
+            const updatedContent = replaceImagePaths(data?.content, fullPath);
             setFileContent(updatedContent);
             setSelectedId(filePath.key);
             setOpenKeys(() => [...parent, ...openKeys]);
         } catch (error) {
+            console.log('error: ', error);
             setFileContent('加载失败');
         } finally {
             setLoading(false);
@@ -203,6 +206,7 @@ const Note = () => {
 
     // 替换 Markdown 内容中的图片路径
     function replaceImagePaths(markdownContent, parentPath) {
+        console.log('markdownContent: ', markdownContent);
         // 将反斜杠转换为正斜杠
         const normalizedParentPath = parentPath.replace(/\\/g, '/');
 

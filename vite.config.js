@@ -63,18 +63,7 @@ export default defineConfig(({ mode }) => {
       // port: 80, // 将端口修改为你想要的端口
       // 配置开发服务器启动时自动打开的页面，根据是否为 admin 模式打开不同的页面。
       open: isAdmin ? '/admin.html' : '/',
-      // proxy: {
-      //   '/github': {
-      //     target: 'http://43.136.95.42:3000', // 后端服务器地址
-      //     changeOrigin: true, // 更改原点
-      //     rewrite: (path) => path.replace(/^\/github/, '/github'), // 保留 /github 前缀
-      //   },
-      //   '/localFile': {
-      //     target: 'http://43.136.95.42:3000', // 后端服务器地址
-      //     changeOrigin: true, // 更改原点
-      //     rewrite: (path) => path.replace(/^\/localFile/, '/localFile'), // 保留 /github 前缀
-      //   },
-      // },
+
       // 确保 history API 支持，例如前端的页面刷新不会导致 404
       historyApiFallback: true // 确保路径会被重写到index.html
     },
