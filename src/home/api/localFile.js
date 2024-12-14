@@ -1,5 +1,12 @@
 // apiRequests.js
 import { api, ApiGatewayServer } from './apiConfig';
+// 根据环境变量设置不同的 API 地址
+const mode = import.meta.env.MODE; // 获取当前模式
+
+import envConfig from '../../../env'; // 导入环境变量配置。
+
+const { VITE_PROPS } = envConfig[mode]
+console.log('VITE_PROPS: ', VITE_PROPS);
 
 
 
@@ -32,9 +39,11 @@ export const getMarkdownFiles = async (owner, repo, folderPath) => {
  * @returns {Promise<Object>} - 返回仓库树形结构
  */
 export const getRepoTree = async () => {
+    const basePath = VITE_PROPS.NOTE_PATH
+
     try {
         const response = await api.post(`${ApiGatewayServer}/localFile_v2/dirTree`, {
-            "path": "E:\\NOTE_STORAGE\\Muliminty-Note"
+            "path": basePath
         });
         return response.data;
     } catch (error) {

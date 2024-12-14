@@ -8,6 +8,16 @@ import useQueryParams from '@/home/hooks/useQueryParams';
 import { Content } from "./Content";
 import { MenuLayout } from "./MenuLayout";
 
+// 根据环境变量设置不同的 API 地址
+const mode = import.meta.env.MODE; // 获取当前模式
+
+import envConfig from '../../../../env.js'; // 导入环境变量配置。
+
+const { VITE_PROPS } = envConfig[mode]
+console.log('VITE_PROPS: ', VITE_PROPS);
+
+
+
 // GitHub 仓库基本信息
 const owner = 'Muliminty';
 const repo = 'Muliminty-Note';
@@ -176,10 +186,12 @@ const Note = () => {
 
     // 获取并显示 Markdown 文件内容
     const fetchFileContent = async (filePath, filteredTree) => {
-        const basePath = "E:\\NOTE_STORAGE\\Muliminty-Note\\"; // 本地基础路径
+        const basePath = VITE_PROPS.NOTE_PATH
+        console.log('basePath: ', basePath);
+        // const basePath = "E:\\NOTE_STORAGE\\Muliminty-Note\\"; // 本地基础路径
         // const basePath = "C:\\project\\Muliminty-Note\\"; // 本地基础路径
         // const basePath = "C:\\AA-study\\Project\\Muliminty-Note\\"; // 本地基础路径
-        // E:\NOTE_STORAGE\Muliminty-Note
+
         const item = filePath.item;
         const name = item?.props.name;
 

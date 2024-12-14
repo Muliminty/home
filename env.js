@@ -21,14 +21,20 @@ const env = {
         VITE_APP_ENV: 'admin',
         VITE_BASE_URL: '/'
     },
+    // 开发环境 灵耀14
     development: {
         VITE_API_BASE_URL: 'http://localhost:3000',
         VITE_PORT: 3000,
-        OTHER_VARIABLE: 'value_for_dev',
         VITE_NAME: 'dev环境',
         VITE_APP_ENV: 'dev',
-        VITE_BASE_URL: '/'
+        VITE_BASE_URL: '/',
+        VITE_PROPS: {
+            NOTE_PATH:'C:\\AA-study\\Project\\Muliminty-Note',
+            MEMOS_PATH:"C:\\AA-study\\Project\\memos-database\\memos"
+        }
+
     },
+    // 飞行堡垒
     staging: {
         VITE_API_BASE_URL: 'https://staging.api.yourservice.com',
         VITE_PORT: 3001,
