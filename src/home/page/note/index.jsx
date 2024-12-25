@@ -218,7 +218,6 @@ const Note = () => {
 
     // 替换 Markdown 内容中的图片路径
     function replaceImagePaths(markdownContent, parentPath) {
-        console.log('markdownContent: ', markdownContent);
         // 将反斜杠转换为正斜杠
         const normalizedParentPath = parentPath.replace(/\\/g, '/');
 

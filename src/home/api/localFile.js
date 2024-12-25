@@ -85,7 +85,7 @@ export const getFileContent = async (owner, repo, filePath) => {
         const response = await api.post(`${ApiGatewayServer}/localFile_v2/getMdByPath`, {
             path: filePath,
         });
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error('Error fetching file content:', error);
         throw error;
