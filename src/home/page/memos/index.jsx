@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types'; // 导入 PropTypes
 import { VariableSizeList as List } from 'react-window'; // 使用 VariableSizeList 来支持不同高度
 import styles from './Memos.module.scss';
@@ -24,7 +24,10 @@ const Memos = () => {
       const data = res.data.map((e) => {
         if (e.data.images) {
           e.data.images = e.data.images.map((i) => {
-            return `https://github.com/Muliminty/memos-database/blob/main${i}?raw=true`;
+            const v = i.replace('../', '');
+            console.log('v: ', v);
+            // https://github.com/Muliminty/memos-database/blob/main/imgs/Pasted%20image%2020241117181511.png?raw=true
+            return `https://github.com/Muliminty/memos-database/blob/main/${v}?raw=true`;
           })
         }
         return e
