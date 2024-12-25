@@ -1,5 +1,5 @@
 import ThemeSwitcher from '@/components/theme-switcher/index';
-import { searchMarkdownFilesByName } from '@/home/api/github2';
+import { searchMarkdownFilesByName } from '@/home/api/localFile';
 import Modal from "@/home/components/modal";
 import { useState } from "react";
 import { MarkdownRenderer } from "../../components/ReactMarkdown";
@@ -11,6 +11,7 @@ import Loading from '@/home/components/Loading';
  * @param {Object} props - 组件属性。
  * @param {Function} props.onGoHome - 回到根路由的函数。
  */
+// eslint-disable-next-line react/prop-types
 export const Header = ({ fetchFileContent, searchClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyword, setKeyword] = useState(''); // 关键字状态
@@ -33,7 +34,8 @@ export const Header = ({ fetchFileContent, searchClick }) => {
       setSearchResults([]);
       // 执行文件搜索
       const results = await searchMarkdownFilesByName(keyword);
-      setSearchResults(results.files || []);
+      console.log('results: ', results);
+      setSearchResults(results || []);
       setLoading(false);
     }
   };

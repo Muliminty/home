@@ -9,6 +9,7 @@ const { VITE_PROPS } = envConfig[mode]
 console.log('VITE_PROPS: ', VITE_PROPS);
 
 
+const basePath = VITE_PROPS.NOTE_PATH
 
 /**
  * 获取指定文件夹下的 Markdown 文件
@@ -39,7 +40,6 @@ export const getMarkdownFiles = async (owner, repo, folderPath) => {
  * @returns {Promise<Object>} - 返回仓库树形结构
  */
 export const getRepoTree = async () => {
-    const basePath = VITE_PROPS.NOTE_PATH
 
     try {
         const response = await api.post(`${ApiGatewayServer}/localFile_v2/dirTree`, {
@@ -58,12 +58,14 @@ export const getRepoTree = async () => {
  * @returns {Promise<Object>} - 返回搜索结果
  */
 export const searchMarkdownFilesByName = async (keyword) => {
+
     try {
-        const response = await api.post(`${ApiGatewayServer}/localFile/repo`, {
-            keyword,
-            type: 'searchMarkdownFilesByName'
+        const response = await api.post(`${ApiGatewayServer}/localFile_v2/searchByName`, {
+            name: keyword,
+            "path": basePath
+
         });
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error('Error searching files:', error);
         throw error;
@@ -83,7 +85,7 @@ export const getFileContent = async (owner, repo, filePath) => {
         const response = await api.post(`${ApiGatewayServer}/localFile_v2/getMdByPath`, {
             path: filePath,
         });
-        return response.data.data;
+        return response.data;
     } catch (error) {
         console.error('Error fetching file content:', error);
         throw error;
