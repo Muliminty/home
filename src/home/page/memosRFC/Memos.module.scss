@@ -4,8 +4,8 @@ $max-width: 920px;
 // 使用版心变量
 .container {
     max-width: $max-width;
+    height: 100vh;
     margin: auto;
-    background-color: #f8f9fa;
     padding: 20px;
     border-radius: 8px;
     display: flex;
@@ -13,10 +13,14 @@ $max-width: 920px;
     // 其他样式...
 }
 
+.drawer-sidebar {
+    display: none;
+}
+
 .sidebar {
-    width: 20%;
-    background-color: #343a40;
-    color: #fff;
+    width: 260px;
+    background-color: var(--background-color);
+    color: var(--text-color);
     padding: 10px;
     flex-shrink: 0;
     // 其他样式...
@@ -24,7 +28,7 @@ $max-width: 920px;
 
 .main {
     flex: 1;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     padding: 20px;
     // 其他样式...
 }
@@ -32,7 +36,7 @@ $max-width: 920px;
 .rightbar {
     width: 20%;
     background-color: #343a40;
-    color: #fff;
+    color: var(--text-color);
     padding: 10px;
     flex-shrink: 0;
     // 其他样式...
@@ -46,7 +50,7 @@ $max-width: 920px;
     justify-content: space-between;
     align-items: center;
     background-color: #007bff;
-    color: #fff;
+    color: var(--text-color);
     padding: 10px;
 }
 
@@ -60,15 +64,32 @@ $max-width: 920px;
     display: none;
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: var(--text-color);
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+.list-container {
 
-    .sidebar, .rightbar {
+    /* 隐藏滚动条 */
+    ::-webkit-scrollbar {
         display: none;
     }
+
+    -ms-overflow-style: none;
+    /* IE 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+@media (max-width: 768px) {
+
+    .sidebar,
+    .rightbar {
+        display: none;
+    }
+
+    .drawer-sidebar,
     .menu-button {
         display: block;
     }

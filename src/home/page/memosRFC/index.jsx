@@ -2,6 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Drawer, Button } from 'antd';
 import { VariableSizeList as List } from 'react-window';
 import styles from './Memos.module.scss'
+import ThemeSwitcher from '@/components/theme-switcher/index';
+
+import Sidebar from './Sidebar';
+import SidebarContent from './SidebarContent';
 
 export default function MemosRFC() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -14,26 +18,22 @@ export default function MemosRFC() {
 
   return (
     <div className={styles['container']}>
+      <div className={styles['sidebar']}><SidebarContent /></div>
       <div className={styles['main']}>
         <div className={styles['header']}>
           <Button className={styles['menu-button']} onClick={toggleSidebar}>
             菜单
           </Button>
           Memos 标题
+
+          <ThemeSwitcher />
+
         </div>
         <div className={styles['content']}>
           <DynamicHeightListDemo items={items} />
         </div>
       </div>
-      <Drawer
-        title="左侧栏内容"
-        placement="left"
-        closable={true}
-        onClose={toggleSidebar}
-        visible={showSidebar}
-      >
-        <p>左侧栏内容</p>
-      </Drawer>
+      <Sidebar visible={showSidebar} onClose={toggleSidebar} />
     </div>
   )
 }
@@ -42,6 +42,18 @@ export default function MemosRFC() {
 const DynamicHeightListDemo = ({ items }) => {
   const listRef = useRef();
   const [heightMap, setHeightMap] = useState({});
+  const [listHeight, setListHeight] = useState(window.innerHeight - 300); // 动态计算高度
+
+  useEffect(() => {
+    const handleResize = () => {
+      setListHeight(window.innerHeight - 30);
+      console.log('window.innerHeight: ', window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   // 更新高度映射表并重置列表布局
   const updateHeight = useCallback((index, size) => {
@@ -88,12 +100,13 @@ const DynamicHeightListDemo = ({ items }) => {
       </div>
     );
   };
-
+  const viewH = window.innerHeight
   return (
     <>
       <List
         ref={listRef}
-        height={500} // 列表容器高度
+        className={styles['list-container']}
+        height={viewH - 120} // 使用动态计算的高度
         itemCount={items.length}
         itemSize={getItemSize}
         style={{ border: '1px solid #ccc', borderRadius: '4px' }}
