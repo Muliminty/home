@@ -1,5 +1,5 @@
 // 定义版心变量
-$max-width: 1200px;
+$max-width: 920px;
 
 // 使用版心变量
 .container {
@@ -65,6 +65,7 @@ $max-width: 1200px;
 }
 
 @media (max-width: 768px) {
+
     .sidebar, .rightbar {
         display: none;
     }

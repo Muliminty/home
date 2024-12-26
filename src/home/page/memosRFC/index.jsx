@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Drawer, Button } from 'antd';
 import { VariableSizeList as List } from 'react-window';
 import styles from './Memos.module.scss'
@@ -16,10 +16,10 @@ export default function MemosRFC() {
     <div className={styles['container']}>
       <div className={styles['main']}>
         <div className={styles['header']}>
-          Memos 标题
           <Button className={styles['menu-button']} onClick={toggleSidebar}>
             菜单
           </Button>
+          Memos 标题
         </div>
         <div className={styles['content']}>
           <DynamicHeightListDemo items={items} />
@@ -33,15 +33,6 @@ export default function MemosRFC() {
         visible={showSidebar}
       >
         <p>左侧栏内容</p>
-      </Drawer>
-      <Drawer
-        title="右侧栏内容"
-        placement="right"
-        closable={true}
-        onClose={toggleSidebar}
-        visible={showSidebar}
-      >
-        <p>右侧栏内容</p>
       </Drawer>
     </div>
   )
@@ -93,21 +84,23 @@ const DynamicHeightListDemo = ({ items }) => {
           {index === 3 && <p style={{ fontSize: '12px' }}>Random height content: {Math.random().toFixed(2)}</p>}
           {index === 3 && <p style={{ fontSize: '12px' }}>Random height content: {Math.random().toFixed(2)}</p>}
         </div>
+        {index === items.length - 1 && <div>已经加载全部{items.length}</div>}
       </div>
     );
   };
 
   return (
-    <List
-      ref={listRef}
-      height={500} // 列表容器高度
-      width={400} // 列表容器宽度
-      itemCount={items.length}
-      itemSize={getItemSize}
-      style={{ border: '1px solid #ccc', borderRadius: '4px' }}
-    >
-      {Row}
-    </List>
+    <>
+      <List
+        ref={listRef}
+        height={500} // 列表容器高度
+        itemCount={items.length}
+        itemSize={getItemSize}
+        style={{ border: '1px solid #ccc', borderRadius: '4px' }}
+      >
+        {Row}
+      </List>
+    </>
   );
 };
 
