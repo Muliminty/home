@@ -1,0 +1,74 @@
+// 定义版心变量
+$max-width: 1200px;
+
+// 使用版心变量
+.container {
+    max-width: $max-width;
+    margin: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    // 其他样式...
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px;
+    flex-shrink: 0;
+    // 其他样式...
+}
+
+.main {
+    flex: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    // 其他样式...
+}
+
+.rightbar {
+    width: 20%;
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px;
+    flex-shrink: 0;
+    // 其他样式...
+}
+
+.header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+}
+
+.content {
+    font-size: 16px;
+    line-height: 1.5;
+    // 其他样式...
+}
+
+.menu-button {
+    display: none;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .sidebar, .rightbar {
+        display: none;
+    }
+    .menu-button {
+        display: block;
+    }
+}
