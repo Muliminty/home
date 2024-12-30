@@ -116,9 +116,7 @@ const DynamicHeightListDemo = ({ items }) => {
 
     return (
       <div ref={rowRef} style={{ ...style, padding: '10px 0', boxSizing: 'border-box', overflow: 'hidden', height: 'unset' }}>
-        <div style={{ border: '1px solid #ddd', padding: '10px', borderRadius: '4px' }}>
-          <Item value={value.data} />
-        </div>
+        <Item value={value.data} />
         {index === items.length - 1 && <div>已经加载全部{items.length}</div>}
       </div>
     );
@@ -148,13 +146,15 @@ const Item = ({ value }) => {
       <div>{value.date}</div>
       <MarkdownRenderer data={value.content} />
 
-
-      <Image.PreviewGroup items={value.images}>
+      <Image.PreviewGroup>
         <div className={styles.imageGrid}>
-          {value.images.map((image, index) => <Image key={index} src={`${image}`} />)}
+          {value.images.map((image, index) => (
+            <div key={index} className={styles.imageWrapper}>
+              <Image src={`${image}`} className={styles.image} />
+            </div>
+          ))}
         </div>
       </Image.PreviewGroup>
     </div>
-
   );
 }
