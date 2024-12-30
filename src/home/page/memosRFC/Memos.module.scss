@@ -21,6 +21,7 @@ $max-width: 920px;
     width: 260px;
     background-color: var(--background-color);
     color: var(--text-color);
+    border-right: 3px solid red;
     padding: 10px;
     flex-shrink: 0;
     // 其他样式...
@@ -29,29 +30,23 @@ $max-width: 920px;
 .main {
     flex: 1;
     background-color: var(--background-color);
-    padding: 20px;
+    padding: 0 20px;
     // 其他样式...
 }
 
-.rightbar {
-    width: 20%;
-    background-color: #343a40;
-    color: var(--text-color);
-    padding: 10px;
-    flex-shrink: 0;
-    // 其他样式...
-}
 
 .header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #007bff;
     color: var(--text-color);
-    padding: 10px;
+    padding: 5px;
+
+    svg {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 .content {
@@ -62,10 +57,6 @@ $max-width: 920px;
 
 .menu-button {
     display: none;
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
 }
 
 .list-container {
@@ -93,4 +84,17 @@ $max-width: 920px;
     .menu-button {
         display: block;
     }
+
+}
+
+// 手机设备
+@media (max-width: 576px) {
+    .container {
+        padding: 0;
+    }
+
+    .main {
+        padding: 0;
+    }
+
 }

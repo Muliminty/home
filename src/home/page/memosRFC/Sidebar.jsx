@@ -9,7 +9,8 @@ const Sidebar = ({ visible, onClose }) => {
             rootClassName={styles['drawer-sidebar']}
 
             title="左侧栏内容"
-            placement="left"
+            placement="bottom"
+            height="calc(100vh - 60px)"
             closable={true}
             onClose={onClose}
             open={visible}
