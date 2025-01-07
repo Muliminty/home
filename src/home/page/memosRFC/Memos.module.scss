@@ -99,6 +99,13 @@ $max-width: 920px;
 
 }
 
+.item {
+    border: 1px solid var(--divider);
+    margin-bottom: 30px;
+    padding: 20px 15px;
+    border-radius: 15px;
+}
+
 .imageGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -110,10 +117,15 @@ $max-width: 920px;
     overflow: hidden;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    // width: 30%;
+    height: 80px;
 }
 
 .image {
     width: 100%;
     height: auto;
     display: block;
+    height: 80px;
+    object-fit: cover;
+
 }

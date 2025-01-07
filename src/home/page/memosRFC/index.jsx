@@ -115,7 +115,7 @@ const DynamicHeightListDemo = ({ items }) => {
     }, [index, heightMap, updateHeight]);
 
     return (
-      <div ref={rowRef} style={{ ...style, padding: '10px 0', boxSizing: 'border-box', overflow: 'hidden', height: 'unset' }}>
+      <div ref={rowRef} style={{ ...style, padding: '10px', boxSizing: 'border-box', overflow: 'hidden', height: 'unset' }}>
         <Item value={value.data} />
         {index === items.length - 1 && <div>已经加载全部{items.length}</div>}
       </div>
@@ -142,7 +142,7 @@ const DynamicHeightListDemo = ({ items }) => {
 
 const Item = ({ value }) => {
   return (
-    <div>
+    <div className={styles['item']}>
       <div>{value.date}</div>
       <MarkdownRenderer data={value.content} />
 
