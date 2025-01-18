@@ -39,7 +39,7 @@ const Loader = () => {
               </svg>
             </li>
           </ul>
-        </div><span>more note</span>
+        </div><span>全部笔记</span>
       </div>
     </StyledWrapper>
   );

@@ -24,20 +24,29 @@ export default function MemosRFC() {
   // 获取 Memos 列表并生成测试数据
   useEffect(() => {
     const fetchMemos = async () => {
-      const res = await getMemosList();
-      const data = res.data.map((e) => {
-        if (e.data.images) {
-          e.data.images = e.data.images.map((i) => {
-            const v = i.replace('../', '');
-
-            // https://github.com/Muliminty/memos-database/blob/main/imgs/Pasted%20image%2020241117181511.png?raw=true
-            return `https://github.com/Muliminty/memos-database/blob/main/${v}?raw=true`;
+      try {
+        const res = await getMemosList();
+        const data = res.data
+          .map((e) => {
+            if (e.data.hide) {
+              return null; // 如果需要隐藏的数据直接返回 null
+            }
+            if (e.data.images) {
+              e.data.images = e.data.images.map((i) => {
+                const v = i.replace('../', '');
+                return `https://github.com/Muliminty/memos-database/blob/main/${v}?raw=true`;
+              });
+            }
+            return e; // 返回处理后的数据
           })
-        }
-        return e
-      }) || [];
-      setPosts(data);
+          .filter(Boolean); // 过滤掉 null 或 undefined 的值
+
+        setPosts(data); // 设置过滤后的数据
+      } catch (error) {
+        console.error('Error fetching memos:', error); // 错误处理
+      }
     };
+
 
     fetchMemos();
   }, []);
@@ -147,6 +156,9 @@ const DynamicHeightListDemo = ({ items }) => {
 
 
 const Item = ({ value }) => {
+  if (value.hide) {
+    return null;
+  }
   return (
     <div className={styles['item']}>
       <div style={{ color: '#999', fontSize: '12px', marginBottom: '5px' }}>{value.date}</div>
