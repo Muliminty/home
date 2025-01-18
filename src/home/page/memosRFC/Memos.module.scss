@@ -28,9 +28,11 @@ $max-width: 920px;
 }
 
 .main {
+    max-width: 400PX;
     flex: 1;
+    margin: 0 AUTO;
     background-color: var(--background-color);
-    padding: 0 20px;
+    // padding: 0 20px;
     // 其他样式...
 }
 
@@ -102,7 +104,7 @@ $max-width: 920px;
 .item {
     border: 1px solid var(--divider);
     margin-bottom: 30px;
-    padding: 20px 15px;
+    padding: 15px 15px 20px;
     border-radius: 15px;
 }
 

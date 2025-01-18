@@ -6,6 +6,7 @@ import ThemeSwitcher from '@/components/theme-switcher/index';
 import Ham1 from '@/home/components/svg-icon/ham1.jsx';
 import { MarkdownRenderer } from "@/home/components/ReactMarkdown"; // 导入Markdown渲染器
 import { Image, Drawer } from 'antd';
+import { useNavigate } from "react-router-dom"; // 导入 useNavigate
 
 import Sidebar from './Sidebar';
 import SidebarContent from './SidebarContent';
@@ -40,20 +41,25 @@ export default function MemosRFC() {
 
     fetchMemos();
   }, []);
+  const navigate = useNavigate(); // 获取 navigate 函数
 
   const items = Array.from({ length: 100 }, (_, i) => `Content for item ${i + 1}`);
-
+  const handleGoHome = () => {
+    navigate("/");
+  };
   return (
     <div className={styles['container']}>
-      <div className={styles['sidebar']}>
+      {/* <div className={styles['sidebar']}>
         <SidebarContent />
-      </div>
+      </div> */}
       <div className={styles['main']}>
         <div className={styles['header']}>
           <div className={styles['menu-button']}><Ham1 active={showSidebar} onClick={toggleSidebar} /></div>
+          <div onClick={handleGoHome} className={styles["menu-title-home"]}>HOME</div>
           <div style={{ width: '40px', textAlign: 'center' }}>
             <ThemeSwitcher />
           </div>
+
         </div>
         <div className={styles['content']}>
           <DynamicHeightListDemo items={posts} />
@@ -117,7 +123,7 @@ const DynamicHeightListDemo = ({ items }) => {
     return (
       <div ref={rowRef} style={{ ...style, padding: '10px', boxSizing: 'border-box', overflow: 'hidden', height: 'unset' }}>
         <Item value={value.data} />
-        {index === items.length - 1 && <div>已经加载全部{items.length}</div>}
+        {index === items.length - 1 && <div style={{ textAlign: 'center' }}>已经加载全部：{items.length}</div>}
       </div>
     );
   };
@@ -143,7 +149,7 @@ const DynamicHeightListDemo = ({ items }) => {
 const Item = ({ value }) => {
   return (
     <div className={styles['item']}>
-      <div>{value.date}</div>
+      <div style={{ color: '#999', fontSize: '12px', marginBottom: '5px' }}>{value.date}</div>
       <MarkdownRenderer data={value.content} />
 
       <Image.PreviewGroup>

@@ -7,11 +7,10 @@ const Sidebar = ({ visible, onClose }) => {
     return (
         <Drawer
             rootClassName={styles['drawer-sidebar']}
-
-            title="左侧栏内容"
+            // title="左侧栏内容"
             placement="bottom"
             height="calc(100vh - 60px)"
-            closable={true}
+            closable={false}
             onClose={onClose}
             open={visible}
         >
