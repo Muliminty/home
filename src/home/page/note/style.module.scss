@@ -182,8 +182,9 @@
 }
 
 .toggle-drawer {
+  display: none;
   height: 45px;
-  display: flex;
+
   align-items: center;
   border-bottom: 1px solid var(--divider);
   width: 100%;
@@ -200,7 +201,7 @@
 
 
 // 手机（最大宽度 600px）
-@media (max-width: 600px) {
+@media (max-width: 400px) {
   .note-content-phone {
     display: block;
   }
@@ -224,7 +225,7 @@
 }
 
 // 平板（最大宽度 900px）
-@media (max-width: 900px）) {
+@media (max-width: 900px) {
 
   .note-content-phone {
     display: block;
@@ -238,6 +239,11 @@
   .menu-container-l {
     display: none;
   }
+
+  .toggle-drawer {
+    display: flex;
+  }
+
 
   .content {
     height: calc(100vh - 50px - 80px);
@@ -254,9 +260,7 @@
 
 // PC（最小宽度 901px）
 @media (min-width: 901px) {
-  .toggle-drawer {
-    display: none;
-  }
+
 
   .content {
     height: calc(100vh - 50px - 30px);
