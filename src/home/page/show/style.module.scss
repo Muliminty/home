@@ -17,7 +17,7 @@
 /* 栅格布局容器 */
 .gridContainer {
   display: grid;
-  gap: 16px;
+  gap: 24px;
   /* 默认间距 */
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   /* 默认列宽 */
@@ -32,14 +32,14 @@
   /* 适配屏幕宽度为 1024px 以上的大屏幕 */
   @media (max-width: 1200px) {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 12px;
+    gap: 24px;
     /* 调整间距 */
   }
 
   /* 适配屏幕宽度在 600px 到 1024px 之间的平板设备 */
   @media (max-width: 1024px) and (min-width: 600px) {
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 10px;
+    gap: 24px;
     /* 更小的间距 */
     grid-auto-rows: 100px;
     /* 更小的行高 */
@@ -48,7 +48,7 @@
   /* 适配屏幕宽度为 600px 以下的手机屏幕 */
   @media (max-width: 600px) {
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 8px;
+    gap: 24px;
     /* 更小的间距 */
     grid-auto-rows: 80px;
     /* 更小的行高 */
@@ -58,7 +58,7 @@
   @media (max-width: 375px) {
     grid-template-columns: 1fr;
     /* 只有一列 */
-    gap: 6px;
+    gap: 24px;
 
   }
 
@@ -66,7 +66,7 @@
   @media (max-width: 320px) {
     grid-template-columns: 1fr;
     /* 只有一列 */
-    gap: 4px;
+    gap: 24px;
 
   }
 }
@@ -106,6 +106,10 @@
       margin-bottom: 16px;
     }
 
+  }
+
+  .gridItemNoteCard {
+    margin-bottom: 80px !important;
   }
 }
 

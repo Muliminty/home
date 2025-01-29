@@ -103,11 +103,12 @@ export const Content = ({ data, handleGoHome, fetchFileContent, loading, toggleD
           {data ? (
             <div key={renderKey} className={styles['animation']}>
               {data !== '## 选择你感兴趣的内容吧' && (
-                <img
-                  style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                  src={imageSrc} // 使用动态的 imageSrc
-                  alt="随机获取Bing历史壁纸1080P高清"
-                />
+                // <img
+                //   style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                //   src={imageSrc} // 使用动态的 imageSrc
+                //   alt="随机获取Bing历史壁纸1080P高清"
+                // />
+                <></>
               )}
               <MarkdownRenderer data={data} showImg={data !== '选择你感兴趣的内容吧'} />
             </div>

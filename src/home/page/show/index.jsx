@@ -8,6 +8,7 @@ import About from './About'; // 引入 About 组件
 import GalleryManager from './GalleryManager'; // 引入 GalleryManager 组件
 import GlitchLoader from '@/home/components/textAnimation/GlitchLoader'
 import NoteCard from './NoteCard';
+import GithubContributionsGraph from './GithubContributionsGraph.jsx'
 
 import 'animate.css'; // 引入 animate.css
 
@@ -58,14 +59,19 @@ const Show = () => {
     },
     {
       id: 4, type: 'image',
-      width: 6, height: 2,
+      width: 6, height: 1.5,
       ItemClassName: styles['gridItemImage'],
 
-      content: <img className={styles.gridItemImageContent} src="https://ghchart.rshah.org/ee827c/Muliminty" alt="GitHub Chart" />,
+      content: <>
+        <div>github 贡献</div>
+        <GithubContributionsGraph username='Muliminty' />
+      </>,
+      // content: <img className={styles.gridItemImageContent} src="https://ghchart.rshah.org/ee827c/Muliminty" alt="GitHub Chart" />,
     },
     {
       id: 10, type: 'linkCard',
       width: 2, height: 2,
+      ItemClassName: styles['gridItemNoteCard'],
       content: <NoteCard />
     },
     { id: 5, type: 'galleryManager', content: <GalleryManager />, width: 2, height: 3 },
