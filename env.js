@@ -49,7 +49,11 @@ const env = {
         VITE_PORT: 3002,
         VITE_NAME: 'prod环境',
         VITE_APP_ENV: 'prod',
-        VITE_BASE_URL: '/'
+        VITE_BASE_URL: '/',
+        VITE_PROPS: {
+            NOTE_PATH: 'C:\\project\\Muliminty-Note',
+            MEMOS_PATH: "C:\\project\\memos-database\\memos"
+        }
     }
 };
 
