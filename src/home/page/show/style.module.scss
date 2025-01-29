@@ -84,10 +84,7 @@
     grid-row: span 3 !important;
   }
 
-  .gridItemImage {
-    grid-column: span 6 !important;
-    grid-row: span 2 !important;
-  }
+
 
   .gridItemAbout {
     grid-column: span 6 !important;
@@ -154,19 +151,7 @@
   /* 保证字体大小在合理范围内 */
 }
 
-/* 图片卡片 */
-.gridItemImage {
-  grid-column: span 4;
-  grid-row: span 1;
-  padding: 0 20px;
-}
 
-.gridItemImageContent {
-  height: 100%;
-  width: 100%;
-  margin: 0 auto;
-  object-fit: contain;
-}
 
 /* 主题切换卡片 */
 .gridItemThemeSwitcher {

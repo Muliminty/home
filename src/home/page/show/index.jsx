@@ -45,13 +45,13 @@ const Show = () => {
   // 自定义卡片和敬请期待卡片的初始数据
   const initialItems = [
     { id: 1, type: 'custom', content: <CardHover />, width: 2, height: 2 },
-    {
-      id: 2, type: 'about',
-      content: <About />,
-      ItemClassName: styles['gridItemAbout'],
+    // {
+    //   id: 2, type: 'about',
+    //   content: <About />,
+    //   ItemClassName: styles['gridItemAbout'],
 
-      width: 6, height: 2
-    },
+    //   width: 6, height: 2
+    // },
     {
       id: 3, type: 'themeSwitcher',
       ItemClassName: styles['gridItemThemeSwitcher'],
@@ -59,13 +59,10 @@ const Show = () => {
     },
     {
       id: 4, type: 'image',
-      width: 6, height: 1.5,
-      ItemClassName: styles['gridItemImage'],
-
-      content: <>
-        <div>github 贡献</div>
+      width: 6, height: 1,
+      content: <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <GithubContributionsGraph username='Muliminty' />
-      </>,
+      </div>,
       // content: <img className={styles.gridItemImageContent} src="https://ghchart.rshah.org/ee827c/Muliminty" alt="GitHub Chart" />,
     },
     {
@@ -195,7 +192,7 @@ const Show = () => {
 
   return (
     <div className={styles.showContainer}>
-      <Button onClick={handleSort} style={{ margin: '0 auto' }}>change</Button>
+      {/* <Button onClick={handleSort} style={{ margin: '0 auto' }}>change</Button> */}
       <div className={styles.separator}>
         <GlitchLoader text='Muliminty' />
       </div>
