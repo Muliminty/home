@@ -22,3 +22,5 @@
 - **`vercel-build`**: 构建项目，使用 `development` 环境配置，适用于 Vercel 部署。
 - **`lint`**: 运行 ESLint 进行代码质量检查。
 - **`serve`**: 启动 Vite 预览服务器，端口为 80，用于预览构建后的项目。
+
+分支管理： prod 分支为生产环境分支，dev 分支为开发环境分支，staging 分支为测试环境分支。
