@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import styles from './splash-cursor.module.scss';
 
 function SplashCursor({
   // You can customize these props if you want
@@ -1190,25 +1191,11 @@ function SplashCursor({
   ]);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 50,
-        pointerEvents: 'none',
-        width: '100%',
-        height: '100%',
-      }}
-    >
+    <div className={styles.container}>
       <canvas
         ref={canvasRef}
         id="fluid"
-        style={{
-          width: '100vw',
-          height: '100vh',
-          display: 'block',
-        }}
+        className={styles.canvas}
       />
     </div>
   );

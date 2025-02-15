@@ -1,0 +1,24 @@
+$background-dark: #121212;
+$text-light: #E0E0E0;
+$accent-blue: #90CAF9;
+$accent-green: #81C784;
+
+.show {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: $background-dark;
+
+  color: $text-light;
+  // 居中
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.show-content {
+  width: 100px;
+  height: 100px;
+  background-color: $accent-blue;
+}
