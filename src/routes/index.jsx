@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Loading from '@/components/Loading';
 import routes from './config';
 
@@ -7,7 +7,7 @@ import routes from './config';
 const generateRoutes = (routes) => {
   return routes.map((route) => {
     const Component = route.element;
-    
+
     if (route.children) {
       return (
         <Route key={route.path} path={route.path} element={<Component />}>
@@ -15,7 +15,7 @@ const generateRoutes = (routes) => {
         </Route>
       );
     }
-    
+
     return (
       <Route
         key={route.path}
@@ -32,11 +32,9 @@ const generateRoutes = (routes) => {
 
 const Router = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        {generateRoutes(routes)}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {generateRoutes(routes)}
+    </Routes>
   );
 };
 

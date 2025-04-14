@@ -4,21 +4,54 @@ $accent-blue: #90CAF9;
 $accent-green: #81C784;
 
 .show {
+  position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background-color: $background-dark;
-
   color: $text-light;
-  // 居中
+
+  // 居中布局
   display: flex;
   align-items: center;
   flex-direction: column;
-
+  justify-content: center;
 }
 
 .show-content {
   width: 100px;
   height: 100px;
   background-color: $accent-blue;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// 添加一些辅助类
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-accent {
+  color: $accent-green;
+  font-weight: 600;
+}
+
+// 响应式调整
+@media (max-width: 768px) {
+  .show {
+    padding: 0 20px;
+  }
+
+  .show-content {
+    width: 80px;
+    height: 80px;
+  }
 }
