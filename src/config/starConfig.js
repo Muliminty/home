@@ -12,8 +12,8 @@ export const starConfig = {
     // 鼠标交互配置
     mouseInteraction: {
         enabled: true, // 是否启用鼠标交互
-        maxDistance: 500, // 最大影响距离
-        intensity: 20, // 移动强度
+        maxDistance: 200, // 最大影响距离（降低以使效果更明显）
+        intensity: 50, // 增加移动强度
     },
 
     // 星星不规则运动配置

@@ -4,7 +4,8 @@
 @use "./syntax.scss";
 @use "./callouts.scss";
 
-html {
+html,
+body {
   scroll-behavior: smooth;
   text-size-adjust: none;
   overflow-x: hidden;
@@ -23,6 +24,11 @@ section {
   background-color: var(--light);
   font-family: var(--bodyFont);
   color: var(--darkgray);
+}
+
+#root {
+  height: 100%;
+  width: 100%;
 }
 
 .text-highlight {
