@@ -45,13 +45,13 @@ const Show = () => {
   // 自定义卡片和敬请期待卡片的初始数据
   const initialItems = [
     { id: 1, type: 'custom', content: <CardHover />, width: 2, height: 2 },
-    // {
-    //   id: 2, type: 'about',
-    //   content: <About />,
-    //   ItemClassName: styles['gridItemAbout'],
+    {
+      id: 2, type: 'about',
+      content: <About />,
+      ItemClassName: styles['gridItemAbout'],
 
-    //   width: 6, height: 2
-    // },
+      width: 4, height: 1
+    },
     {
       id: 3, type: 'themeSwitcher',
       ItemClassName: styles['gridItemThemeSwitcher'],
@@ -71,7 +71,7 @@ const Show = () => {
       ItemClassName: styles['gridItemNoteCard'],
       content: <NoteCard />
     },
-    { id: 5, type: 'galleryManager', content: <GalleryManager />, width: 2, height: 3 },
+    // { id: 5, type: 'galleryManager', content: <GalleryManager />, width: 2, height: 3 },
     {
       id: 6, type: 'linkCard',
       ItemClassName: styles['gridItemLinkCard'],
@@ -104,9 +104,6 @@ const Show = () => {
         }
       />
     },
-
-
-
 
     // ...Array.from({ length: 7 }, (_, i) => ({
     //   id: i + 6,

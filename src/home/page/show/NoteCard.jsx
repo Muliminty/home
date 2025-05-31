@@ -241,7 +241,7 @@ const NoteCard = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/note');
+    window.open('http://muliminty.online:8080/');
   };
 
   return <div
