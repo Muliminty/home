@@ -8,25 +8,9 @@ import { about } from './commands/about';
 import { projects } from './commands/projects';
 import { blogs } from './commands/blogs';
 import { Link } from './commands/link';
+import { help } from './commands/help';
 
-const processCommand = (command) => {
-  const [cmd, ...args] = command.trim().split(' ');
 
-  switch (cmd.toLowerCase()) {
-    case 'about':
-      return about();
-    case 'projects':
-      return projects();
-    case 'blogs':
-      return blogs();
-    case 'help':
-      return '可用命令: about, projects, blogs, help';
-    case 'link':
-      return Link();
-    default:
-      return `未知命令: ${cmd}`;
-  }
-};
 
 const asciiArt = `
 ▗▖  ▗▖▗▖ ▗▖▗▖   ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖
@@ -64,7 +48,44 @@ const Terminal = () => {
       { type: 'output', content: processCommand(command) },
     ]);
   };
+  const processCommand = (command) => {
+    const [cmd, ...args] = command.trim().split(' ');
 
+
+    const helpList = [
+      {
+        name: 'about',
+        fn: about,
+      },
+      {
+        name: 'projects',
+        fn: projects,
+      },
+      {
+        name: 'blogs',
+        fn: blogs,
+      },
+      {
+        name: 'link',
+        fn: Link,
+      },
+    ]
+    switch (cmd.toLowerCase()) {
+      case 'about':
+        return about();
+      case 'projects':
+        return projects();
+      case 'blogs':
+        return blogs();
+      case 'help':
+        return help(helpList, executeCommand);
+      case 'link':
+        return Link();
+      default:
+        return `未知命令: ${cmd}`;
+    }
+  };
+  
   return (
     <div className="terminal">
       <div className="output">
