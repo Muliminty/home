@@ -7,6 +7,7 @@ import './terminal.scss'
 import { about } from './commands/about';
 import { projects } from './commands/projects';
 import { blogs } from './commands/blogs';
+import { Link } from './commands/link';
 
 const processCommand = (command) => {
   const [cmd, ...args] = command.trim().split(' ');
@@ -20,14 +21,40 @@ const processCommand = (command) => {
       return blogs();
     case 'help':
       return '可用命令: about, projects, blogs, help';
+    case 'link':
+      return Link();
     default:
       return `未知命令: ${cmd}`;
   }
 };
 
+const asciiArt = `
+▗▖  ▗▖▗▖ ▗▖▗▖   ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖
+▐▛▚▞▜▌▐▌ ▐▌▐▌     █  ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █   ▝▚▞▘ 
+▐▌  ▐▌▐▌ ▐▌▐▌     █  ▐▌  ▐▌  █  ▐▌ ▝▜▌  █    ▐▌  
+▐▌  ▐▌▝▚▄▞▘▐▙▄▄▖▗▄█▄▖▐▌  ▐▌▗▄█▄▖▐▌  ▐▌  █    ▐▌  
+
+
+欢迎来到我的个人网站
+
+你可以输入 help 查看可用命令
+
+`;
+
 const Terminal = () => {
   const [history, setHistory] = useState([
-    { type: 'input', content: 'muliminty' },
+    {
+      type: 'input', content: <div
+        style={{
+          whiteSpace: 'pre-wrap',
+          fontFamily: 'Courier New, monospace',
+          color: '#00FF00',
+        }}
+      >
+        {asciiArt}
+      </div>
+
+    },
   ]);
 
   const executeCommand = (command) => {
