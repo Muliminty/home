@@ -1,5 +1,4 @@
-import React from 'react'
-import Terminal from '../../components/terminal/idnex'
+import Terminal from '@/components/terminal'
 const Home = () => {
   return (
     <div className="home">

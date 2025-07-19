@@ -13,7 +13,7 @@ const CommandInput = ({ onExecute }) => {
 
   return (
     <form onSubmit={handleSubmit} className="command-input">
-      <span className="prompt">user@gemini-cli:~$</span>
+      <span className="prompt">user@muliminty:~$</span>
       <input
         type="text"
         value={command}
