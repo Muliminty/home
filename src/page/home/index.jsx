@@ -1,9 +1,9 @@
 import React from 'react'
-
+import Terminal from '../../components/terminal/idnex'
 const Home = () => {
   return (
     <div className="home">
-      <h1>首页</h1>
+      <Terminal />
     </div>
   )
 }

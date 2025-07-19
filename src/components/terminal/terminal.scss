@@ -1,0 +1,59 @@
+/* terminal 样式 */
+.terminal {
+  background-color: #1e1e1e;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+}
+
+.output {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.output-line {
+  margin: 5px 0;
+}
+
+.output-line.input {
+  color: #00ff00;
+}
+
+.output-line.output {
+  color: #ffffff;
+}
+
+.command-input {
+  display: flex;
+  align-items: center;
+}
+
+.command-input input {
+  background-color: #333333;
+  border: none;
+  color: #00ff00;
+  padding: 5px;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+}
+
+.command-input .prompt {
+  margin-right: 10px;
+}
+
+/* 使光标闪烁 */
+.command-input input:focus {
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}

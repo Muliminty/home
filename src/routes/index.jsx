@@ -1,8 +1,10 @@
 import { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Loading from '@/components/Loading';
 import routes from './config';
 
+
+
+const Loading = () => 'Loading...'
 // 递归生成路由
 const generateRoutes = (routes) => {
   return routes.map((route) => {
