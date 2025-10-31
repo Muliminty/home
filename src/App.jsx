@@ -5,7 +5,7 @@ import './assets/styles/theme.css'; // 导入主题样式
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/home">
       <Router />
 
     </BrowserRouter>
