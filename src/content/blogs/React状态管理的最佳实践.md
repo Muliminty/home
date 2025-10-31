@@ -1,6 +1,15 @@
-# React 状态管理的最佳实践
-
-> 从 Context API 到 Redux，状态管理完整指南
+---
+title: React 状态管理的最佳实践
+desc: 从 Context API 到 Redux，状态管理完整指南
+date: 2024-01-10
+icon: 📚
+tags:
+  - React
+  - 状态管理
+  - Redux
+  - ContextAPI
+  - 最佳实践
+---
 
 状态管理是React应用的核心问题之一。本文将探讨不同的状态管理方案，以及如何根据项目需求选择最合适的方案。
 

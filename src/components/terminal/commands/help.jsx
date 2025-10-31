@@ -3,6 +3,7 @@ export const help = (links = [], executeCommand, onHelpActive) => {
     { name: 'clear', desc: '清空终端屏幕' },
     { name: 'history', desc: '显示命令历史记录' },
     { name: 'read', desc: '读取博客文章，用法：read <文章ID>' },
+    { name: 'tag', desc: '显示所有博客标签' },
     { name: 'help', desc: '显示此帮助信息' },
   ];
 

@@ -6,7 +6,7 @@ import './terminal.scss'
 
 import { about } from './commands/about';
 import { projects } from './commands/projects';
-import { blogs, readBlog } from './commands/blogs';
+import { blogs, readBlog, showTags } from './commands/blogs';
 import { Link } from './commands/link';
 import { help } from './commands/help';
 
@@ -157,7 +157,7 @@ const Terminal = () => {
   };
   
   const processCommand = (command, args = []) => {
-    const [cmd] = command.trim().split(' ');
+    const [cmd, ...cmdArgs] = command.trim().split(' ');
 
 
     const helpList = [
@@ -184,12 +184,20 @@ const Terminal = () => {
       case 'projects':
         return projects();
       case 'blogs':
+        // 检查是否有--tag参数
+        const tagIndex = cmdArgs.indexOf('--tag');
+        if (tagIndex !== -1 && cmdArgs[tagIndex + 1]) {
+          return blogs(executeCommand, cmdArgs[tagIndex + 1]);
+        }
         return blogs(executeCommand);
       case 'read':
         if (args.length === 0) {
           return '请指定文章ID，例如：read 1';
         }
         return readBlog(args[0]);
+      case 'tag':
+      case 'tags':
+        return showTags(executeCommand);
       case 'help':
         return help(helpList, executeCommand, setHelpActive);
       case 'link':
