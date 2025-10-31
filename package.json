@@ -19,8 +19,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-grid-layout": "^1.5.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.1.5",
     "react-syntax-highlighter": "^15.6.1",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.2.0",
     "three": "^0.173.0"
   },
