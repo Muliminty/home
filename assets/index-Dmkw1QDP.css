@@ -1,0 +1,1 @@
+.not-found-page h1{animation:flicker 2s infinite}.not-found-page a:hover{transition:all .3s}@media (max-width: 768px){.not-found-page h1{font-size:80px!important}.not-found-page p{font-size:18px!important}}@keyframes flicker{0%,to{opacity:1}50%{opacity:.7}}
