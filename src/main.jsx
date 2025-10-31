@@ -8,6 +8,12 @@
 //     <App />
 //   </StrictMode>,
 // )
+import { Buffer } from 'buffer';
+
+// 全局注入 Buffer，让 gray-matter 可以在浏览器中使用
+window.Buffer = Buffer;
+globalThis.Buffer = Buffer;
+
 import { createRoot } from 'react-dom/client';
 import App from './App';
 

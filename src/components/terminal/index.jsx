@@ -183,13 +183,14 @@ const Terminal = () => {
         return about();
       case 'projects':
         return projects();
-      case 'blogs':
+      case 'blogs': {
         // 检查是否有--tag参数
         const tagIndex = cmdArgs.indexOf('--tag');
         if (tagIndex !== -1 && cmdArgs[tagIndex + 1]) {
           return blogs(executeCommand, cmdArgs[tagIndex + 1]);
         }
         return blogs(executeCommand);
+      }
       case 'read':
         if (args.length === 0) {
           return '请指定文章ID，例如：read 1';
