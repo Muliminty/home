@@ -68,20 +68,20 @@ export const terminalConfig = {
       icon: '💻',
       link: '#'
     },
-    { 
-      name: 'Task Manager', 
-      desc: '一个功能完整的任务管理系统，支持实时协作', 
-      tech: 'React, Node.js, MongoDB',
-      icon: '📋',
-      link: '#'
-    },
-    { 
-      name: 'Weather App', 
-      desc: '实时天气查询应用，支持全球多个城市', 
-      tech: 'React, API',
-      icon: '🌤️',
-      link: '#'
-    },
+    // { 
+    //   name: 'Task Manager', 
+    //   desc: '一个功能完整的任务管理系统，支持实时协作', 
+    //   tech: 'React, Node.js, MongoDB',
+    //   icon: '📋',
+    //   link: '#'
+    // },
+    // { 
+    //   name: 'Weather App', 
+    //   desc: '实时天气查询应用，支持全球多个城市', 
+    //   tech: 'React, API',
+    //   icon: '🌤️',
+    //   link: '#'
+    // },
   ],
 
   // ==================== 联系方式 ====================
