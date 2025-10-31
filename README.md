@@ -41,6 +41,18 @@ npm run build
 npm run preview
 ```
 
+### GitHub Pages 部署
+
+项目已配置 GitHub Actions 自动部署到 GitHub Pages。
+
+**首次部署步骤：**
+1. 进入仓库设置 Settings
+2. 找到 Pages
+3. Source 选择 "GitHub Actions"
+4. 推送到 main 分支将自动构建并部署
+
+部署完成后，你的网站将在 `https://<username>.github.io/<repo-name>/` 可用
+
 ## 📖 使用指南
 
 ### 可用命令
