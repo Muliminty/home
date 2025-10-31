@@ -1,4 +1,4 @@
-import { terminalConfig } from '../../config/terminal.config';
+import { terminalConfig } from '../../config/terminal.config.js';
 
 export const Link = () => {
   const { links, theme } = terminalConfig;

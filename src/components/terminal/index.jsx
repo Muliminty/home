@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import CommandInput from './CommandInput';
 import CommandOutput from './CommandOutput';
 import './terminal.scss'
-import { terminalConfig } from '../../config/terminal.config';
+import { terminalConfig } from '../../config/terminal.config.js';
 
 import { about } from './commands/about';
 import { projects } from './commands/projects';
