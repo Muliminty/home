@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import CommandInput from './CommandInput';
 import CommandOutput from './CommandOutput';
 import './terminal.scss'
-
+import { terminalConfig } from '../../config/terminal.config';
 
 import { about } from './commands/about';
 import { projects } from './commands/projects';
@@ -10,32 +10,8 @@ import { blogs, readBlog, showTags } from './commands/blogs';
 import { Link } from './commands/link';
 import { help } from './commands/help';
 
-
-// ░███     ░███            ░██ ░██                ░██              ░██               
-// ░████   ░████            ░██                                     ░██               
-// ░██░██ ░██░██ ░██    ░██ ░██ ░██░█████████████  ░██░████████  ░████████ ░██    ░██ 
-// ░██ ░████ ░██ ░██    ░██ ░██ ░██░██   ░██   ░██ ░██░██    ░██    ░██    ░██    ░██ 
-// ░██  ░██  ░██ ░██    ░██ ░██ ░██░██   ░██   ░██ ░██░██    ░██    ░██    ░██    ░██ 
-// ░██       ░██ ░██   ░███ ░██ ░██░██   ░██   ░██ ░██░██    ░██    ░██    ░██   ░███ 
-// ░██       ░██  ░█████░██ ░██ ░██░██   ░██   ░██ ░██░██    ░██     ░████  ░█████░██ 
-//                                                                                ░██ 
-//                                                                          ░███████  
-
-
-
-const asciiArt = `
-▗▖  ▗▖▗▖ ▗▖▗▖   ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖
-▐▛▚▞▜▌▐▌ ▐▌▐▌     █  ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █   ▝▚▞▘ 
-▐▌  ▐▌▐▌ ▐▌▐▌     █  ▐▌  ▐▌  █  ▐▌ ▝▜▌  █    ▐▌  
-▐▌  ▐▌▝▚▄▞▘▐▙▄▄▖▗▄█▄▖▐▌  ▐▌▗▄█▄▖▐▌  ▐▌  █    ▐▌  
-
-欢迎来到我的个人网站
-
-你可以输入 help 查看可用命令
-
-`;
-
 const Terminal = () => {
+  const { terminal: terminalSettings, theme } = terminalConfig;
   const canvasRef = useRef(null);
   const [history, setHistory] = useState([
     {
@@ -43,26 +19,28 @@ const Terminal = () => {
         style={{
           whiteSpace: 'pre-wrap',
           fontFamily: 'Courier New, monospace',
-          color: '#00FF00',
+          color: theme.primaryColor,
         }}
       >
-        {asciiArt}
+        {terminalSettings.asciiArt}
       </div>
 
     },
   ]);
   const [commandHistory, setCommandHistory] = useState([]); // 命令历史数组
   const [helpActive, setHelpActive] = useState(false);
-  const [showTip, setShowTip] = useState(true);
+  const [showTip, setShowTip] = useState(terminalSettings.showTip);
 
   // 粒子背景效果
   useEffect(() => {
+    if (!terminalSettings.enableParticles) return;
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
     const particles = [];
-    const particleCount = 50;
+    const { particles: particleConfig } = theme;
     
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -71,9 +49,9 @@ const Terminal = () => {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.5;
-        this.speedY = Math.random() * 0.5 + 0.2;
-        this.opacity = Math.random() * 0.5 + 0.2;
+        this.size = Math.random() * (particleConfig.maxSize - particleConfig.minSize) + particleConfig.minSize;
+        this.speedY = Math.random() * (particleConfig.maxSpeed - particleConfig.minSpeed) + particleConfig.minSpeed;
+        this.opacity = Math.random() * (particleConfig.maxOpacity - particleConfig.minOpacity) + particleConfig.minOpacity;
       }
       
       update() {
@@ -85,14 +63,18 @@ const Terminal = () => {
       }
       
       draw() {
-        ctx.fillStyle = `rgba(0, 255, 0, ${this.opacity})`;
+        const rgb = theme.primaryColor.match(/\d+/g);
+        const r = parseInt(rgb[0], 16) || 0;
+        const g = parseInt(rgb[1], 16) || 255;
+        const b = parseInt(rgb[2], 16) || 0;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
       }
     }
     
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < particleConfig.count; i++) {
       particles.push(new Particle());
     }
     
@@ -114,7 +96,7 @@ const Terminal = () => {
     
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [terminalSettings.enableParticles, theme]);
 
   const executeCommand = (command) => {
     const [cmd, ...args] = command.trim().split(' ');

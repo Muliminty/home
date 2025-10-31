@@ -1,39 +1,19 @@
+import { terminalConfig } from '../../config/terminal.config';
+
 export const projects = () => {
-  const projectList = [
-    { 
-      name: 'Terminal Portfolio', 
-      desc: '一个终端样式的个人主页，使用React和Vite构建', 
-      tech: 'React, Vite, SCSS',
-      icon: '💻',
-      link: '#'
-    },
-    { 
-      name: 'Task Manager', 
-      desc: '一个功能完整的任务管理系统，支持实时协作', 
-      tech: 'React, Node.js, MongoDB',
-      icon: '📋',
-      link: '#'
-    },
-    { 
-      name: 'Weather App', 
-      desc: '实时天气查询应用，支持全球多个城市', 
-      tech: 'React, API',
-      icon: '🌤️',
-      link: '#'
-    },
-  ];
+  const { projects: projectList, theme } = terminalConfig;
 
   return (
     <div>
-      <div style={{ marginBottom: '15px', color: '#00ff00' }}>
+      <div style={{ marginBottom: '15px', color: theme.primaryColor }}>
         🚀 我的项目
       </div>
       {projectList.map((project, idx) => (
         <div
           key={idx}
           style={{
-            background: 'rgba(0, 255, 0, 0.05)',
-            border: '1px solid rgba(0, 255, 0, 0.2)',
+            background: theme.bgHighlight,
+            border: `1px solid ${theme.borderColor}`,
             borderRadius: '4px',
             padding: '15px',
             marginBottom: '15px',
@@ -41,12 +21,12 @@ export const projects = () => {
             transition: 'all 0.2s',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 255, 0, 0.1)';
-            e.currentTarget.style.borderColor = 'rgba(0, 255, 0, 0.5)';
+            e.currentTarget.style.background = theme.bgHover;
+            e.currentTarget.style.borderColor = theme.bgHover;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(0, 255, 0, 0.05)';
-            e.currentTarget.style.borderColor = 'rgba(0, 255, 0, 0.2)';
+            e.currentTarget.style.background = theme.bgHighlight;
+            e.currentTarget.style.borderColor = theme.borderColor;
           }}
           onClick={() => {
             if (project.link !== '#') {
@@ -56,11 +36,11 @@ export const projects = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
             <span style={{ fontSize: '24px', marginRight: '10px' }}>{project.icon}</span>
-            <span style={{ color: '#00ff00', fontWeight: 'bold', fontSize: '16px' }}>
+            <span style={{ color: theme.primaryColor, fontWeight: 'bold', fontSize: '16px' }}>
               {project.name}
             </span>
           </div>
-          <div style={{ color: '#fff', marginBottom: '8px' }}>
+          <div style={{ color: theme.textColor, marginBottom: '8px' }}>
             {project.desc}
           </div>
           <div style={{ color: '#888', fontSize: '14px' }}>
