@@ -14,6 +14,7 @@
 - ⌨️ **键盘快捷键** - 提升交互效率
 - 🎯 **命令系统** - 类似真实终端的命令体验
 - 💫 **光晕效果** - 霓虹灯般的视觉效果
+- ⚙️ **全功能配置** - 一键配置文件，零代码修改
 
 ## 🚀 快速开始
 
@@ -64,6 +65,53 @@ npm run preview
 #### 🌐 其他部署方案
 
 如需部署到其他平台，查看 [免费部署方案.md](doc/免费部署方案.md)
+
+## ⚙️ 个性化配置
+
+所有配置都在 `src/config/terminal.config.js` 中，修改即可个性化你的网站：
+
+### 📝 快速配置
+
+1. **修改个人信息**
+   ```javascript
+   about: {
+     name: '你的名字',
+     job: '你的职业',
+     skills: '你的技能',
+     bio: '个人简介',
+   }
+   ```
+
+2. **添加你的项目**
+   ```javascript
+   projects: [
+     {
+       name: '项目名',
+       desc: '项目描述',
+       tech: '技术栈',
+       icon: '🚀',
+       link: 'https://...'
+     }
+   ]
+   ```
+
+3. **更新联系方式**
+   ```javascript
+   links: [
+     { name: 'GitHub', url: 'https://github.com/yourname', icon: '🐱' },
+     // 添加更多...
+   ]
+   ```
+
+4. **自定义主题颜色**
+   ```javascript
+   theme: {
+     primaryColor: '#00ff00',  // 主色
+     backgroundGradient: { ... }
+   }
+   ```
+
+**详细配置说明**：查看 [src/config/README.md](src/config/README.md)
 
 ## 📖 使用指南
 
