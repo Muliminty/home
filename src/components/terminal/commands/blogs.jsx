@@ -15,12 +15,6 @@ const blogModules = {
   '../../../content/blogs/博客系统使用完全指南.md?raw': blog4,
 };
 
-console.log('🔍 Manual import check:');
-console.log('  blog1 type:', typeof blog1);
-console.log('  blog1 length:', blog1?.length);
-console.log('  blog1 preview:', blog1?.substring(0, 150));
-console.log('  blogModules keys:', Object.keys(blogModules));
-
 // 辅助函数：从文件名提取标题
 const extractTitleFromFilename = (path) => {
   const filename = path.split('/').pop().replace('.md', '');
@@ -64,12 +58,8 @@ const extractMetadata = (content) => {
   try {
     // 尝试解析frontmatter
     const { data, content: markdownContent } = matter(content);
-    console.log('  Parsed data:', data);
-    console.log('  Data keys:', Object.keys(data || {}));
-    console.log('  Has keys?', data && Object.keys(data).length > 0);
     
     if (data && Object.keys(data).length > 0) {
-      console.log('  ✅ Using frontmatter data');
       // 处理日期，如果是Date对象转为字符串
       let dateStr = '';
       if (data.date) {
@@ -88,12 +78,9 @@ const extractMetadata = (content) => {
         tags: data.tags || [], // 提取标签
         content: markdownContent // 返回解析后的内容
       };
-    } else {
-      console.log('  ⚠️ No frontmatter data found');
     }
-  } catch (e) {
+  } catch {
     // frontmatter解析失败，使用原有逻辑
-    console.log('  ❌ Frontmatter parse error:', e);
   }
   
   // 没有frontmatter，从markdown内容提取
@@ -133,9 +120,7 @@ const extractMetadata = (content) => {
 
 // 动态构建博客列表
 const blogList = Object.entries(blogModules).map(([path, content], index) => {
-  console.log(`Processing blog ${index + 1}: ${path}`);
   const metadata = extractMetadata(content);
-  console.log(`  Metadata:`, { title: metadata.title, tags: metadata.tags, tagsCount: metadata.tags?.length || 0 });
   
   // 优先使用元数据中的标题，否则使用文件名
   const title = metadata.title || extractTitleFromFilename(path);
@@ -154,12 +139,6 @@ const blogList = Object.entries(blogModules).map(([path, content], index) => {
     content: metadata.content || content, // 使用解析后的内容
     path
   };
-});
-
-console.log('=== Final Blog List ===');
-console.log('Total blogs:', blogList.length);
-blogList.forEach((blog, idx) => {
-  console.log(`${idx + 1}. ${blog.title} - Tags: [${blog.tags.join(', ')}] - Count: ${blog.tags.length}`);
 });
 
 export const blogs = (executeCommand, filterTag = null) => {
@@ -207,6 +186,18 @@ export const blogs = (executeCommand, filterTag = null) => {
               <span style={{ fontSize: '24px', marginRight: '10px' }}>{blog.icon}</span>
               <span style={{ color: '#00ff00', fontWeight: 'bold', fontSize: '16px' }}>
                 {blog.title}
+              </span>
+              <span style={{ 
+                marginLeft: '10px',
+                background: 'rgba(0, 255, 0, 0.2)',
+                border: '1px solid rgba(0, 255, 0, 0.4)',
+                borderRadius: '3px',
+                padding: '2px 8px',
+                fontSize: '12px',
+                color: '#00ff00',
+                fontFamily: 'monospace'
+              }}>
+                [ID: {blog.id}]
               </span>
             </div>
             <div style={{ color: '#fff', marginBottom: '8px', lineHeight: '1.6' }}>
