@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@': '/src', // 这里是设置别名，将 @ 映射到 src 目录
     },
+    extensions: ['.js', '.jsx', '.json'],
   },
   define: {
     'global': 'globalThis',
