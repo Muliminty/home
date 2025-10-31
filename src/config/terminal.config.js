@@ -8,8 +8,8 @@ export const terminalConfig = {
   
   // 网站标题和介绍
   site: {
-    title: 'Terminal Home',
-    subtitle: '欢迎来到我的个人网站',
+    title: 'Muliminty\'s Home',
+    subtitle: 'Welcome to my personal website',
     prompt: '你可以输入 help 查看可用命令',
   },
 
@@ -52,10 +52,10 @@ export const terminalConfig = {
   // ==================== 个人信息 ====================
   
   about: {
-    name: 'Your Name',
+    name: 'Muliminty',
     job: '前端开发工程师',
     skills: 'React, JavaScript, TypeScript, Node.js',
-    bio: '热爱编程，专注于前端开发，喜欢探索新技术和最佳实践。这个网站使用 React + Vite 构建，展示终端风格的交互界面。',
+    bio: '热爱编程，喜欢探索新技术和最佳实践。',
   },
 
   // ==================== 项目列表 ====================
@@ -87,10 +87,9 @@ export const terminalConfig = {
   // ==================== 联系方式 ====================
   
   links: [
-    { name: 'GitHub', url: 'https://github.com', icon: '🐱' },
-    { name: '博客', url: 'https://blog.example.com', icon: '📝' },
-    { name: '邮箱', url: 'mailto:your@email.com', icon: '📧' },
-    { name: 'Twitter', url: 'https://twitter.com', icon: '🐦' },
+    { name: 'GitHub', url: 'https://github.com/Muliminty', icon: '🐱' },
+    { name: '博客', url: 'https://muliminty.github.io/home/', icon: '📝' },
+    { name: '邮箱', url: 'muliminty@qq.com', icon: '📧' },
   ],
 
   // ==================== 博客配置 ====================
