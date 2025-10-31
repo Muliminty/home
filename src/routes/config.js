@@ -6,27 +6,18 @@ const routes = [
     path: '/',
     element: lazy(() => import('@/page/home')),
   },
-  // {
-  //   path: '/home',
-  //   element: HomeLayout,
-  //   children: [
-  //     {
-  //       title: '笔记',
-  //       path: 'index',
-  //       element: lazy(() => import('@/page/note')),
-  //     },
-  //     // 这里可以继续添加其他子路由
-  //     {
-  //       title: '关于',
-  //       path: 'about',
-  //       element: lazy(() => import('@/page/about')),
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '*',
-  //   element: lazy(() => import('@/page/404')),
-  // }
+  {
+    path: '/about',
+    element: lazy(() => import('@/page/about')),
+  },
+  {
+    path: '/note',
+    element: lazy(() => import('@/page/note')),
+  },
+  {
+    path: '*',
+    element: lazy(() => import('@/page/404')),
+  },
 ];
 
 export default routes; 
