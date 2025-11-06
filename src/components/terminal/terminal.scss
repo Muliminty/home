@@ -133,3 +133,17 @@
   text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
   font-weight: bold;
 }
+
+.help-button-container {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.help-hint {
+  user-select: none;
+  
+  &:active {
+    opacity: 0.5 !important;
+  }
+}

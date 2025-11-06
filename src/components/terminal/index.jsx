@@ -223,6 +223,33 @@ const Terminal = () => {
         {history.map((entry, index) => (
           <CommandOutput key={index} type={entry.type} content={entry.content} />
         ))}
+        {history.length === 1 && (
+          <div className="help-button-container">
+            <div
+              onClick={() => executeCommand('help')}
+              className="help-hint"
+              style={{
+                color: '#888',
+                fontSize: '12px',
+                marginTop: '10px',
+                fontFamily: 'Courier New, monospace',
+                cursor: 'pointer',
+                opacity: 0.7,
+                transition: 'opacity 0.2s, color 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.color = theme.primaryColor;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.7';
+                e.currentTarget.style.color = '#888';
+              }}
+            >
+              <span style={{ color: theme.primaryColor }}>$</span> 提示: 输入 <span style={{ color: theme.primaryColor, textDecoration: 'underline', cursor: 'pointer' }}>help</span> 查看可用命令
+            </div>
+          </div>
+        )}
       </div>
       {!helpActive && <CommandInput onExecute={executeCommand} commandHistory={commandHistory} />}
     </div>
