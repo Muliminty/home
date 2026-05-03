@@ -53,25 +53,13 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   .curtain-layer {
     position: fixed; inset: 0; z-index: 9998; pointer-events: none;
     display: flex; flex-direction: column;
-    clip-path: inset(0 100% 0 0);
   }
-  .curtain-layer.active { clip-path: inset(0 0 0 0); transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
   .curtain-slat {
     flex: 1;
     background: #1c1917;
     transform: scaleX(0);
     transform-origin: left;
-  }
-  .curtain-layer.active .curtain-slat {
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .curtain-layer[data-reverse] .curtain-slat {
-    transform-origin: right;
-    transform: scaleX(1);
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .curtain-layer[data-reverse].active .curtain-slat {
-    transform: scaleX(0);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   </style>
 </head>
@@ -222,77 +210,76 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       var layer = document.getElementById('curtain-layer');
       if (!layer) return;
 
-      // Build slats
       for (var i = 0; i < N; i++) {
         var s = document.createElement('div');
         s.className = 'curtain-slat';
-        s.style.transitionDelay = (i * 0.04) + 's';
+        s.style.transitionDelay = (i * 0.05) + 's';
         layer.appendChild(s);
       }
 
       var btn = document.getElementById('theme-toggle');
       var icon = btn ? btn.querySelector('.theme-icon') : null;
-      var STORAGE_KEY = 'theme';
+      var KEY = 'theme';
+      var slats = layer.querySelectorAll('.curtain-slat');
+      var busy = false;
 
       function getTheme() {
-        var stored = localStorage.getItem(STORAGE_KEY);
+        var stored = localStorage.getItem(KEY);
         if (stored === 'dark' || stored === 'light') return stored;
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
 
-      function applyTheme(theme, animate) {
-        var isDark = theme === 'dark';
+      function setDOM(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        if (icon) icon.textContent = isDark ? '🌙' : '☀️';
-        localStorage.setItem(STORAGE_KEY, theme);
-        if (!animate) return;
-
-        var slats = layer.querySelectorAll('.curtain-slat');
-
-        if (isDark) {
-          // light → dark: slats expand left-to-right
-          layer.removeAttribute('data-reverse');
-          slats.forEach(function(s) { s.style.transform = 'scaleX(1)'; });
-          layer.classList.add('active');
-          var last = slats[slats.length - 1];
-          last.addEventListener('transitionend', function handler() {
-            last.removeEventListener('transitionend', handler);
-            layer.classList.remove('active');
-            slats.forEach(function(s) { s.style.transform = ''; });
-          });
-        } else {
-          // dark → light: slats contract right-to-left
-          layer.setAttribute('data-reverse', '');
-          void layer.offsetWidth;
-          slats.forEach(function(s) { s.style.transform = 'scaleX(1)'; });
-          layer.classList.add('active');
-          void layer.offsetWidth;
-          slats.forEach(function(s) { s.style.transform = 'scaleX(0)'; });
-          var last = slats[slats.length - 1];
-          last.addEventListener('transitionend', function handler() {
-            last.removeEventListener('transitionend', handler);
-            layer.classList.remove('active');
-            layer.removeAttribute('data-reverse');
-            slats.forEach(function(s) { s.style.transform = ''; });
-          });
-        }
+        if (icon) icon.textContent = theme === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+        localStorage.setItem(KEY, theme);
       }
 
-      // Init
-      var current = getTheme();
-      applyTheme(current, false);
-
-      if (btn) {
-        btn.addEventListener('click', function() {
-          var next = getTheme() === 'dark' ? 'light' : 'dark';
-          applyTheme(next, true);
+      function playSlats(expand, onDone) {
+        busy = true;
+        slats.forEach(function(s) {
+          s.style.transformOrigin = expand ? 'left' : 'right';
+          s.style.transform = expand ? 'scaleX(1)' : 'scaleX(0)';
+        });
+        var last = slats[slats.length - 1];
+        last.addEventListener('transitionend', function handler() {
+          last.removeEventListener('transitionend', handler);
+          busy = false;
+          if (onDone) onDone();
         });
       }
 
-      // Listen for system theme changes (only if user hasn't set a preference)
+      // Init — no animation
+      setDOM(getTheme());
+
+      btn.addEventListener('click', function() {
+        if (busy) return;
+        var goingDark = getTheme() === 'light';
+
+        if (goingDark) {
+          // Expand dark slats to cover the light page
+          playSlats(true, function() {
+            // Switch theme underneath, then hide slats instantly
+            setDOM('dark');
+            slats.forEach(function(s) { s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
+            layer.offsetHeight; // force reflow
+            slats.forEach(function(s) { s.style.transition = ''; });
+          });
+        } else {
+          // Switch to light first, then expand light-colored slats over dark
+          slats.forEach(function(s) { s.style.background = '#fafaf8'; });
+          playSlats(true, function() {
+            setDOM('light');
+            slats.forEach(function(s) { s.style.background = '#1c1917'; s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
+            layer.offsetHeight;
+            slats.forEach(function(s) { s.style.transition = ''; });
+          });
+        }
+      });
+
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(e.matches ? 'dark' : 'light', true);
+        if (!localStorage.getItem(KEY) && !busy) {
+          setDOM(e.matches ? 'dark' : 'light');
         }
       });
     })();
