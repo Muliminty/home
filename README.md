@@ -188,22 +188,79 @@ export const siteConfig = {
 
 ## 部署
 
-使用 GitHub Actions 三步构建：
+### 触发方式
 
-```yaml
-# .github/workflows/deploy.yml
-- uses: actions/checkout@v4
-- uses: withastro/action@v3
-- uses: actions/deploy-pages@v4
+| 触发条件 | 场景 | 说明 |
+|----------|------|------|
+| Push to `main` | 代码变更 | 修改代码后推送 main 分支自动部署 |
+| Issues 事件 | 内容变更 | 创建/编辑/打标签/关闭/重开 Issue 自动部署 |
+| 定时任务 | 兜底更新 | 每天 UTC 3:00 自动构建一次 |
+| `workflow_dispatch` | 手动触发 | 在 Actions 面板手动运行 |
+
+### 手动触发部署
+
+打开 https://github.com/Muliminty/home/actions/workflows/deploy.yml
+
+1. 点击 **Run workflow** 按钮
+2. Branch 选 `main`
+3. 点击绿色 **Run workflow**
+
+![手动触发位置：Actions 标签页 → Deploy to GitHub Pages → Run workflow 按钮]()
+
+### 查看部署状态
+
+打开 https://github.com/Muliminty/home/actions 查看最近的 workflow 运行：
+
+- 🟡 `in_progress` — 正在构建
+- 🟢 `completed + success` — 部署成功
+- 🔴 `completed + failure` — 部署失败（点进去看日志）
+
+### 首次部署配置
+
+1. **启用 GitHub Pages**：仓库 Settings → Pages → Source 选 **GitHub Actions**
+2. **配置 Secret**：Settings → Secrets and variables → Actions → New repository secret
+   - Name: `GH_TOKEN`
+   - Value: 你的 GitHub Personal Access Token（需要 `public_repo` + `read:user` 权限）
+3. 推送代码到 main 分支，自动触发首次部署
+
+### 部署失败排查
+
+| 现象 | 可能原因 | 解决 |
+|------|---------|------|
+| 构建成功，页面 404 | Pages Source 未设为 Actions | Settings → Pages → GitHub Actions |
+| API 403 | `GH_TOKEN` 未配置或过期 | 检查 Secrets 并重新生成 Token |
+| Rate limit 耗尽 | Token 权限不够 | 确认 Token 有 `public_repo` 权限 |
+| base path 资源 404 | 路径前缀问题 | 确认 `astro.config.ts` 的 `base` 与仓库名一致 |
+
+### 本地预览部署产物
+
+```bash
+npm run build
+npx astro preview
+# 打开 http://localhost:4321/home/
 ```
 
-触发条件：
-- **Push to main**：代码变更时
-- **Issues 事件**：创建/编辑/标签变更时（内容变更自动上线）
-- **定时任务**：每天 UTC 3:00（保底更新）
-- **手动触发**：GitHub Actions 面板 `workflow_dispatch`
+## 首页代码块配置
 
-部署前需要在仓库 Settings → Secrets and variables → Actions 中配置 `GH_TOKEN`。
+首页代码块从 `src/content/profile.js` 读取内容，Shiki 语法高亮渲染。自动识别技术名并渲染品牌 logo + 品牌色虚线下划线。
+
+```ts
+// src/config.ts — codeProfile 配置
+codeProfile: {
+  themes: { light: 'github-light', dark: 'github-dark' },  // Shiki 双主题
+  language: 'javascript',
+  filepath: 'src/content/profile.js',      // 内容文件路径
+
+  techs: { 'React': '#61dafb', ... },      // 技术栈 → 品牌色
+  sites: { 'github': 'github.com', ... },   // 站点 → favicon 域名
+  categories: ['技术栈', '工具', '正在学习'], // 分类标签（自动加粗）
+}
+```
+
+- **换主题**：改 `themes.light` / `themes.dark` 值
+- **加新技术**：在 `techs` 添加映射，下载对应 SVG 到 `public/tech-icons/`
+- **加站点链接**：在 `sites` 添加域名
+- **缺少 logo**：自动跳过不渲染，无副作用
 
 ## 技术栈
 
