@@ -181,7 +181,7 @@
         <li><strong>不需要额外服务器</strong>，数据跟着仓库走</li>
         <li><strong>版本历史</strong>天然保留，编辑有迹可循</li>
       </ul>
-      <p>用 Label 来做内容分类特别巧妙——<code>type:article</code> 标记文章，<code>type:moment</code> 标记瞬间，<code>status:draft</code> 控制发布状态。不需要数据库 schema，不需要管理后台，一切都在 GitHub 上完成。</p>
+      <p>用 Label 来做内容分类特别巧妙——<code>type:article</code> 标记文章，<code>type:moment</code> 标记动态，<code>status:draft</code> 控制发布状态。不需要数据库 schema，不需要管理后台，一切都在 GitHub 上完成。</p>
 
       <h2 id="tech-stack">技术选型</h2>
       <p>数据在 GitHub，展示层我选了 Astro。原因很简单：</p>
@@ -202,8 +202,8 @@
       <p>这套链路没有状态管理、没有运行时数据请求、没有缓存失效问题。构建一次，产出就是最终页面。</p>
 
       <h2 id="content-model">内容模型</h2>
-      <p>我定义了两种内容形态——<strong>文章</strong>和<strong>瞬间</strong>。它们共享同一个数据源，但在展示层有完全不同的视觉形态。</p>
-      <p>文章就是传统的长文——有标题、描述、正文、阅读时间。瞬间更像是随手发的状态——一段文字 + 一组图片，不强制标题。</p>
+      <p>我定义了两种内容形态——<strong>文章</strong>和<strong>动态</strong>。它们共享同一个数据源，但在展示层有完全不同的视觉形态。</p>
+      <p>文章就是传统的长文——有标题、描述、正文、阅读时间。动态更像是随手发的状态——一段文字 + 一组图片，不强制标题。</p>
       <p>这两种形态在 <code>/updates</code> 页面混合展示，按时间线排列。读者看到的不再是分门别类的博客列表，而是一个<strong>人的近况流</strong>。</p>
       <hr>
       <p>这个项目还在进行中。如果你对用 GitHub Issues 做 CMS 感兴趣，欢迎关注后续更新。</p>

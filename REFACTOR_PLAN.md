@@ -9,7 +9,7 @@
 核心判断：
 
 - 站点不是传统博客系统，而是个人公开时间线。
-- 文章和瞬间都属于“近况”，只是内容形态不同。
+- 文章和动态都属于“近况”，只是内容形态不同。
 - GitHub Issues 是内容后台。
 - Astro 负责静态生成。
 - GitHub Pages 负责免费部署。
@@ -24,8 +24,8 @@ MVP 必须包含：
 - 近况时间线 `/updates`
 - 文章列表 `/articles`
 - 文章详情 `/articles/[slug]`
-- 瞬间列表 `/moments`
-- 瞬间详情 `/moments/[number]`
+- 动态列表 `/moments`
+- 动态详情 `/moments/[number]`
 - 标签聚合 `/tags/[tag]`
 - 404 页面 `src/pages/404.astro`
 - fixture 数据源
@@ -60,7 +60,7 @@ MVP 必须包含：
 - 我长期关注什么
 - 怎么找到我
 
-近况页是核心入口。用户进入 `/updates` 后，按时间线看到文章和瞬间混合出现：一会儿是一篇长文，一会儿是一组图片，一会儿是一段短想法。
+近况页是核心入口。用户进入 `/updates` 后，按时间线看到文章和动态混合出现：一会儿是一篇长文，一会儿是一组图片，一会儿是一段短想法。
 
 ## 技术选型
 
@@ -145,7 +145,7 @@ API 拉取规则：
 - 非置顶组按 `publishedAt desc` 排序。
 - `/updates` 和 `/moments` 使用 `publishedAt` 排序。
 - `/updates` 必须把 `type:article` 和 `type:moment` 合并成同一个数组后排序。
-- `/updates` 不按内容形态分区展示，不能先展示文章再展示瞬间。
+- `/updates` 不按内容形态分区展示，不能先展示文章再展示动态。
 - `/articles` 默认也使用 `publishedAt` 排序，后续可增加“最近更新”排序。
 - `updatedAt` 只用于展示“最近编辑”信息，不影响近况时间线默认排序。
 
@@ -156,7 +156,7 @@ API 拉取规则：
 ### 内容形态标签
 
 - `type:article`：文章型近况，适合长内容。
-- `type:moment`：瞬间型近况，适合少文字、多图片。
+- `type:moment`：动态型近况，适合少文字、多图片。
 
 校验规则：
 
@@ -191,7 +191,7 @@ API 拉取规则：
 - 非命名空间标签，例如 `bug`、`enhancement`，默认忽略。
 - `/updates` 可以用主题标签过滤所有近况。
 - `/articles` 可以用主题标签只过滤文章。
-- `/moments` 可以用主题标签只过滤瞬间。
+- `/moments` 可以用主题标签只过滤动态。
 - `/tags/[tag]` 的 URL 使用去掉 `tag:` 后的值，例如 `tag:react` 对应 `/tags/react`。
 
 ## Slug 策略
@@ -250,9 +250,9 @@ publishedAt: 2026-05-03
 - `publishedAt` 缺省为 issue `created_at`，`created_at` 格式为 GitHub API 标准 ISO 8601（UTC）。
 - `updatedAt` 使用 issue `updated_at`。
 
-### 瞬间型近况
+### 动态型近况
 
-瞬间不强制 frontmatter。Issue body 就是内容，解析后 `text` 保留 Markdown 格式。
+动态不强制 frontmatter。Issue body 就是内容，解析后 `text` 保留 Markdown 格式。
 
 ```md
 今天路过一家很好看的小店。
@@ -358,7 +358,7 @@ type UpdateItem = ArticleUpdate | MomentUpdate;
 
 - Now 模块
 - 当前状态
-- 最近近况
+- 最新近况
 - 长期关注
 - 精选项目
 - 联系入口
@@ -388,9 +388,9 @@ SEO 组件和 `BaseLayout.astro` 从 `src/config.ts` 读取默认值。
 
 核心内容页。
 
-- 按时间线混排文章和瞬间。
-- 文章和瞬间是同一条流里的不同卡片形态，不是两个列表或两个分区。
-- 支持全部、文章、瞬间筛选。
+- 按时间线混排文章和动态。
+- 文章和动态是同一条流里的不同卡片形态，不是两个列表或两个分区。
+- 支持全部、文章、动态筛选。
 - 支持主题标签筛选。
 - 置顶内容优先展示，但仍保留时间信息。
 
@@ -420,9 +420,9 @@ SEO 组件和 `BaseLayout.astro` 从 `src/config.ts` 读取默认值。
 - 原始 Issue 链接。
 - 返回近况时间线入口。
 
-### 瞬间 `/moments`
+### 动态 `/moments`
 
-瞬间型近况的筛选视图。
+动态型近况的筛选视图。
 
 - 时间线。
 - 图片优先。
@@ -431,13 +431,13 @@ SEO 组件和 `BaseLayout.astro` 从 `src/config.ts` 读取默认值。
 - 主题标签筛选。
 - 默认每页建议 20 条，第一版可全量渲染但保留分页口子。
 
-### 瞬间详情 `/moments/[number]`
+### 动态详情 `/moments/[number]`
 
-每条瞬间必须有独立可引用的 URL。内容为标题、正文、图片网格、标签、发布时间、原始 Issue 链接。参考 article 详情页结构，但布局以图片为重。
+每条动态必须有独立可引用的 URL。内容为标题、正文、图片网格、标签、发布时间、原始 Issue 链接。参考 article 详情页结构，但布局以图片为重。
 
 ### 标签 `/tags/[tag]`
 
-同一个主题下混合展示文章和瞬间。
+同一个主题下混合展示文章和动态。
 
 ### 404 `/404`
 
@@ -462,7 +462,7 @@ SEO 组件和 `BaseLayout.astro` 从 `src/config.ts` 读取默认值。
 - `og:image` 优先使用 `cover`。
 - 没有 `cover` 时使用站点默认分享图。
 
-近况、文章列表、瞬间和标签页：
+近况、文章列表、动态和标签页：
 
 - 使用页面级标题和描述。
 - canonical URL 必须包含 `/home/` base path。
@@ -607,7 +607,7 @@ src/
 5. 用 fixture JSON 实现内容模型。
 6. 实现标签规则、slug 规则、Zod 校验。
 7. 实现 `fetchIssues.ts` 分页逻辑和 API 失败报错，先用 fixture 测试解析链路。
-8. 用 fixture 数据完成首页、近况、文章、文章详情、瞬间、标签页、404。
+8. 用 fixture 数据完成首页、近况、文章、文章详情、动态、标签页、404。
 9. 切换 `CONTENT_SOURCE=live`，验证真实 GitHub Issues API。
 10. 增加 Issues 事件触发、手动触发和定时构建。
 11. 增加基础 SEO、sitemap、代码高亮。
@@ -618,10 +618,10 @@ src/
 ## 第一版验收标准
 
 - 创建带 `type:article` 的 Issue 后，可以生成文章型近况。
-- 创建带 `type:moment` 的 Issue 后，可以生成瞬间型近况。
+- 创建带 `type:moment` 的 Issue 后，可以生成动态型近况。
 - `status:draft` 和 `status:hidden` 不发布。
 - closed Issue 仍可展示。
-- `/updates` 把文章和瞬间混排在同一条时间线里。
+- `/updates` 把文章和动态混排在同一条时间线里。
 - `/articles/[slug]` 有稳定 URL。
 - `/tags/react` 能展示带 `tag:react` 的内容。
 - Issues 新建、编辑、打标签后能触发重新构建。
@@ -633,14 +633,14 @@ src/
 - 推送到 `main` 后自动部署到 GitHub Pages。
 - `CONTENT_SOURCE=fixture` 和 `CONTENT_SOURCE=live` 解析同一份 Issue 数据输出结果一致。
 - 首页 Largest Contentful Paint < 2s（3G 网络模拟）。
-- 瞬间图片网格在移动端（375px 视口）正常展示，无横向溢出或布局错位。
+- 动态图片网格在移动端（375px 视口）正常展示，无横向溢出或布局错位。
 
 ## 待决策问题
 
 - closed Issue 是否永远允许展示，还是未来需要归档开关？
 - slug 是否坚持默认 `issue-123`，还是允许标题型 slug 作为显式选择？
 - 首页优先展示最新近况，还是展示精选内容？
-- 瞬间是否需要隐私分级或归档机制？
+- 动态是否需要隐私分级或归档机制？
 - 标签是否需要白名单，还是完全自由增长？
 - 是否引入 `signal:*` 或 `mood:*` 作为内容状态标签？
 - 是否保留旧终端风作为彩蛋，而不是主视觉？
@@ -650,13 +650,13 @@ src/
 - GitHub API 返回的 Issues 里包含 Pull Requests，必须过滤。
 - GitHub REST API 单页最多 100 条 Issues，必须做分页拉取。
 - 只监听 push 不会响应 Issue 内容变化，必须加 `issues` 事件、手动触发或定时构建。
-- GitHub Issue 上传的图片没有天然尺寸信息，瞬间图片网格需要固定 `aspect-ratio` 占位。
-- RSS 里最好优先放文章，瞬间可以后续单独做 feed，避免多图内容影响订阅体验。
-- 第一版 RSS 只包含文章，瞬间不进默认 RSS。
+- GitHub Issue 上传的图片没有天然尺寸信息，动态图片网格需要固定 `aspect-ratio` 占位。
+- RSS 里最好优先放文章，动态可以后续单独做 feed，避免多图内容影响订阅体验。
+- 第一版 RSS 只包含文章，动态不进默认 RSS。
 - `CONTENT_SOURCE=live` 本地请求 GitHub API 可能遇到 rate limit，应预留 `GITHUB_TOKEN` 并保证 fixture 可离线开发。
 - 标签 URL 不包含 `tag:` 前缀，避免冒号进入 URL。
 - 图片缺失 alt 时前端渲染 `alt=""`，不要省略 alt 属性。
-- Issue title 对瞬间来说更像后台管理标题，正文才是前台主要内容。
+- Issue title 对动态来说更像后台管理标题，正文才是前台主要内容。
 - 仓库名是 `home` 时，GitHub Pages 的 base path 是 `/home/`。
 - 内容模型越早稳定，后面的视觉迭代越自由。
 - `astro dev` 不应用 `base` 路径前缀，本地开发使用根路径 `/`，部署后路径前缀是 `/home/`，开发与部署时的路径差异在 README 中说明。

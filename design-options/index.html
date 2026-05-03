@@ -3,41 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>设计方案对比 — 个人公开时间线</title>
+<title>近况卡片 · 设计方案对比</title>
 <style>
+  :root {
+    --bg: #fafaf8; --text: #1c1917; --text-muted: #78716c;
+    --border: #e7e5e4;
+    --font-sans: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
-  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; max-width: 1600px; margin: 0 auto; }
-  .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-  .card header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-  .card header h2 { font-size: 16px; font-weight: 600; }
-  .card header span { font-size: 12px; color: #999; padding: 2px 8px; background: #f0f0f0; border-radius: 4px; }
-  .card iframe { width: 100%; height: 700px; border: none; }
-  .card:nth-child(1) iframe { height: 750px; }
-  .card:nth-child(2) iframe { height: 750px; }
-  .card:nth-child(3) iframe { height: 750px; }
-  .card:nth-child(4) iframe { height: 750px; }
-
-  @media (max-width: 1000px) { .gallery { grid-template-columns: 1fr; } }
+  body {
+    font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    padding: 60px 20px; line-height: 1.6;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 8px; }
+  .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 32px; }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    display: block;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .option:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
+  .option h3 { font-size: 15px; margin-bottom: 4px; }
+  .option .desc { font-size: 12px; color: var(--text-muted); }
+  .tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 4px; background: #f5f5f4; color: var(--text-muted);
+    border: 1px solid var(--border); margin-left: 6px;
+  }
 </style>
 </head>
 <body>
-<div class="gallery">
-  <div class="card">
-    <header><h2>A · 杂志编辑风</h2><span>Magazine Editorial</span></header>
-    <iframe src="option-a-magazine.html"></iframe>
-  </div>
-  <div class="card">
-    <header><h2>B · 极简日志风</h2><span>Minimal Feed</span></header>
-    <iframe src="option-b-feed.html"></iframe>
-  </div>
-  <div class="card">
-    <header><h2>C · 日式手帐风</h2><span>Warm Handbook</span></header>
-    <iframe src="option-c-warm.html"></iframe>
-  </div>
-  <div class="card">
-    <header><h2>D · 暗色终端基因</h2><span>Dark Terminal DNA</span></header>
-    <iframe src="option-d-dark.html"></iframe>
+<div class="container">
+  <h1>近况卡片 · 设计方案对比</h1>
+  <p class="sub">三个方向，hover 到卡片上看交互动效。选择你倾向的方向再细化。</p>
+  <div class="options">
+    <a href="opt-a-lift.html" class="option">
+      <h3>A · 纸张浮起 <span class="tag">稳妥成熟</span></h3>
+      <p class="desc">半透卡片 + 悬浮上移 + 阴影加深 + 图片放大，最经典的卡片 hover 模式。</p>
+    </a>
+    <a href="opt-b-editor.html" class="option">
+      <h3>B · 编辑器选中行 + 点阵让位 <span class="tag">个人特色</span></h3>
+      <p class="desc">左侧时间轴线 + 向右滑移 + 点阵 backdrop-blur 淡出，和首页代码感一脉相承。</p>
+    </a>
+    <a href="opt-c-notion.html" class="option">
+      <h3>C · Notion 日志流 <span class="tag">安静耐看</span></h3>
+      <p class="desc">无边框文档流 + 日期 pill + 标题下划线绘制 + 箭头淡入，最克制、阅读体验最好。</p>
+    </a>
   </div>
 </div>
 </body>

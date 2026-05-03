@@ -1009,7 +1009,7 @@ const navItems = [
   { href: '/', label: '首页', match: currentPath === '/home' || currentPath === '/home/' },
   { href: '/updates', label: '近况', match: currentPath.startsWith('/home/updates') },
   { href: '/articles', label: '文章', match: currentPath.startsWith('/home/articles') },
-  { href: '/moments', label: '瞬间', match: currentPath.startsWith('/home/moments') },
+  { href: '/moments', label: '动态', match: currentPath.startsWith('/home/moments') },
 ];
 ---
 
@@ -1331,7 +1331,7 @@ const recentItems = items.slice(0, 5);
     <GitHubHeatmap />
 
     <section class="updates-section">
-      <div class="section-title">最近近况</div>
+      <div class="section-title">最新近况</div>
       {recentItems.map(item => <UpdateItem item={item} />)}
       {items.length > 5 && <p style="font-size:13px;color:var(--text-muted)"><a href="/updates">查看更多 &rarr;</a></p>}
     </section>
@@ -1398,7 +1398,7 @@ git add -A && git commit -m "feat: add homepage with Now, heatmap, and recent up
 
 ---
 
-### Task 12: 近况、文章列表、瞬间列表页
+### Task 12: 近况、文章列表、动态列表页
 
 **Files:**
 - Create: `src/pages/updates/index.astro`
@@ -1479,10 +1479,10 @@ const { items } = await loadAllContent();
 const moments = items.filter(i => i.kind === 'moment');
 ---
 
-<BaseLayout title="瞬间">
+<BaseLayout title="动态">
   <div class="container">
     <SiteHeader />
-    <div class="section-title">瞬间</div>
+    <div class="section-title">动态</div>
     {moments.map(item => <MomentCard moment={item} />)}
   </div>
 </BaseLayout>
@@ -1803,7 +1803,7 @@ git add -A && git commit -m "feat: add article detail page with TOC and comments
 
 ---
 
-### Task 14: 瞬间详情页
+### Task 14: 动态详情页
 
 **Files:**
 - Create: `src/components/MomentImages.astro`
@@ -1864,9 +1864,9 @@ const moment = items.find(i => i.kind === 'moment' && i.number === Number(number
 if (!moment) return Astro.redirect('/404');
 ---
 
-<BaseLayout title={moment.title || `瞬间 #${moment.number}`}>
+<BaseLayout title={moment.title || `动态 #${moment.number}`}>
   <div class="container">
-    <a class="back-link" href="/moments">&larr; 瞬间</a>
+    <a class="back-link" href="/moments">&larr; 动态</a>
 
     <header class="moment-header">
       <span class="kind-badge">MOMENT</span>
