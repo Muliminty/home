@@ -21,7 +21,7 @@ const moment = items.find(i => i.kind === 'moment' && i.number === Number(number
 if (!moment) return Astro.redirect(base + '404');
 ---
 
-<BaseLayout title={moment.title || `动态 #${moment.number}`}>
+<BaseLayout title={moment.title || `动态 #${moment.number}`} description={moment.text}>
   <div class="container">
     <a class="back-link" href={`${base}updates/`}>&larr; 近况</a>
 
