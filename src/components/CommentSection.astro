@@ -1,0 +1,60 @@
+---
+import CommentItem from './CommentItem.astro';
+
+interface Props {
+  owner: string;
+  repo: string;
+  issueNumber: number;
+  issueUrl: string;
+}
+
+const { owner, repo, issueNumber, issueUrl } = Astro.props;
+
+interface GitHubComment {
+  id: number;
+  user: { login: string; avatar_url: string } | null;
+  created_at: string;
+  body_html: string;
+  html_url: string;
+}
+
+let comments: GitHubComment[] = [];
+try {
+  const token = import.meta.env.GH_TOKEN;
+  const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'User-Agent': 'timeline-builder' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments?per_page=50`, { headers });
+  if (res.ok) comments = await res.json();
+} catch (e) {
+  console.warn(`Failed to fetch comments for issue #${issueNumber}:`, e);
+}
+---
+
+<section class="comments-section">
+  <h3 class="comments-title">评论 <span class="count">{comments.length}</span></h3>
+
+  {comments.length === 0 && <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px">暂无评论</p>}
+
+  {comments.map(c => (
+    <>
+      <CommentItem author={c.user?.login || 'unknown'} avatarUrl={c.user?.avatar_url || ''} createdAt={c.created_at} bodyHtml={c.body_html} htmlUrl={c.html_url} />
+      <div class="comment-border"></div>
+    </>
+  ))}
+
+  <div class="comment-box">
+    <div class="comment-login-hint">
+      通过 <a href={issueUrl}>GitHub</a> 登录后即可评论
+    </div>
+  </div>
+</section>
+
+<style>
+  .comments-section { margin-top: 48px; }
+  .comments-title { font-size: 14px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+  .comments-title .count { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+  .comment-border { height: 1px; background: var(--border); margin: 20px 0 20px 42px; }
+  .comment-box { margin-top: 32px; margin-left: 42px; }
+  .comment-login-hint { padding: 16px 20px; border: 1px dashed var(--border); border-radius: 8px; text-align: center; font-size: 13px; color: var(--text-muted); }
+  .comment-login-hint a { color: var(--accent); font-weight: 500; }
+</style>

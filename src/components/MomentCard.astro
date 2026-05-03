@@ -1,0 +1,29 @@
+---
+import type { MomentUpdate } from '../lib/content/types';
+
+interface Props {
+  moment: MomentUpdate;
+}
+
+const { moment } = Astro.props;
+---
+
+<div class="moment-card card-hover">
+  <div class="time">{moment.publishedAt.slice(0, 10)}</div>
+  <div class="body">{moment.text}</div>
+  {moment.images.length > 0 && (
+    <div class="imgs">
+      {moment.images.slice(0, 4).map(img => (
+        <img class="thumb" src={img.src} alt={img.alt} loading="lazy" />
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .moment-card { margin-bottom: 24px; }
+  .time { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 6px; }
+  .body { font-size: 14px; line-height: 1.7; }
+  .imgs { display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; }
+  .thumb { width: 80px; height: 80px; flex-shrink: 0; object-fit: cover; border-radius: 6px; background: #f5f5f7; }
+</style>

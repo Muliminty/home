@@ -1,0 +1,25 @@
+---
+interface Props {
+  images: Array<{ src: string; alt: string }>;
+}
+
+const { images } = Astro.props;
+const gridClass = images.length === 1 ? 'grid-single' : 'grid-multi';
+---
+
+<div class={`moment-images ${gridClass}`}>
+  {images.map(img => (
+    <img src={img.src} alt={img.alt} class="moment-img" loading="lazy" />
+  ))}
+</div>
+
+<style>
+  .moment-images { margin-bottom: 48px; }
+  .grid-single .moment-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; background: #f5f5f7; }
+  .grid-multi { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .grid-multi .moment-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: #f5f5f7; }
+
+  @media (max-width: 600px) {
+    .grid-single .moment-img { border-radius: 4px; }
+  }
+</style>

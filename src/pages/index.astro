@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import CodeProfile from '../components/CodeProfile.astro';
+import GitHubHeatmap from '../components/GitHubHeatmap.astro';
+import UpdateItem from '../components/UpdateItem.astro';
+import { siteConfig } from '../config';
+import { loadAllContent } from '../lib/content/loadContent';
+
+const base = import.meta.env.BASE_URL;
+const { items } = await loadAllContent();
+const recentItems = items.slice(0, 5);
+---
+
+<BaseLayout title={siteConfig.title}>
+  <div class="container entrance-container">
+    <SiteHeader />
+    <CodeProfile />
+    <GitHubHeatmap />
+
+    <!-- Updates -->
+    <section class="updates-section">
+      <div class="section-title">最近近况</div>
+      {recentItems.map(item => <UpdateItem item={item} />)}
+      {items.length > 5 && (
+        <p class="more-link">
+          <a href={`${base}updates/`} class="dash-link">近况 &rarr;</a>
+        </p>
+      )}
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Projects -->
+    <section class="projects-section">
+      <div class="section-title">精选项目</div>
+      {siteConfig.projects.map(p => (
+        <div class="project-item">
+          <h4><a href={p.url} target="_blank">{p.name}</a></h4>
+          <p class="desc">{p.description}</p>
+        </div>
+      ))}
+    </section>
+
+    <!-- Social links -->
+    <section class="social-section">
+      <div class="section-title">找到我</div>
+      <div class="social-links">
+        <a href={siteConfig.github} target="_blank" class="pill-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href={`mailto:${siteConfig.email}`} class="pill-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Email
+        </a>
+        <a href={`${base}rss.xml`} class="pill-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
+          RSS
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <footer class="page-footer">
+    <div class="container">
+      <p class="copy">&copy; {new Date().getFullYear()} {siteConfig.title} &middot; 由 GitHub Issues 驱动</p>
+    </div>
+  </footer>
+</BaseLayout>
+
+<style>
+  .updates-section { margin-bottom: 36px; }
+  .more-link { font-size: 13px; margin-top: 8px; }
+
+  .divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+  .projects-section { margin-bottom: 48px; }
+  .project-item { margin-bottom: 16px; }
+  .project-item h4 { font-size: 14px; font-weight: 600; }
+  .project-item h4 a { color: var(--text); }
+  .project-item h4 a:hover { color: var(--accent); text-decoration: none; }
+  .project-item .desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .social-section { margin-bottom: 48px; }
+  .social-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .page-footer { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--border); }
+  .copy { font-size: 11px; color: var(--text-muted); }
+</style>

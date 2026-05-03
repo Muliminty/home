@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:400,500,600,700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 24px 28px;
+    line-height: 1.8;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .line { display: flex; }
+  .ln {
+    min-width: 28px; text-align: right; padding-right: 16px;
+    color: #858585; user-select: none; flex-shrink: 0;
+  }
+  .c  { color: #6a9955; } /* comment */
+  .kw { color: #569cd6; } /* keyword */
+  .s  { color: #ce9178; } /* string */
+  .fn { color: #dcdcaa; } /* function */
+  .pr { color: #9cdcfe; } /* property */
+  .op { color: #d4d4d4; } /* operator */
+</style>
+</head>
+<body>
+
+<div class="line"><span class="ln">1</span><span class="c">/**</span></div>
+<div class="line"><span class="ln">2</span><span class="c"> * Muliminty</span></div>
+<div class="line"><span class="ln">3</span><span class="c"> * 清醒，热爱，自由</span></div>
+<div class="line"><span class="ln">4</span><span class="c"> */</span></div>
+<div class="line"><span class="ln">5</span><span></span></div>
+<div class="line"><span class="ln">6</span><span class="kw">const</span><span> author </span><span class="op">=</span><span> {</span></div>
+<div class="line"><span class="ln">7</span><span>  name:    </span><span class="s">'Muliminty'</span><span>,</span></div>
+<div class="line"><span class="ln">8</span><span>  github:  </span><span class="s">'https://github.com/muliminty'</span><span>,</span></div>
+<div class="line"><span class="ln">9</span><span>};</span></div>
+<div class="line"><span class="ln">10</span><span></span></div>
+<div class="line"><span class="ln">11</span><span class="kw">const</span><span> now </span><span class="op">=</span><span> {</span></div>
+<div class="line"><span class="ln">12</span><span>  doing:     </span><span class="s">'用 Astro 重建个人站点'</span><span>,</span></div>
+<div class="line"><span class="ln">13</span><span>  reading:   </span><span class="s">'《建筑永恒之道》'</span><span>,</span></div>
+<div class="line"><span class="ln">14</span><span>  listening: </span><span class="s">'Nujabes · Modal Soul'</span><span>,</span></div>
+<div class="line"><span class="ln">15</span><span>};</span></div>
+
+</body>
+</html>

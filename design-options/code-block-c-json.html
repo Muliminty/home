@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:400,500,600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #fafaf8;
+    color: #1c1917;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 24px 28px;
+    line-height: 1.85;
+    font-size: 13px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #e7e5e4;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .bar {
+    background: #f5f5f4;
+    padding: 6px 14px;
+    border-bottom: 1px solid #e7e5e4;
+    font-size: 11px;
+    color: #78716c;
+    display: flex; gap: 8px;
+  }
+  .bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .bar .dot.r { background: #ef4444; }
+  .bar .dot.y { background: #f59e0b; }
+  .bar .dot.g { background: #22c55e; }
+  .code { padding: 20px 24px; }
+  .key { color: #2563eb; }
+  .str { color: #059669; }
+  .num { color: #d97706; }
+  .punct { color: #78716c; }
+  .comment { color: #a8a29e; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="bar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    &nbsp;config.ts
+  </div>
+  <div class="code">
+    <div><span class="comment">// site config</span></div>
+    <div><span class="punct">{</span></div>
+    <div>&nbsp;&nbsp;<span class="key">"name"</span><span class="punct">:</span> <span class="str">"Muliminty"</span><span class="punct">,</span></div>
+    <div>&nbsp;&nbsp;<span class="key">"bio"</span><span class="punct">:</span> <span class="str">"清醒，热爱，自由"</span><span class="punct">,</span></div>
+    <div>&nbsp;&nbsp;<span class="key">"github"</span><span class="punct">:</span> <span class="str">"https://github.com/muliminty"</span><span class="punct">,</span></div>
+    <div>&nbsp;&nbsp;<span class="key">"now"</span><span class="punct">:</span> <span class="punct">{</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"doing"</span><span class="punct">:</span> <span class="str">"用 Astro 重建个人站点"</span><span class="punct">,</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"reading"</span><span class="punct">:</span> <span class="str">"《建筑永恒之道》"</span><span class="punct">,</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"listening"</span><span class="punct">:</span> <span class="str">"Nujabes · Modal Soul"</span></div>
+    <div>&nbsp;&nbsp;<span class="punct">}</span></div>
+    <div><span class="punct">}</span></div>
+  </div>
+</div>
+
+</body>
+</html>

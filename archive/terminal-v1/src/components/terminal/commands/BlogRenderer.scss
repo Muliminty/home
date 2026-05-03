@@ -1,0 +1,179 @@
+.blog-renderer {
+  max-width: 100%;
+  color: #e0e0e0;
+  line-height: 1.8;
+  margin-top: 15px;
+  
+  // 标题样式
+  .blog-h1 {
+    color: #00ff00;
+    font-size: 28px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 255, 0, 0.3);
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+  }
+  
+  .blog-h2 {
+    color: #00ff00;
+    font-size: 24px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 3px solid #00ff00;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+  }
+  
+  .blog-h3 {
+    color: #00ff88;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+  }
+  
+  // 段落
+  .blog-p {
+    margin: 12px 0;
+    color: #e0e0e0;
+    text-align: justify;
+  }
+  
+  // 列表
+  .blog-ul,
+  .blog-ol {
+    margin: 15px 0;
+    padding-left: 30px;
+    color: #d0d0d0;
+  }
+  
+  .blog-li {
+    margin: 8px 0;
+    
+    &::marker {
+      color: #00ff00;
+    }
+  }
+  
+  // 代码
+  .inline-code {
+    background: rgba(0, 255, 0, 0.15);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #00ff88;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+  }
+  
+  // 链接
+  .blog-link {
+    color: #00ffff;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s;
+    
+    &:hover {
+      color: #00ff00;
+      border-bottom-color: #00ff00;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+    }
+  }
+  
+  // 块引用
+  .blog-blockquote {
+    margin: 20px 0;
+    padding: 15px 20px;
+    border-left: 4px solid #00ff00;
+    background: rgba(0, 255, 0, 0.05);
+    border-radius: 0 8px 8px 0;
+    color: #b0b0b0;
+    font-style: italic;
+    
+    &::before {
+      content: '"';
+      font-size: 3em;
+      color: rgba(0, 255, 0, 0.3);
+      position: absolute;
+    }
+  }
+  
+  // 表格
+  .blog-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+  }
+  
+  .blog-thead {
+    background: rgba(0, 255, 0, 0.1);
+  }
+  
+  .blog-th {
+    padding: 12px;
+    text-align: left;
+    color: #00ff00;
+    border-bottom: 2px solid rgba(0, 255, 0, 0.3);
+    font-weight: bold;
+  }
+  
+  .blog-td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+    color: #d0d0d0;
+  }
+  
+  .blog-tr {
+    transition: background 0.2s;
+    
+    &:hover {
+      background: rgba(0, 255, 0, 0.05);
+    }
+  }
+  
+  // 水平线
+  .blog-hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff00, transparent);
+    margin: 30px 0;
+  }
+  
+  // 代码高亮容器的自定义样式
+  :global(.blog-renderer) pre {
+    background: #1a1a2e !important;
+    border: 1px solid rgba(0, 255, 0, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin: 20px 0 !important;
+    overflow-x: auto !important;
+    
+    code {
+      background: transparent !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+  }
+  
+  // 响应式
+  @media (max-width: 768px) {
+    .blog-h1 {
+      font-size: 24px;
+    }
+    
+    .blog-h2 {
+      font-size: 20px;
+    }
+    
+    .blog-h3 {
+      font-size: 18px;
+    }
+    
+    .blog-table {
+      font-size: 14px;
+    }
+  }
+}
+

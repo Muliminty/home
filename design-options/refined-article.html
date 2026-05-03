@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 GitHub Issues 搭建个人公开时间线 — 漫游笔记</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:400,500,600&family=JetBrains+Mono:400,500,600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #fff;
+    --text: #1d1d1f;
+    --text-muted: #86868b;
+    --border: #f0f0f0;
+    --accent: #0071e3;
+    --tag-bg: #f5f5f7;
+    --code-font: 'JetBrains Mono', monospace;
+    --text-secondary: #555;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ Layout: article column + optional TOC sidebar ═══ */
+  .page-layout {
+    max-width: 920px; margin: 0 auto; padding: 48px 16px 80px;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .toc-sidebar { position: sticky; top: 48px; }
+  .article-column { min-width: 0; max-width: 600px; }
+
+  /* ── Back nav ── */
+  .back-link { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 40px; }
+  .back-link:hover { color: var(--accent); }
+
+  /* ── TOC ── */
+  .toc-label { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
+  .toc-list { list-style: none; }
+  .toc-list li { margin-bottom: 6px; }
+  .toc-list a { font-size: 12px; color: var(--text-muted); text-decoration: none; line-height: 1.5; transition: color 0.15s; display: block; padding: 2px 0; }
+  .toc-list a:hover, .toc-list a.active { color: var(--accent); }
+  .toc-list .toc-h3 a { padding-left: 14px; font-size: 11px; }
+
+  /* ── Article Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-header .kind-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 3px; margin-bottom: 16px; }
+  .article-header h1 { font-size: 24px; font-weight: 700; line-height: 1.35; margin-bottom: 12px; }
+  .article-header .desc { font-size: 15px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+  .article-header .meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .article-header .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .article-header .tag { font-size: 11px; color: var(--accent); text-decoration: none; }
+  .article-header .tag:hover { text-decoration: underline; }
+
+  .cover-placeholder { width: 100%; aspect-ratio: 16/9; background: #f5f5f7; border-radius: 8px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 14px; }
+
+  /* ── Article Body ── */
+  .article-body { font-size: 15px; line-height: 1.85; color: var(--text); }
+  .article-body h2 { font-size: 20px; font-weight: 700; margin: 48px 0 16px; line-height: 1.35; }
+  .article-body h3 { font-size: 17px; font-weight: 600; margin: 36px 0 12px; line-height: 1.4; }
+  .article-body p { margin-bottom: 20px; }
+  .article-body a { color: var(--accent); text-decoration: none; }
+  .article-body a:hover { text-decoration: underline; }
+  .article-body strong { font-weight: 600; }
+  .article-body ul, .article-body ol { margin: 16px 0 16px 20px; }
+  .article-body li { margin-bottom: 8px; }
+  .article-body blockquote { margin: 24px 0; padding-left: 16px; border-left: 3px solid var(--accent); color: var(--text-secondary); }
+  .article-body hr { border: none; height: 1px; background: var(--border); margin: 48px 0; }
+  .article-body code { font-family: var(--code-font); font-size: 13px; background: #f5f5f7; padding: 2px 6px; border-radius: 4px; }
+  .article-body pre { background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 20px; overflow-x: auto; margin: 24px 0; }
+  .article-body pre code { background: none; padding: 0; font-size: 12px; line-height: 1.7; }
+
+  /* ── Issue source ── */
+  .issue-source { margin-top: 64px; padding: 16px 20px; background: #fafafa; border-radius: 8px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .issue-source a { color: var(--accent); text-decoration: none; }
+  .issue-source a:hover { text-decoration: underline; }
+
+  /* ═══ Comments ═══ */
+  .comments-section { margin-top: 64px; }
+  .comments-title { font-size: 14px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+  .comments-title .count { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+
+  .comment { margin-bottom: 24px; }
+  .comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #aaa; }
+  .comment-author { font-size: 13px; font-weight: 600; }
+  .comment-time { font-size: 11px; color: var(--text-muted); }
+  .comment-time a { color: var(--text-muted); text-decoration: none; }
+  .comment-time a:hover { color: var(--accent); }
+  .comment-body { margin-left: 42px; font-size: 14px; line-height: 1.7; color: var(--text); }
+  .comment-body p { margin-bottom: 12px; }
+  .comment-body p:last-child { margin-bottom: 0; }
+  .comment-body a { color: var(--accent); text-decoration: none; }
+  .comment-border { height: 1px; background: var(--border); margin: 20px 0 20px 42px; }
+
+  /* Comment box — simplified, like GitHub's comment editor hint */
+  .comment-box { margin-top: 32px; margin-left: 42px; }
+  .comment-login-hint { padding: 16px 20px; border: 1px dashed var(--border); border-radius: 8px; text-align: center; font-size: 13px; color: var(--text-muted); }
+  .comment-login-hint a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .comment-login-hint a:hover { text-decoration: underline; }
+
+  /* ── Footer ── */
+  .page-footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .page-footer .copy { font-size: 11px; color: var(--text-muted); }
+
+  /* ═══ Responsive ═══ */
+  @media (max-width: 960px) {
+    .page-layout { grid-template-columns: 1fr; max-width: 600px; gap: 0; }
+    .toc-sidebar { position: static; margin-bottom: 32px; }
+    /* TOC becomes a compact horizontal scroll or simple list */
+    .toc-list { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+    .toc-list li { margin-bottom: 0; }
+    .toc-list .toc-h3 { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .page-layout { padding: 24px 16px 60px; }
+    .article-header h1 { font-size: 20px; }
+    .article-body { font-size: 14px; }
+    .cover-placeholder { border-radius: 4px; }
+    .comment-body { margin-left: 0; }
+    .comment-border { margin-left: 0; }
+    .comment-box { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page-layout">
+
+  <!-- ═══ TOC Sidebar ═══ -->
+  <aside class="toc-sidebar">
+    <div class="toc-label">目录</div>
+    <ul class="toc-list">
+      <li><a href="#why-issues">为什么是 GitHub Issues</a></li>
+      <li><a href="#tech-stack">技术选型</a></li>
+      <li class="toc-h3"><a href="#data-flow">数据流</a></li>
+      <li><a href="#content-model">内容模型</a></li>
+    </ul>
+  </aside>
+
+  <!-- ═══ Main Column ═══ -->
+  <div class="article-column">
+
+    <a class="back-link" href="#">← 近况</a>
+
+    <header class="article-header">
+      <span class="kind-badge">ARTICLE</span>
+      <h1>用 GitHub Issues 搭建个人公开时间线</h1>
+      <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+      <div class="meta">
+        <span>2026-05-02</span>
+        <span>·</span>
+        <span>阅读 6 分钟</span>
+      </div>
+      <div class="tags">
+        <a class="tag" href="#">#frontend</a>
+        <a class="tag" href="#">#astro</a>
+        <a class="tag" href="#">#project</a>
+      </div>
+    </header>
+
+    <div class="cover-placeholder">cover image</div>
+
+    <div class="article-body">
+      <p>我一直想要一个完全属于自己的内容空间。不是微信公众号那样的封闭平台，也不是 Medium 那种越来越重的写作工具。我希望它轻、快、属于我，并且能长期维护下去。</p>
+      <p>这个想法断断续续想了很久，直到最近重新审视 GitHub Issues 的时候，突然意识到——<strong>它几乎是一个完美的轻量级 CMS</strong>。</p>
+
+      <h2 id="why-issues">为什么是 GitHub Issues</h2>
+      <p>GitHub Issues 有几个特性让它天然适合做内容管理：</p>
+      <ul>
+        <li><strong>免费的 Markdown 编辑器</strong>，支持图片拖拽上传</li>
+        <li><strong>Label 体系</strong>可以充当分类和状态管理</li>
+        <li><strong>REST API</strong>稳定、文档完善、有分页</li>
+        <li><strong>不需要额外服务器</strong>，数据跟着仓库走</li>
+        <li><strong>版本历史</strong>天然保留，编辑有迹可循</li>
+      </ul>
+      <p>用 Label 来做内容分类特别巧妙——<code>type:article</code> 标记文章，<code>type:moment</code> 标记瞬间，<code>status:draft</code> 控制发布状态。不需要数据库 schema，不需要管理后台，一切都在 GitHub 上完成。</p>
+
+      <h2 id="tech-stack">技术选型</h2>
+      <p>数据在 GitHub，展示层我选了 Astro。原因很简单：</p>
+      <blockquote>
+        <p>GitHub Pages 只能托管静态文件，而 Astro 是目前最好的静态站点生成器之一。它默认输出零 JavaScript 的 HTML，首屏极快，SEO 友好。</p>
+      </blockquote>
+      <p>React 只用在需要交互的地方——标签筛选、图片预览。大部分页面是纯 Astro 组件，构建时就把 HTML 生成好了。</p>
+
+      <h3 id="data-flow">数据流</h3>
+      <p>整个数据流非常简单：</p>
+      <pre><code>GitHub Issues API
+  ↓  fetchIssues.ts (分页拉取)
+  ↓  parseIssue.ts (label → type/tag/status)
+  ↓  parseArticle.ts / parseMoment.ts
+  ↓  Zod schema 校验
+  ↓  Astro getStaticPaths
+  ↓  静态 HTML</code></pre>
+      <p>这套链路没有状态管理、没有运行时数据请求、没有缓存失效问题。构建一次，产出就是最终页面。</p>
+
+      <h2 id="content-model">内容模型</h2>
+      <p>我定义了两种内容形态——<strong>文章</strong>和<strong>瞬间</strong>。它们共享同一个数据源，但在展示层有完全不同的视觉形态。</p>
+      <p>文章就是传统的长文——有标题、描述、正文、阅读时间。瞬间更像是随手发的状态——一段文字 + 一组图片，不强制标题。</p>
+      <p>这两种形态在 <code>/updates</code> 页面混合展示，按时间线排列。读者看到的不再是分门别类的博客列表，而是一个<strong>人的近况流</strong>。</p>
+      <hr>
+      <p>这个项目还在进行中。如果你对用 GitHub Issues 做 CMS 感兴趣，欢迎关注后续更新。</p>
+    </div>
+
+    <!-- Issue source -->
+    <div class="issue-source">
+      <span>💡</span>
+      <span>本文由 GitHub Issue <a href="#">#12</a> 生成。发现错误？<a href="#">去 Issue 页编辑</a></span>
+    </div>
+
+    <!-- ═══ Comments ═══ -->
+    <section class="comments-section">
+      <h3 class="comments-title">评论 <span class="count">2</span></h3>
+
+      <div class="comment">
+        <div class="comment-header">
+          <div class="comment-avatar">A</div>
+          <span class="comment-author">alice-dev</span>
+          <span class="comment-time"><a href="#">2 天前</a></span>
+        </div>
+        <div class="comment-body">
+          <p>很赞同「用 Label 做内容分类」的思路。之前试过用 Notion 做 CMS，但 API 不稳定。GitHub Issues 的 API 确实可靠很多，而且免费额度对个人站完全够用。</p>
+          <p>想问下图片你是怎么处理的？GitHub Issues 拖拽上传的图片会存到 user-attachments，URL 有有效期吗？</p>
+        </div>
+      </div>
+
+      <div class="comment-border"></div>
+
+      <div class="comment">
+        <div class="comment-header">
+          <div class="comment-avatar">M</div>
+          <span class="comment-author">漫游笔记</span>
+          <span class="comment-time"><a href="#">1 天前</a></span>
+        </div>
+        <div class="comment-body">
+          <p>user-attachments 的图片没有过期时间，是持久存储的。唯一的限制是单个文件不能超过 25MB，对博客图片来说完全不是问题。👍</p>
+        </div>
+      </div>
+
+      <div class="comment-border"></div>
+
+      <!-- Comment input -->
+      <div class="comment-box">
+        <div class="comment-login-hint">
+          通过 <a href="#">GitHub</a> 登录后即可评论。评论会同步到对应 Issue 的评论区。
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <p class="copy">© 2026 漫游笔记 · 由 GitHub Issues 驱动</p>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+// Simple TOC active state tracking on scroll
+const headings = document.querySelectorAll('.article-body h2[id], .article-body h3[id]');
+const tocLinks = document.querySelectorAll('.toc-list a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -70% 0px' });
+headings.forEach(h => observer.observe(h));
+</script>
+</body>
+</html>

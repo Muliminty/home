@@ -1,0 +1,32 @@
+---
+interface Props {
+  author: string;
+  avatarUrl: string;
+  createdAt: string;
+  bodyHtml: string;
+  htmlUrl: string;
+}
+
+const { author, avatarUrl, createdAt, bodyHtml, htmlUrl } = Astro.props;
+---
+
+<div class="comment">
+  <div class="comment-header">
+    <img class="comment-avatar" src={avatarUrl} alt={author} width="32" height="32" />
+    <span class="comment-author">{author}</span>
+    <span class="comment-time"><a href={htmlUrl}>{createdAt.slice(0, 10)}</a></span>
+  </div>
+  <div class="comment-body"><Fragment set:html={bodyHtml} /></div>
+</div>
+
+<style>
+  .comment { margin-bottom: 24px; }
+  .comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .comment-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; }
+  .comment-author { font-size: 13px; font-weight: 600; }
+  .comment-time { font-size: 11px; color: var(--text-muted); }
+  .comment-time a { color: var(--text-muted); text-decoration: none; }
+  .comment-body { margin-left: 42px; font-size: 14px; line-height: 1.7; }
+  .comment-body :global(p) { margin-bottom: 12px; }
+  .comment-body :global(p:last-child) { margin-bottom: 0; }
+</style>

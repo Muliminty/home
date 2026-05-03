@@ -1,0 +1,52 @@
+[
+  {
+    "number": 1,
+    "title": "用 GitHub Issues 搭建个人公开时间线",
+    "body": "---\nslug: github-issues-timeline\ndescription: 不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类。\ncover: https://github.com/user-attachments/assets/example\n---\n\n我一直想要一个完全属于自己的内容空间。\n\n## 为什么是 GitHub Issues\n\nGitHub Issues 有几个特性让它天然适合做内容管理。\n\n## 技术选型\n\n数据在 GitHub，展示用 Astro。",
+    "html_url": "https://github.com/muliminty/home/issues/1",
+    "labels": [
+      { "name": "type:article", "color": "blue" },
+      { "name": "status:pinned", "color": "yellow" },
+      { "name": "tag:frontend", "color": "green" },
+      { "name": "tag:astro", "color": "green" },
+      { "name": "tag:project", "color": "green" }
+    ],
+    "created_at": "2026-05-02T12:00:00Z",
+    "updated_at": "2026-05-02T12:00:00Z",
+    "closed_at": null,
+    "state": "open",
+    "pull_request": null
+  },
+  {
+    "number": 2,
+    "title": "路过一家蓝色小店",
+    "body": "今天路过一家很好看的小店。门是蓝色的，门口摆了一排多肉。🌿\n\n![小店门面](https://github.com/user-attachments/assets/example-1)",
+    "html_url": "https://github.com/muliminty/home/issues/2",
+    "labels": [
+      { "name": "type:moment", "color": "green" },
+      { "name": "tag:life", "color": "teal" },
+      { "name": "tag:photo", "color": "teal" }
+    ],
+    "created_at": "2026-04-28T08:00:00Z",
+    "updated_at": "2026-04-28T08:00:00Z",
+    "closed_at": null,
+    "state": "open",
+    "pull_request": null
+  },
+  {
+    "number": 3,
+    "title": "前端性能优化三个维度",
+    "body": "---\nslug: perf-three-dimensions\ndescription: 字体加载、关键 CSS 内联、图片 decoding 属性\n---\n\n不只是 bundle size 和 lazy load。\n\n## 字体加载策略\n\n## 关键 CSS 内联\n\n## 图片 decoding 属性",
+    "html_url": "https://github.com/muliminty/home/issues/3",
+    "labels": [
+      { "name": "type:article", "color": "blue" },
+      { "name": "tag:frontend", "color": "green" },
+      { "name": "tag:performance", "color": "green" }
+    ],
+    "created_at": "2026-04-20T10:00:00Z",
+    "updated_at": "2026-04-22T14:00:00Z",
+    "closed_at": null,
+    "state": "open",
+    "pull_request": null
+  }
+]

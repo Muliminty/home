@@ -1,0 +1,13 @@
+---
+import type { UpdateItem as UpdateItemType } from '../lib/content/types';
+import ArticleCard from './ArticleCard.astro';
+import MomentCard from './MomentCard.astro';
+
+interface Props {
+  item: UpdateItemType;
+}
+
+const { item } = Astro.props;
+---
+
+{item.kind === 'article' ? <ArticleCard article={item} showPinned /> : <MomentCard moment={item} />}

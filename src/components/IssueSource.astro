@@ -1,0 +1,18 @@
+---
+interface Props {
+  issueUrl: string;
+  issueNumber: number;
+}
+
+const { issueUrl, issueNumber } = Astro.props;
+---
+
+<div class="issue-source">
+  <span>💡</span>
+  <span>本文由 GitHub Issue <a href={issueUrl}>#{issueNumber}</a> 生成。发现错误？<a href={issueUrl}>去 Issue 页编辑</a></span>
+</div>
+
+<style>
+  .issue-source { margin-top: 64px; padding: 16px 20px; background: #fafafa; border-radius: 8px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .issue-source a { color: var(--accent); text-decoration: none; font-weight: 500; }
+</style>

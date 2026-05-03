@@ -1,0 +1,31 @@
+.not-found-page {
+  h1 {
+    animation: flicker 2s infinite;
+  }
+  
+  a {
+    &:hover {
+      transition: all 0.3s;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 80px !important;
+    }
+    
+    p {
+      font-size: 18px !important;
+    }
+  }
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+

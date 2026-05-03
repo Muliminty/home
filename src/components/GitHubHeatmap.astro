@@ -1,0 +1,189 @@
+---
+import { siteConfig } from '../config';
+
+const { username, weeks: weekCount, thresholds, colors } = siteConfig.heatmap;
+
+interface ContributionDay {
+  contributionCount: number;
+  date: string;
+}
+
+interface ContributionWeek {
+  contributionDays: ContributionDay[];
+}
+
+let allWeeks: ContributionWeek[] = [];
+let totalContribs = 0;
+let error = false;
+
+try {
+  const token = import.meta.env.GH_TOKEN;
+  if (token) {
+    const query = `
+      query($username: String!) {
+        user(login: $username) {
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+              weeks { contributionDays { contributionCount date } }
+            }
+          }
+        }
+      }`;
+
+    const res = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: { Authorization: `bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, variables: { username } }),
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      const calendar = json.data?.user?.contributionsCollection?.contributionCalendar;
+      if (calendar) {
+        totalContribs = calendar.totalContributions;
+        allWeeks = calendar.weeks.slice(-weekCount);
+      } else {
+        error = true;
+      }
+    } else {
+      error = true;
+    }
+  } else {
+    error = true;
+  }
+} catch {
+  error = true;
+}
+
+function getLevel(count: number): number {
+  if (count === 0) return 0;
+  if (count <= thresholds[0]) return 1;
+  if (count <= thresholds[1]) return 2;
+  if (count <= thresholds[2]) return 3;
+  return 4;
+}
+
+// Month labels — position marks where month changes
+const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const monthMarks: Array<{ label: string; weekIndex: number }> = [];
+if (allWeeks.length > 0) {
+  let lastMonth = -1;
+  allWeeks.forEach((week, idx) => {
+    const firstDay = week.contributionDays[0];
+    if (firstDay) {
+      const month = new Date(firstDay.date + 'T00:00:00').getMonth();
+      if (month !== lastMonth) {
+        monthMarks.push({ label: monthNames[month], weekIndex: idx });
+        lastMonth = month;
+      }
+    }
+  });
+}
+---
+
+<section class="heatmap-section">
+  <div class="section-title">Contributions</div>
+  <div class="heatmap-container">
+    {error || allWeeks.length === 0 ? (
+      <p class="heatmap-fallback">GitHub 活跃数据暂不可用</p>
+    ) : (
+      <div class="heatmap-wrapper">
+        <div class="heatmap-months">
+          {monthMarks.map(m => (
+            <span style={`grid-column-start: ${m.weekIndex + 1}`}>{m.label}</span>
+          ))}
+        </div>
+        <div
+          class="heatmap-grid"
+          style={`--cols: ${allWeeks.length}; --c0: ${colors[0]}; --c1: ${colors[1]}; --c2: ${colors[2]}; --c3: ${colors[3]}; --c4: ${colors[4]}`}
+        >
+          {allWeeks.map(week => (
+            <div class="heatmap-week">
+              {week.contributionDays.map(day => (
+                <div
+                  class={`heatmap-day level-${getLevel(day.contributionCount)}`}
+                  title={`${day.contributionCount} contributions on ${day.date}`}
+                ></div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div class="heatmap-footer">
+          <span class="heatmap-total">{totalContribs} contributions in the last year</span>
+          <div class="heatmap-legend">
+            <span class="legend-label">Less</span>
+            <div class="swatch level-0"></div>
+            <div class="swatch level-1"></div>
+            <div class="swatch level-2"></div>
+            <div class="swatch level-3"></div>
+            <div class="swatch level-4"></div>
+            <span class="legend-label">More</span>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .heatmap-section { margin-bottom: 48px; }
+  .heatmap-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  /* Month labels — same column count as grid */
+  .heatmap-months {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 53), 1fr);
+    gap: 3px;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .heatmap-months span { white-space: nowrap; }
+
+  /* Grid fills the container using CSS grid + 1fr per column */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 53), 1fr);
+    gap: 3px;
+    width: 100%;
+  }
+  .heatmap-week {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .heatmap-day {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 2px;
+  }
+
+  .heatmap-day.level-0 { background: var(--c0, #f3f4f6); outline: 1px solid rgba(0,0,0,0.06); outline-offset: -1px; }
+  .heatmap-day.level-1 { background: var(--c1, #d1d5db); }
+  .heatmap-day.level-2 { background: var(--c2, #9ca3af); }
+  .heatmap-day.level-3 { background: var(--c3, #6b7280); }
+  .heatmap-day.level-4 { background: var(--c4, #374151); }
+
+  .heatmap-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px; flex-wrap: wrap; gap: 8px;
+  }
+  .heatmap-total { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+  .heatmap-fallback { font-size: 12px; color: var(--text-muted); padding: 8px 0; }
+
+  .heatmap-legend { display: flex; align-items: center; gap: 3px; }
+  .legend-label { font-size: 9px; color: var(--text-muted); }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; }
+  .swatch.level-0 { background: var(--c0, #f3f4f6); outline: 1px solid rgba(0,0,0,0.06); outline-offset: -1px; }
+  .swatch.level-1 { background: var(--c1, #d1d5db); }
+  .swatch.level-2 { background: var(--c2, #9ca3af); }
+  .swatch.level-3 { background: var(--c3, #6b7280); }
+  .swatch.level-4 { background: var(--c4, #374151); }
+</style>
