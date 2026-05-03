@@ -48,10 +48,36 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     }
     #loading-bar.phased { width: 70%; transition: width 2s ease-out; }
     #loading-bar.done { width: 100%; opacity: 0; transition: width 0.3s ease, opacity 0.3s ease; }
+
+  /* Curtain slats — 幕布扫描动画层 */
+  .curtain-layer {
+    position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+    display: flex; flex-direction: column;
+    clip-path: inset(0 100% 0 0);
+  }
+  .curtain-layer.active { clip-path: inset(0 0 0 0); transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
+  .curtain-slat {
+    flex: 1;
+    background: #1c1917;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .curtain-layer.active .curtain-slat {
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .curtain-layer[data-reverse] .curtain-slat {
+    transform-origin: right;
+    transform: scaleX(1);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .curtain-layer[data-reverse].active .curtain-slat {
+    transform: scaleX(0);
+  }
   </style>
 </head>
 <body>
   <div id="loading-bar"></div>
+  <div class="curtain-layer" id="curtain-layer" aria-hidden="true"></div>
   <slot />
 
   <!-- Dot grid parallax -->
@@ -185,6 +211,89 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         card.addEventListener('mouseleave', function() {
           card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
         });
+      });
+    })();
+  </script>
+
+  <!-- Curtain theme toggle -->
+  <script>
+    (function() {
+      var N = 8;
+      var layer = document.getElementById('curtain-layer');
+      if (!layer) return;
+
+      // Build slats
+      for (var i = 0; i < N; i++) {
+        var s = document.createElement('div');
+        s.className = 'curtain-slat';
+        s.style.transitionDelay = (i * 0.04) + 's';
+        layer.appendChild(s);
+      }
+
+      var btn = document.getElementById('theme-toggle');
+      var icon = btn ? btn.querySelector('.theme-icon') : null;
+      var STORAGE_KEY = 'theme';
+
+      function getTheme() {
+        var stored = localStorage.getItem(STORAGE_KEY);
+        if (stored === 'dark' || stored === 'light') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      function applyTheme(theme, animate) {
+        var isDark = theme === 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        if (icon) icon.textContent = isDark ? '🌙' : '☀️';
+        localStorage.setItem(STORAGE_KEY, theme);
+        if (!animate) return;
+
+        var slats = layer.querySelectorAll('.curtain-slat');
+
+        if (isDark) {
+          // light → dark: slats expand left-to-right
+          layer.removeAttribute('data-reverse');
+          slats.forEach(function(s) { s.style.transform = 'scaleX(1)'; });
+          layer.classList.add('active');
+          var last = slats[slats.length - 1];
+          last.addEventListener('transitionend', function handler() {
+            last.removeEventListener('transitionend', handler);
+            layer.classList.remove('active');
+            slats.forEach(function(s) { s.style.transform = ''; });
+          });
+        } else {
+          // dark → light: slats contract right-to-left
+          layer.setAttribute('data-reverse', '');
+          void layer.offsetWidth;
+          slats.forEach(function(s) { s.style.transform = 'scaleX(1)'; });
+          layer.classList.add('active');
+          void layer.offsetWidth;
+          slats.forEach(function(s) { s.style.transform = 'scaleX(0)'; });
+          var last = slats[slats.length - 1];
+          last.addEventListener('transitionend', function handler() {
+            last.removeEventListener('transitionend', handler);
+            layer.classList.remove('active');
+            layer.removeAttribute('data-reverse');
+            slats.forEach(function(s) { s.style.transform = ''; });
+          });
+        }
+      }
+
+      // Init
+      var current = getTheme();
+      applyTheme(current, false);
+
+      if (btn) {
+        btn.addEventListener('click', function() {
+          var next = getTheme() === 'dark' ? 'light' : 'dark';
+          applyTheme(next, true);
+        });
+      }
+
+      // Listen for system theme changes (only if user hasn't set a preference)
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          applyTheme(e.matches ? 'dark' : 'light', true);
+        }
       });
     })();
   </script>

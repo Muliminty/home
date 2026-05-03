@@ -110,6 +110,9 @@ try {
     .code-card :global(.shiki code) { color: var(--shiki-dark); }
     .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
   }
+  html[data-theme="dark"] .code-card :global(pre.shiki),
+  html[data-theme="dark"] .code-card :global(.shiki code) { color: var(--shiki-dark); }
+  html[data-theme="dark"] .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
 
   /* Clickable links */
   .code-card :global(.code-link) {

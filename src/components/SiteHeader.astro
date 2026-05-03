@@ -21,6 +21,9 @@ const navItems = [
     {navItems.map(item => (
       <a href={base + item.href} class:list={[{ active: item.match }]}>{item.label}</a>
     ))}
+    <button class="theme-toggle" id="theme-toggle" aria-label="切换主题" title="切换昼夜模式">
+      <span class="theme-icon">☀️</span>
+    </button>
   </nav>
 </header>
 
@@ -56,4 +59,13 @@ const navItems = [
     padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.15s;
   }
   .nav a:hover, .nav a.active { color: var(--text); border-bottom-color: var(--text-muted); }
+
+  .theme-toggle {
+    background: none; border: none; font-size: 16px; cursor: none;
+    padding: 2px 4px; line-height: 1; transition: transform 0.2s;
+    display: flex; align-items: center;
+  }
+  .theme-toggle:hover { transform: scale(1.15); }
+  .theme-icon { display: inline-block; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .theme-toggle:active .theme-icon { transform: rotate(180deg) scale(0.9); }
 </style>
