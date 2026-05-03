@@ -8,6 +8,7 @@ interface Props {
 const { moment } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const detailUrl = `${base}moments/${moment.number}/`;
+const imagesJson = JSON.stringify(moment.images);
 ---
 
 <a href={detailUrl} class="moment-card">
@@ -22,9 +23,9 @@ const detailUrl = `${base}moments/${moment.number}/`;
     )}
     <p class="body">{moment.text}</p>
     {moment.images.length > 0 && (
-      <div class="imgs">
-        {moment.images.slice(0, 4).map(img => (
-          <img class="thumb" src={img.src} alt={img.alt} loading="lazy" />
+      <div class="imgs" data-moment-images={imagesJson}>
+        {moment.images.slice(0, 4).map((img, i) => (
+          <img class="thumb" src={img.src} alt={img.alt} loading="lazy" data-img-index={i} />
         ))}
       </div>
     )}
@@ -148,6 +149,7 @@ const detailUrl = `${base}moments/${moment.number}/`;
 
 <script>
   (function() {
+    // 3D tilt
     document.querySelectorAll('.moment-card').forEach(function(card) {
       card.addEventListener('mousemove', function(e) {
         var r = card.getBoundingClientRect();
@@ -161,6 +163,88 @@ const detailUrl = `${base}moments/${moment.number}/`;
       card.addEventListener('mouseleave', function() {
         card.style.setProperty('--mx', '0.5');
         card.style.setProperty('--my', '0.5');
+      });
+    });
+
+    // Shared lightbox builder (called once, reused across cards)
+    function getLightbox() {
+      var lb = document.querySelector('.moment-lightbox');
+      if (!lb) {
+        lb = document.createElement('div');
+        lb.className = 'moment-lightbox';
+        lb.innerHTML =
+          '<button class="lb-close" aria-label="关闭">&times;</button>' +
+          '<button class="lb-nav lb-prev" aria-label="上一张">&lsaquo;</button>' +
+          '<button class="lb-nav lb-next" aria-label="下一张">&rsaquo;</button>' +
+          '<div class="lb-img-wrap"><img class="lb-img" src="" alt="" /></div>' +
+          '<span class="lb-counter"></span>';
+        document.body.appendChild(lb);
+
+        var closeBtn = lb.querySelector('.lb-close');
+        var prevBtn = lb.querySelector('.lb-prev');
+        var nextBtn = lb.querySelector('.lb-next');
+        closeBtn.addEventListener('click', function() { hideLightbox(lb); });
+        prevBtn.addEventListener('click', function() { navLightbox(lb, -1); });
+        nextBtn.addEventListener('click', function() { navLightbox(lb, 1); });
+        lb.addEventListener('click', function(e) {
+          if (e.target === lb) hideLightbox(lb);
+        });
+        document.addEventListener('keydown', function(e) {
+          if (!lb.classList.contains('open')) return;
+          if (e.key === 'Escape') hideLightbox(lb);
+          if (e.key === 'ArrowLeft') navLightbox(lb, -1);
+          if (e.key === 'ArrowRight') navLightbox(lb, 1);
+        });
+      }
+      return lb;
+    }
+
+    function showLightbox(lb, images, idx) {
+      lb._images = images;
+      lb._currentIdx = idx;
+      var imgEl = lb.querySelector('.lb-img');
+      var prevBtn = lb.querySelector('.lb-prev');
+      var nextBtn = lb.querySelector('.lb-next');
+      var counter = lb.querySelector('.lb-counter');
+      imgEl.src = images[idx].src;
+      imgEl.alt = images[idx].alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      var dot = document.querySelector('.cursor-dot');
+      var trail = document.querySelector('.cursor-trail');
+      if (dot) dot.style.display = 'none';
+      if (trail) trail.style.display = 'none';
+      prevBtn.classList.toggle('hidden', idx === 0);
+      nextBtn.classList.toggle('hidden', idx === images.length - 1);
+      counter.textContent = images.length > 1 ? (idx + 1) + ' / ' + images.length : '';
+    }
+
+    function hideLightbox(lb) {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      var dot = document.querySelector('.cursor-dot');
+      var trail = document.querySelector('.cursor-trail');
+      if (dot) dot.style.display = '';
+      if (trail) trail.style.display = '';
+    }
+
+    function navLightbox(lb, delta) {
+      var images = lb._images || [];
+      var next = (lb._currentIdx || 0) + delta;
+      if (next >= 0 && next < images.length) showLightbox(lb, images, next);
+    }
+
+    // Attach click to thumbnails: open lightbox, don't navigate
+    document.querySelectorAll('.moment-card .imgs').forEach(function(imgsContainer) {
+      var images = JSON.parse(imgsContainer.getAttribute('data-moment-images') || '[]');
+      if (!images.length) return;
+      imgsContainer.querySelectorAll('.thumb').forEach(function(thumb) {
+        thumb.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var idx = parseInt(thumb.getAttribute('data-img-index') || '0', 10);
+          showLightbox(getLightbox(), images, idx);
+        });
       });
     });
   })();
