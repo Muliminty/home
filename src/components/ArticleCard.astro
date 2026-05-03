@@ -11,24 +11,143 @@ interface Props {
 const { article, showPinned = false } = Astro.props;
 ---
 
-<article class="article-card card-hover card-tilt" class:list={{ pinned: showPinned && article.pinned }}>
-  <div class="time">{article.publishedAt.slice(0, 10)}</div>
-  <h3><a href={`${base}articles/${article.slug}`}>{article.title}</a></h3>
-  <p class="desc">{article.description}</p>
-  <div class="tags">
-    {article.tags.map(tag => <a href={`${base}tags/${tag}`} class="tag">#{tag}</a>)}
+<a href={`${base}articles/${article.slug}`} class="article-card" class:list={{ pinned: showPinned && article.pinned }}>
+  <div class="inner">
+    <time class="time">{article.publishedAt.slice(0, 10)}</time>
+    {article.tags?.length > 0 && (
+      <div class="labels">
+        {article.tags.slice(0, 3).map(tag => (
+          <span class="label">#{tag}</span>
+        ))}
+      </div>
+    )}
+    <p class="body">{article.title}</p>
   </div>
-</article>
+</a>
 
 <style>
-  .article-card { margin-bottom: 24px; }
-  .article-card.pinned { border-left: 2px solid var(--accent); padding-left: 12px; }
-  .time { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; }
-  h3 { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 2px; }
-  h3 a { color: var(--text); text-decoration: none; }
-  h3 a:hover { color: var(--accent); }
-  .desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-  .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
-  .tag { font-size: 11px; color: var(--accent); text-decoration: none; }
-  .tag:hover { text-decoration: underline; }
+  .article-card {
+    --mx: 0.5; --my: 0.5; --sx: 50%; --sy: 50%;
+    position: relative; display: block;
+    padding: 20px 24px; margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    text-decoration: none; color: inherit;
+    transform:
+      perspective(800px)
+      rotateY(calc((var(--mx) - 0.5) * 8deg))
+      rotateX(calc((var(--my) - 0.5) * -6deg))
+      translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    transition:
+      transform 0.15s ease-out,
+      box-shadow 0.25s ease-out,
+      background 0.25s ease-out,
+      border-color 0.25s ease-out;
+    z-index: 0;
+  }
+  .article-card.pinned {
+    border-left-color: var(--accent);
+  }
+  .article-card:hover {
+    transform:
+      perspective(800px)
+      rotateY(calc((var(--mx) - 0.5) * 8deg))
+      rotateX(calc((var(--my) - 0.5) * -6deg))
+      translateY(-3px);
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.12);
+    z-index: 2;
+  }
+
+  .article-card::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0;
+    background: radial-gradient(
+      400px circle at var(--sx) var(--sy),
+      rgba(255, 255, 255, 0.5),
+      transparent 50%
+    );
+    border-radius: 10px;
+    transition: opacity 0.35s ease;
+  }
+  .article-card:hover::before { opacity: 1; }
+
+  .article-card::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+    opacity: 0;
+    border-radius: 10px;
+    box-shadow:
+      calc((var(--mx) - 0.5) * 16px) calc((var(--my) - 0.5) * 12px) 28px rgba(0, 0, 0, 0.08);
+    transition: opacity 0.25s ease;
+  }
+  .article-card:hover::after { opacity: 1; }
+
+  .inner { position: relative; z-index: 2; }
+
+  .time {
+    font-size: 11px; color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 6px; transition: color 0.25s ease;
+  }
+  .article-card:hover .time { color: var(--text-secondary); }
+
+  .labels { display: flex; gap: 4px; margin-bottom: 8px; }
+  .label {
+    font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    background: var(--tag-bg); color: var(--text-muted);
+    border: 1px solid var(--border);
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  .article-card:hover .label {
+    background: rgba(37, 99, 235, 0.08);
+    border-color: rgba(37, 99, 235, 0.2);
+    color: var(--accent);
+  }
+
+  .body { font-size: 14px; line-height: 1.7; }
+
+  @media (prefers-color-scheme: dark) {
+    .article-card {
+      background: rgba(41, 37, 36, 0.45);
+      border-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .article-card:hover {
+      background: rgba(41, 37, 36, 0.82);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+    .article-card::before {
+      background: radial-gradient(
+        400px circle at var(--sx) var(--sy),
+        rgba(96, 165, 250, 0.08),
+        transparent 50%
+      );
+    }
+    .article-card::after {
+      box-shadow:
+        calc((var(--mx) - 0.5) * 16px) calc((var(--my) - 0.5) * 12px) 28px rgba(0, 0, 0, 0.35);
+    }
+  }
 </style>
+
+<script>
+  (function() {
+    document.querySelectorAll('.article-card').forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = e.clientX - r.left;
+        var y = e.clientY - r.top;
+        card.style.setProperty('--mx', (x / r.width).toFixed(3));
+        card.style.setProperty('--my', (y / r.height).toFixed(3));
+        card.style.setProperty('--sx', x + 'px');
+        card.style.setProperty('--sy', y + 'px');
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.setProperty('--mx', '0.5');
+        card.style.setProperty('--my', '0.5');
+      });
+    });
+  })();
+</script>

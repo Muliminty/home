@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C · Notion 日志流 + 柔和光晕</title>
+<style>
+  :root {
+    --bg: #fafaf8; --text: #1c1917; --text-muted: #78716c;
+    --text-secondary: #57534e; --border: #e7e5e4; --accent: #2563eb;
+    --tag-bg: #f5f5f4;
+    --font-sans: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    padding: 48px 20px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: -10px; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(circle at center, rgba(0,0,0,0.09) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+  }
+  .container { max-width: 640px; margin: 0 auto; }
+  .section-title {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .card {
+    --mx: 0.5; --my: 0.5; --sx: 50%; --sy: 50%;
+    position: relative; display: block;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    text-decoration: none; color: inherit;
+    transition:
+      background 0.3s ease-out,
+      padding 0.25s ease-out,
+      margin 0.25s ease-out,
+      border-radius 0.25s ease-out,
+      border-bottom-color 0.25s ease-out;
+    z-index: 0;
+  }
+  .card:last-child { border-bottom: none; }
+  .card:hover {
+    background: rgba(255,255,255,0.45);
+    padding: 16px 12px;
+    margin-left: -12px; margin-right: -12px;
+    border-radius: 8px;
+    border-bottom-color: transparent;
+    z-index: 2;
+  }
+
+  /* 极淡径向光晕 — 跟随鼠标 */
+  .card::before {
+    content: ''; position: absolute; pointer-events: none; z-index: 1;
+    inset: -8px;
+    opacity: 0;
+    background: radial-gradient(
+      300px circle at var(--sx) var(--sy),
+      rgba(37,99,235,0.04),
+      transparent 60%
+    );
+    border-radius: 10px;
+    transition: opacity 0.4s ease;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .inner { position: relative; z-index: 2; }
+
+  /* 日期 — hover 变 pill */
+  .time {
+    display: inline-block;
+    font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);
+    margin-bottom: 6px; padding: 1px 0;
+    transition: all 0.25s ease;
+  }
+  .card:hover .time {
+    background: var(--tag-bg); color: var(--text-secondary);
+    padding: 1px 8px; border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .labels { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
+  .label {
+    font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    background: var(--tag-bg); color: var(--text-muted);
+    border: 1px solid var(--border);
+    transition: all 0.25s ease;
+  }
+  .card:hover .label {
+    transform: translateY(-1px);
+    background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.15); color: var(--accent);
+  }
+
+  /* 标题 — hover 下划线从左到右（方向跟随鼠标 X） */
+  .body {
+    font-size: 14px; line-height: 1.7;
+    position: relative;
+    display: inline;
+    background: linear-gradient(to right, var(--text-secondary), var(--text-secondary)) no-repeat;
+    background-size: 0 1px;
+    background-position: 0 100%;
+    transition: background-size 0.35s ease;
+  }
+  .card:hover .body {
+    background-size: 100% 1px;
+  }
+
+  .imgs { display: flex; gap: 6px; margin-top: 10px; }
+  .thumb {
+    width: 72px; height: 72px; object-fit: cover; border-radius: 6px;
+    background: #f5f5f7; filter: saturate(0.85);
+    transition: transform 0.25s ease-out, filter 0.25s ease-out;
+  }
+  .card:hover .thumb { transform: scale(1.04); filter: saturate(1); }
+
+  .arrow {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    font-size: 14px; color: var(--text-muted); opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover .arrow { opacity: 0.4; transform: translateY(-50%) translateX(4px); }
+
+  .back { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; display: inline-block; }
+  .note {
+    margin-top: 32px; padding: 12px 16px; background: rgba(0,0,0,0.03);
+    border-radius: 6px; font-size: 12px; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back">&larr; 返回对比</a>
+  <div class="section-title">C · Notion 日志流 + 柔和光晕</div>
+
+  <div class="card">
+    <div class="inner">
+      <div class="time">2026-04-28</div>
+      <div class="labels"><span class="label">life</span><span class="label">photo</span></div>
+      <p class="body">周末去了趟镰仓，海边的风很大。在江之电上拍了张照片，阳光透过车窗照进来。</p>
+      <div class="imgs"><div class="thumb" style="background:linear-gradient(135deg,#a8b5c8,#d4c5b9)"></div></div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </div>
+
+  <div class="card">
+    <div class="inner">
+      <div class="time">2026-04-25</div>
+      <p class="body">把博客构建时间从 4 分钟优化到 40 秒。主要改动是把图片处理移到 CDN 层，Astro 只生成 HTML。</p>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </div>
+
+  <div class="card">
+    <div class="inner">
+      <div class="time">2026-04-20</div>
+      <div class="labels"><span class="label">tech</span></div>
+      <p class="body">试了 Claude Code 的新 worktree 隔离模式，在同一 terminal 里维护 3 个 feature branch 互不干扰。</p>
+      <div class="imgs"><div class="thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div><div class="thumb" style="background:linear-gradient(135deg,#f093fb,#f5576c)"></div></div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </div>
+
+  <div class="card">
+    <div class="inner">
+      <div class="time">2026-04-18</div>
+      <div class="labels"><span class="label">reading</span></div>
+      <p class="body">最近在读《The Pragmatic Programmer》第二版，关于"知识组合"和"DRY 原则"在 AI 时代反而更有意义了。</p>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </div>
+
+  <div class="note">
+    <strong>鼠标交互：</strong>极淡径向蓝光晕跟随光标 + 下划线从左到右绘制 + 日期变 pill + 箭头淡入右移。<br>
+    <strong>hover 增强：</strong>卡片区域轻微扩展 + 背景微亮。<br>
+    <strong>感受：</strong>最克制、最"耐看"，像 Notion 的 database 条目被柔光照亮。
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      card.style.setProperty('--mx', (x / r.width).toFixed(3));
+      card.style.setProperty('--my', (y / r.height).toFixed(3));
+      card.style.setProperty('--sx', x + 'px');
+      card.style.setProperty('--sy', y + 'px');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--mx', '0.5');
+      card.style.setProperty('--my', '0.5');
+    });
+  });
+</script>
+</body>
+</html>

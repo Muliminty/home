@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B · 编辑器选中行 + 点阵让位</title>
+<style>
+  :root {
+    --bg: #fafaf8; --text: #1c1917; --text-muted: #78716c;
+    --text-secondary: #57534e; --border: #e7e5e4; --accent: #2563eb;
+    --tag-bg: #f5f5f4;
+    --font-sans: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    padding: 48px 20px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: -10px; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(circle at center, rgba(0,0,0,0.09) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+  }
+  .container { max-width: 640px; margin: 0 auto; }
+  .section-title {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .card {
+    --mx: 0.5; --my: 0.5; --sx: 50%; --sy: 50%;
+    position: relative; display: flex; align-items: flex-start;
+    padding: 18px 0 18px 0; margin-bottom: 12px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 0 8px 8px 0;
+    border-left: 3px solid rgba(0,0,0,0.07);
+    text-decoration: none; color: inherit;
+    backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);
+    transition:
+      transform 0.15s ease-out,
+      background 0.25s ease-out,
+      border-color 0.25s ease-out,
+      border-left-color 0.22s ease-out,
+      box-shadow 0.25s ease-out,
+      backdrop-filter 0.25s ease-out;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  /* 左侧 marker 亮度由鼠标 Y 位置驱动 */
+  .card:hover {
+    /* 水平磁吸：轻微向右拉 */
+    transform: translateX(calc(4px + (var(--mx) - 0.5) * 4px)) translateY(-1px);
+    background: rgba(255,255,255,0.78);
+    border-color: rgba(0,0,0,0.1);
+    border-left-color: color-mix(in srgb, var(--accent) calc(var(--my) * 100%), rgba(0,0,0,0.15));
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  }
+
+  /* 光标行高光 — 模拟编辑器选中行的横向光带 */
+  .card::before {
+    content: ''; position: absolute; left: 0; right: 0; pointer-events: none; z-index: 1;
+    height: 80px;
+    top: var(--sy);
+    transform: translateY(-50%);
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(37,99,235,0.06) 0%,
+      rgba(37,99,235,0.03) 40%,
+      transparent 100%
+    );
+    transition: opacity 0.3s ease;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-inner { flex: 1; padding-left: 20px; min-width: 0; position: relative; z-index: 2; }
+
+  .time {
+    font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);
+    margin-bottom: 6px; transition: color 0.25s ease;
+  }
+  .card:hover .time { color: var(--text-secondary); }
+
+  .labels { display: flex; gap: 4px; margin-bottom: 6px; }
+  .label {
+    font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    background: var(--tag-bg); color: var(--text-muted);
+    border: 1px solid var(--border);
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  .card:hover .label {
+    background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.18); color: var(--accent);
+  }
+
+  .body { font-size: 14px; line-height: 1.7; }
+
+  .imgs { display: flex; gap: 6px; margin-top: 10px; }
+  .thumb {
+    width: 72px; height: 72px; object-fit: cover; border-radius: 6px;
+    background: #f5f5f7; filter: saturate(0.85);
+    transition: transform 0.25s ease-out, filter 0.25s ease-out;
+  }
+  .card:hover .thumb { transform: scale(1.05); filter: saturate(1) brightness(1.05); }
+
+  .arrow {
+    position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; color: var(--text-muted); opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .card:hover .arrow { opacity: 0.45; }
+
+  .back { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; display: inline-block; }
+  .note {
+    margin-top: 32px; padding: 12px 16px; background: rgba(0,0,0,0.03);
+    border-radius: 6px; font-size: 12px; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back">&larr; 返回对比</a>
+  <div class="section-title">B · 编辑器选中行 + 点阵让位</div>
+
+  <a class="card" href="#">
+    <div class="card-inner">
+      <div class="time">2026-04-28</div>
+      <div class="labels"><span class="label">life</span><span class="label">photo</span></div>
+      <p class="body">周末去了趟镰仓，海边的风很大。在江之电上拍了张照片，阳光透过车窗照进来。</p>
+      <div class="imgs"><div class="thumb" style="background:linear-gradient(135deg,#a8b5c8,#d4c5b9)"></div></div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <a class="card" href="#">
+    <div class="card-inner">
+      <div class="time">2026-04-25</div>
+      <p class="body">把博客构建时间从 4 分钟优化到 40 秒。主要改动是把图片处理移到 CDN 层，Astro 只生成 HTML。</p>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <a class="card" href="#">
+    <div class="card-inner">
+      <div class="time">2026-04-20</div>
+      <div class="labels"><span class="label">tech</span></div>
+      <p class="body">试了 Claude Code 的新 worktree 隔离模式，在同一 terminal 里维护 3 个 feature branch 互不干扰。</p>
+      <div class="imgs"><div class="thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div><div class="thumb" style="background:linear-gradient(135deg,#f093fb,#f5576c)"></div></div>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <a class="card" href="#">
+    <div class="card-inner">
+      <div class="time">2026-04-18</div>
+      <div class="labels"><span class="label">reading</span></div>
+      <p class="body">最近在读《The Pragmatic Programmer》第二版，关于"知识组合"和"DRY 原则"在 AI 时代反而更有意义了。</p>
+    </div>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <div class="note">
+    <strong>鼠标交互：</strong>水平磁吸（卡片跟随光标 X 位置微调位移）+ 左侧 marker 亮度由光标 Y 位置驱动 + 横向光带像编辑器选中行。<br>
+    <strong>hover 增强：</strong>点阵 backdrop-blur 淡出 + 箭头淡入 + 图片提亮。<br>
+    <strong>感受：</strong>像在代码编辑器里浏览 commit log，最有"个人站特色"。
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      card.style.setProperty('--mx', (x / r.width).toFixed(3));
+      card.style.setProperty('--my', (y / r.height).toFixed(3));
+      card.style.setProperty('--sx', x + 'px');
+      card.style.setProperty('--sy', y + 'px');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--mx', '0.5');
+      card.style.setProperty('--my', '0.5');
+    });
+  });
+</script>
+</body>
+</html>

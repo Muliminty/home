@@ -8,22 +8,15 @@ import { loadAllContent } from '../../lib/content/loadContent';
 const base = import.meta.env.BASE_URL;
 const { items } = await loadAllContent();
 
-// Read filter from query param: ?filter=articles | ?filter=moments
-const filter = Astro.url.searchParams.get('filter') || 'all';
-
-const filtered = filter === 'all'
-  ? items
-  : items.filter(i => i.kind === filter);
-
 const filterTabs = [
   { key: 'all', label: '全部' },
   { key: 'article', label: '文章' },
-  { key: 'moment', label: '瞬间' },
+  { key: 'moment', label: '动态' },
 ];
 
-// Group by date
-const grouped = new Map<string, typeof filtered>();
-for (const item of filtered) {
+// Group by date — always render all items, filter via client JS
+const grouped = new Map<string, typeof items>();
+for (const item of items) {
   const date = item.publishedAt.slice(0, 10);
   if (!grouped.has(date)) grouped.set(date, []);
   grouped.get(date)!.push(item);
@@ -38,7 +31,8 @@ for (const item of filtered) {
       {filterTabs.map(tab => (
         <a
           href={tab.key === 'all' ? `${base}updates/` : `${base}updates/?filter=${tab.key}`}
-          class:list={['filter-tab', { active: filter === tab.key }]}
+          class="filter-tab"
+          data-filter={tab.key}
         >
           {tab.label}
         </a>
@@ -46,19 +40,17 @@ for (const item of filtered) {
     </div>
 
     {Array.from(grouped.entries()).map(([date, dayItems]) => (
-      <div>
+      <div class="day-group">
         <div class="day-sep">{date}</div>
         {dayItems.map(item => (
           item.kind === 'article'
-            ? <ArticleCard article={item} showPinned />
-            : <MomentCard moment={item} />
+            ? <div data-kind="article"><ArticleCard article={item} showPinned /></div>
+            : <div data-kind="moment"><MomentCard moment={item} /></div>
         ))}
       </div>
     ))}
 
-    {filtered.length === 0 && (
-      <p class="empty-text">暂无内容</p>
-    )}
+    <p class="empty-text" hidden>暂无内容</p>
   </div>
 </BaseLayout>
 
@@ -91,3 +83,45 @@ for (const item of filtered) {
 
   .empty-text { font-size: 13px; color: var(--text-muted); text-align: center; padding: 40px 0; }
 </style>
+
+<script>
+  (function() {
+    var tabs = document.querySelectorAll('.filter-tab');
+    var groups = document.querySelectorAll('.day-group');
+    var empty = document.querySelector('.empty-text');
+
+    function getFilter() {
+      var m = window.location.search.match(/filter=(\w+)/);
+      return m ? m[1] : 'all';
+    }
+
+    function applyFilter(key) {
+      // Update tab active states
+      tabs.forEach(function(t) {
+        t.classList.toggle('active', t.dataset.filter === key);
+      });
+
+      // Show/hide cards
+      var hasVisible = false;
+      groups.forEach(function(group) {
+        var cards = group.querySelectorAll('[data-kind]');
+        var groupVisible = false;
+        cards.forEach(function(card) {
+          var show = key === 'all' || card.dataset.kind === key;
+          card.hidden = !show;
+          if (show) groupVisible = true;
+        });
+        group.hidden = !groupVisible;
+        if (groupVisible) hasVisible = true;
+      });
+
+      if (empty) empty.hidden = hasVisible;
+    }
+
+    // Init from URL
+    applyFilter(getFilter());
+
+    // Handle tab clicks — update URL without full reload when already on this page
+    // (Link navigation is the primary flow; init handles the state on load)
+  })();
+</script>
