@@ -8,13 +8,11 @@ const gridClass = images.length === 1 ? 'grid-single' : 'grid-multi';
 const imagesJson = JSON.stringify(images);
 ---
 
-<div class={`moment-images ${gridClass}`}>
+<div class={`moment-images ${gridClass}`} data-moment-images={imagesJson}>
   {images.map((img, i) => (
     <img src={img.src} alt={img.alt} class="moment-img" loading="lazy" data-lightbox-index={i} />
   ))}
 </div>
-
-<script type="application/json" id="moment-images-data">{imagesJson}</script>
 
 <style>
   .moment-images { margin-bottom: 48px; }
@@ -26,7 +24,9 @@ const imagesJson = JSON.stringify(images);
     .grid-single .moment-img { border-radius: 4px; }
   }
 
-  /* Lightbox */
+</style>
+<style is:global>
+  /* Lightbox (global — DOM created dynamically by JS) */
   .moment-lightbox {
     position: fixed; inset: 0; z-index: 100000;
     display: flex; align-items: center; justify-content: center;
@@ -34,6 +34,7 @@ const imagesJson = JSON.stringify(images);
     opacity: 0;
     transition: background 0.35s ease, opacity 0.35s ease;
     pointer-events: none;
+    cursor: default;
   }
   .moment-lightbox.open {
     background: rgba(0, 0, 0, 0.9);
@@ -107,9 +108,11 @@ const imagesJson = JSON.stringify(images);
 
 <script>
   (function() {
-    var dataEl = document.getElementById('moment-images-data');
-    if (!dataEl) return;
-    var images = JSON.parse(dataEl.textContent || '[]');
+    var container = document.querySelector('.moment-images');
+    if (!container) return;
+    var raw = container.getAttribute('data-moment-images');
+    if (!raw) return;
+    var images = JSON.parse(raw);
     if (!images.length) return;
 
     // Build lightbox DOM once (shared singleton)
@@ -182,16 +185,9 @@ const imagesJson = JSON.stringify(images);
       if (e.key === 'ArrowRight') nav(1);
     });
 
-    // Attach to the current page's moment images
-    var container = document.currentScript && document.currentScript.previousElementSibling;
-    // previousElementSibling is the JSON script; go one more back for .moment-images
-    if (container && container.tagName === 'SCRIPT') {
-      container = container.previousElementSibling;
-    }
-    if (container) {
-      container.querySelectorAll('.moment-img').forEach(function(el, i) {
-        el.addEventListener('click', function() { show(i); });
-      });
-    }
+    // Attach click handlers to moment images
+    document.querySelectorAll('.moment-images .moment-img').forEach(function(el, i) {
+      el.addEventListener('click', function() { show(i); });
+    });
   })();
 </script>
