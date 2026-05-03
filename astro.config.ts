@@ -9,4 +9,14 @@ export default defineConfig({
   prefetch: {
     defaultStrategy: 'hover',
   },
+  vite: {
+    optimizeDeps: {
+      exclude: ['archive'],
+    },
+    server: {
+      fs: {
+        deny: ['archive'],
+      },
+    },
+  },
 });
