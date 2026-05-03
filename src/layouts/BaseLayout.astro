@@ -59,7 +59,8 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   }
   .curtain-slat {
     flex: 1;
-    background: #1c1917;
+    background: #fff;
+    mix-blend-mode: difference;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -216,6 +217,9 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       for (var i = 0; i < N; i++) {
         var s = document.createElement('div');
         s.className = 'curtain-slat';
+        s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        s.style.transform = 'scaleX(0)';
+        s.style.transformOrigin = 'left';
         s.style.transitionDelay = (i * 0.05) + 's';
         layer.appendChild(s);
       }
@@ -226,7 +230,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       var slats = layer.querySelectorAll('.curtain-slat');
       var busy = false;
 
-      function getTheme() {
+      function resolveTheme() {
         var stored = localStorage.getItem(KEY);
         if (stored === 'dark' || stored === 'light') return stored;
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -238,46 +242,34 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         localStorage.setItem(KEY, theme);
       }
 
-      function playSlats(expand, onDone) {
-        busy = true;
-        slats.forEach(function(s) {
-          s.style.transformOrigin = expand ? 'left' : 'right';
-          s.style.transform = expand ? 'scaleX(1)' : 'scaleX(0)';
-        });
-        var last = slats[slats.length - 1];
-        last.addEventListener('transitionend', function handler() {
-          last.removeEventListener('transitionend', handler);
-          busy = false;
-          if (onDone) onDone();
-        });
-      }
-
       // Init — no animation
-      setDOM(getTheme());
+      setDOM(resolveTheme());
 
       btn.addEventListener('click', function() {
         if (busy) return;
-        var goingDark = getTheme() === 'light';
+        var goingDark = resolveTheme() === 'light';
+        busy = true;
 
-        if (goingDark) {
-          // Expand dark slats to cover the light page
-          playSlats(true, function() {
-            // Switch theme underneath, then hide slats instantly
-            setDOM('dark');
-            slats.forEach(function(s) { s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
-            layer.offsetHeight; // force reflow
-            slats.forEach(function(s) { s.style.transition = ''; });
+        // mix-blend-mode: difference + 白色条纹 → 两个方向共用 expand→switch→reset 流程
+        slats.forEach(function(s) {
+          s.style.transformOrigin = 'left';
+          s.style.transform = 'scaleX(1)';
+        });
+
+        var last = slats[slats.length - 1];
+        last.addEventListener('transitionend', function handler() {
+          last.removeEventListener('transitionend', handler);
+          setDOM(goingDark ? 'dark' : 'light');
+          // 瞬间缩回 scaleX(0)：关 transition → 设 transform → 开 transition
+          slats.forEach(function(s) { s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
+          layer.offsetHeight;
+          // 恢复 transition 和 delay（setProperty('transition','none') 覆盖了 delay）
+          slats.forEach(function(s, i) {
+            s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            s.style.transitionDelay = (i * 0.05) + 's';
           });
-        } else {
-          // Switch to light first, then expand light-colored slats over dark
-          slats.forEach(function(s) { s.style.background = '#fafaf8'; });
-          playSlats(true, function() {
-            setDOM('light');
-            slats.forEach(function(s) { s.style.background = '#1c1917'; s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
-            layer.offsetHeight;
-            slats.forEach(function(s) { s.style.transition = ''; });
-          });
-        }
+          busy = false;
+        });
       });
 
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
