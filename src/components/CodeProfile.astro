@@ -75,7 +75,7 @@ try {
   {error ? (
     <p class="code-fallback">个人配置加载失败</p>
   ) : (
-    <div class="code-card" id="code-card">
+    <div class="code-card" id="code-card" data-anim-duration={String(siteConfig.codeProfile.animationDuration)}>
       <Fragment set:html={highlighted} />
     </div>
   )}
@@ -176,10 +176,15 @@ try {
       }
     });
 
+    // Duration from config (ms) — total animation time across all lines
+    var duration = parseInt(card.getAttribute('data-anim-duration')) || 1200;
+    var totalLines = commentLines.length + codeLines.length;
+    var gap = totalLines > 0 ? duration / totalLines : 100;
+
     // Random pick: B (slide) or D (ink bleed)
     var useSlide = Math.random() > 0.5;
 
-    function animateLine(line, delay, cb) {
+    function animateLine(line, delay) {
       if (useSlide) {
         line.style.transform = 'translateX(-16px)';
         line.style.transition = 'opacity 0.35s ease, transform 0.45s ease';
@@ -191,22 +196,15 @@ try {
         line.style.opacity = '1';
         if (useSlide) line.style.transform = 'translateX(0)';
         else line.style.filter = 'blur(0)';
-        if (cb) cb();
       }, delay);
     }
 
-    // Animate comments, then code
-    var commentDelay = useSlide ? 280 : 220;
-    var codeDelay = useSlide ? 200 : 150;
-
+    // Animate all lines with even spacing
     commentLines.forEach(function(line, i) {
-      animateLine(line, 200 + i * commentDelay);
+      animateLine(line, i * gap);
     });
-
-    // After last comment, start code lines
-    var codeStart = 200 + commentLines.length * commentDelay + 100;
     codeLines.forEach(function(line, i) {
-      animateLine(line, codeStart + i * codeDelay);
+      animateLine(line, (commentLines.length + i) * gap);
     });
   })();
 </script>
