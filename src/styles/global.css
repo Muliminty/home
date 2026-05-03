@@ -46,23 +46,45 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
+  --dot-x: 0px;
+  --dot-y: 0px;
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  cursor: none;
 }
 
 /* Dot pattern background overlay */
 body::before {
   content: '';
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  position: fixed; inset: -10px; z-index: -1; pointer-events: none;
   --dot-size: 1px;
   --dot-spacing: 18px;
   --dot-color: rgba(0,0,0,0.06);
   background-image: radial-gradient(circle at center, var(--dot-color) var(--dot-size), transparent var(--dot-size));
   background-size: var(--dot-spacing) var(--dot-spacing);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 10%, black 40%, transparent 70%);
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+  transform: translate(var(--dot-x, 0), var(--dot-y, 0));
+}
+
+/* Custom cursor */
+.cursor-dot {
+  position: fixed; z-index: 99999; pointer-events: none;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease;
+  mix-blend-mode: difference;
+}
+.cursor-dot.hovering {
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 2px solid var(--text);
 }
 
 /* Layout utilities */
@@ -91,8 +113,10 @@ body::before {
   margin-bottom: 20px;
 }
 
-a { color: var(--accent); text-decoration: none; }
+a { color: var(--accent); text-decoration: none; cursor: none; }
 a:hover { text-decoration: underline; }
+
+button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: none; }
 
 /* Pill button — for social links */
 .pill-link {
@@ -121,21 +145,15 @@ a:hover { text-decoration: underline; }
    Animations & Transitions
    ============================================ */
 
-/* Content entrance — staggered children */
-.entrance-container > * {
+/* Scroll reveal */
+.reveal {
   opacity: 0;
-  transform: translateY(12px);
-  animation: entrance-in 0.4s ease forwards;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.entrance-container > *:nth-child(1) { animation-delay: 0s; }
-.entrance-container > *:nth-child(2) { animation-delay: 0.05s; }
-.entrance-container > *:nth-child(3) { animation-delay: 0.1s; }
-.entrance-container > *:nth-child(4) { animation-delay: 0.15s; }
-.entrance-container > *:nth-child(5) { animation-delay: 0.2s; }
-.entrance-container > *:nth-child(n+6) { animation-delay: 0.25s; }
-
-@keyframes entrance-in {
-  to { opacity: 1; transform: translateY(0); }
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Fade-in only (for single items) */
@@ -182,14 +200,11 @@ a:hover { text-decoration: underline; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-/* Greeting text entrance */
-.greeting-text {
-  display: inline-block;
-  animation: greeting-in 0.5s ease both;
-}
-@keyframes greeting-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* 3D tilt */
+.card-tilt {
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  perspective: 800px;
 }
 
 /* Skeleton loading (for dynamic content) */
@@ -213,5 +228,7 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 600px) {
   .container { padding: 24px 16px 60px; }
-  body { font-size: 14px; }
+  body { font-size: 14px; cursor: auto; }
+  a, button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: auto; }
+  .cursor-dot { display: none; }
 }

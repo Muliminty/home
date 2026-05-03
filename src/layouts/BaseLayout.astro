@@ -52,6 +52,46 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   <div id="loading-bar"></div>
   <slot />
 
+  <!-- Dot grid parallax -->
+  <script>
+    (function() {
+      var x = 0, y = 0, tx = 0, ty = 0;
+      document.addEventListener('mousemove', function(e) {
+        x = (e.clientX / window.innerWidth - 0.5) * 8;
+        y = (e.clientY / window.innerHeight - 0.5) * 8;
+      });
+      function tick() {
+        tx += (x - tx) * 0.05;
+        ty += (y - ty) * 0.05;
+        var el = document.querySelector('body');
+        if (el) el.style.setProperty('--dot-x', tx + 'px');
+        if (el) el.style.setProperty('--dot-y', ty + 'px');
+        requestAnimationFrame(tick);
+      }
+      tick();
+    })();
+  </script>
+
+  <!-- Custom cursor -->
+  <script>
+    (function() {
+      var dot = document.createElement('div');
+      dot.className = 'cursor-dot';
+      document.body.appendChild(dot);
+      var mx = 0, my = 0;
+      document.addEventListener('mousemove', function(e) {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+      });
+      // Hover detection
+      document.querySelectorAll('a, button, .card-hover, .filter-tab, .pill-link, .heatmap-day').forEach(function(el) {
+        el.addEventListener('mouseenter', function() { dot.classList.add('hovering'); });
+        el.addEventListener('mouseleave', function() { dot.classList.remove('hovering'); });
+      });
+    })();
+  </script>
+
   <script>
     (function() {
       var bar = document.getElementById('loading-bar');
@@ -89,6 +129,47 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         window.navigation.addEventListener('navigatesuccess', finish);
         window.navigation.addEventListener('navigateerror', finish);
       }
+    })();
+  </script>
+
+  <!-- Scroll reveal -->
+  <script>
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var items = entry.target.querySelectorAll(':scope > *');
+            items.forEach(function(item, i) {
+              item.classList.add('reveal');
+              setTimeout(function() {
+                item.classList.add('visible');
+              }, i * 60);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.entrance-container').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- 3D card tilt -->
+  <script>
+    (function() {
+      document.querySelectorAll('.card-tilt').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect();
+          var x = (e.clientX - rect.left) / rect.width - 0.5;
+          var y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = 'perspective(800px) rotateY(' + (x * 6) + 'deg) rotateX(' + (-y * 4) + 'deg)';
+        });
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
+        });
+      });
     })();
   </script>
 </body>
