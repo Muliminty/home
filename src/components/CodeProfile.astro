@@ -75,7 +75,7 @@ try {
   {error ? (
     <p class="code-fallback">个人配置加载失败</p>
   ) : (
-    <div class="code-card">
+    <div class="code-card" id="code-card">
       <Fragment set:html={highlighted} />
     </div>
   )}
@@ -153,3 +153,36 @@ try {
     .code-card :global(pre) { font-size: 12px; }
   }
 </style>
+
+<script>
+  (function() {
+    var card = document.getElementById('code-card');
+    if (!card) return;
+    var lines = card.querySelectorAll('.shiki .line');
+    if (!lines.length) return;
+
+    // Identify comment lines — text content starts with *, /*, or */
+    var commentLines = [];
+    lines.forEach(function(line) {
+      var text = (line.textContent || '').trim();
+      if (text.startsWith('*') || text.startsWith('/*') || text.startsWith('*/')) {
+        commentLines.push(line);
+      }
+    });
+
+    // Hide all comment lines
+    commentLines.forEach(function(l) { l.style.opacity = '0'; });
+
+    // Type out comment lines one by one
+    var index = 0;
+    function revealNext() {
+      if (index >= commentLines.length) return;
+      var line = commentLines[index];
+      line.style.transition = 'opacity 0.3s ease';
+      line.style.opacity = '1';
+      index++;
+      setTimeout(revealNext, 150 + Math.random() * 100);
+    }
+    setTimeout(revealNext, 500);
+  })();
+</script>

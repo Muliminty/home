@@ -27,8 +27,7 @@ const isHome = currentPath === base || currentPath === base.slice(0, -1);
 
 {isHome && (
 <div class="greeting">
-  <span class="greeting-text" id="greeting-text"></span>
-  <span class="greeting-cursor">|</span>
+  <span class="greeting-text">你好，这里是 {siteConfig.title} 的个人站点</span>
 </div>
 )}
 
@@ -65,35 +64,4 @@ const isHome = currentPath === base || currentPath === base.slice(0, -1);
   .nav a:hover, .nav a.active { color: var(--text); border-bottom-color: var(--text-muted); }
   .greeting { margin-bottom: 40px; }
   .greeting-text { font-size: 20px; font-weight: 600; color: var(--text); }
-  @keyframes cursor-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-  .greeting-cursor {
-    color: var(--accent);
-    font-weight: 300;
-    animation: none;
-  }
 </style>
-
-<script>
-  (function() {
-    var el = document.getElementById('greeting-text');
-    if (!el) return;
-    var text = '你好，这里是 Muliminty 的个人站点';
-    var i = 0;
-    var cursor = document.querySelector('.greeting-cursor');
-    function type() {
-      if (i < text.length) {
-        el.textContent += text.charAt(i);
-        i++;
-        setTimeout(type, 80 + Math.random() * 40);
-      } else {
-        if (cursor) {
-          cursor.style.animation = 'cursor-blink 1s step-end infinite';
-        }
-      }
-    }
-    setTimeout(type, 400);
-  })();
-</script>
