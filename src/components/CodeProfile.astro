@@ -96,6 +96,10 @@ try {
     background: transparent !important;
     font-family: var(--font-mono);
   }
+  /* Hide all lines initially — JS controls reveal */
+  .code-card :global(.shiki .line) {
+    opacity: 0;
+  }
 
   /* Shiki CSS variable resolution */
   .code-card :global(pre.shiki),
@@ -161,6 +165,14 @@ try {
     var lines = card.querySelectorAll('.shiki .line');
     if (!lines.length) return;
 
+    // Show non-comment lines immediately
+    lines.forEach(function(line) {
+      var text = (line.textContent || '').trim();
+      if (!text.startsWith('*') && !text.startsWith('/*') && !text.startsWith('*/')) {
+        line.style.opacity = '1';
+      }
+    });
+
     // Identify comment lines
     var commentLines = [];
     lines.forEach(function(line) {
@@ -170,13 +182,13 @@ try {
       }
     });
 
-    // Random pick: B (slide+strip) or D (ink bleed)
+    if (!commentLines.length) return;
+
+    // Random pick: B (slide) or D (ink bleed)
     var useSlide = Math.random() > 0.5;
 
     if (useSlide) {
-      // B: Slide in from left
       commentLines.forEach(function(line, i) {
-        line.style.opacity = '0';
         line.style.transform = 'translateX(-16px)';
         line.style.transition = 'opacity 0.35s ease, transform 0.45s ease';
         setTimeout(function() {
@@ -185,9 +197,7 @@ try {
         }, 200 + i * 280);
       });
     } else {
-      // D: Ink bleed — blur to sharp
       commentLines.forEach(function(line, i) {
-        line.style.opacity = '0';
         line.style.filter = 'blur(3px)';
         line.style.transition = 'opacity 0.5s ease, filter 0.6s ease';
         setTimeout(function() {
