@@ -185,17 +185,17 @@ try {
     var useSlide = Math.random() > 0.5;
 
     function animateLine(line, delay) {
+      line.style.transform = 'translateY(8px)';
+      line.style.transition = 'opacity 0.35s ease, transform 0.45s ease, filter 0.5s ease';
       if (useSlide) {
-        line.style.transform = 'translateX(-16px)';
-        line.style.transition = 'opacity 0.35s ease, transform 0.45s ease';
+        line.style.transform = 'translateX(-14px) translateY(8px)';
       } else {
         line.style.filter = 'blur(3px)';
-        line.style.transition = 'opacity 0.5s ease, filter 0.6s ease';
       }
       setTimeout(function() {
         line.style.opacity = '1';
-        if (useSlide) line.style.transform = 'translateX(0)';
-        else line.style.filter = 'blur(0)';
+        line.style.transform = 'translateX(0) translateY(0)';
+        line.style.filter = 'blur(0)';
       }, delay);
     }
 
