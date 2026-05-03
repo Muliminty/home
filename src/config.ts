@@ -28,6 +28,9 @@ export const siteConfig = {
     language: 'javascript',
     filepath: 'src/content/profile.js',
 
+    /** 代码块动画总时长（毫秒），注释+代码依次动画 */
+    animationDuration: 1200,
+
     /** 技术栈 — name → brand color */
     techs: {
       React: '#61dafb',

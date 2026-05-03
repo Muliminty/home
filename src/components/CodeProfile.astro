@@ -75,7 +75,7 @@ try {
   {error ? (
     <p class="code-fallback">个人配置加载失败</p>
   ) : (
-    <div class="code-card">
+    <div class="code-card" id="code-card" data-anim-duration={String(siteConfig.codeProfile.animationDuration)}>
       <Fragment set:html={highlighted} />
     </div>
   )}
@@ -95,6 +95,10 @@ try {
     font-size: 14px; line-height: 1.9;
     background: transparent !important;
     font-family: var(--font-mono);
+  }
+  /* Hide all lines initially — JS controls reveal */
+  .code-card :global(.shiki .line) {
+    opacity: 0;
   }
 
   /* Shiki CSS variable resolution */
@@ -153,3 +157,54 @@ try {
     .code-card :global(pre) { font-size: 12px; }
   }
 </style>
+
+<script>
+  (function() {
+    var card = document.getElementById('code-card');
+    if (!card) return;
+    var lines = card.querySelectorAll('.shiki .line');
+    if (!lines.length) return;
+
+    // Split lines: comments first, then code
+    var commentLines = [], codeLines = [];
+    lines.forEach(function(line) {
+      var text = (line.textContent || '').trim();
+      if (text.startsWith('*') || text.startsWith('/*') || text.startsWith('*/')) {
+        commentLines.push(line);
+      } else {
+        codeLines.push(line);
+      }
+    });
+
+    // Duration from config (ms) — total animation time across all lines
+    var duration = parseInt(card.getAttribute('data-anim-duration')) || 1200;
+    var totalLines = commentLines.length + codeLines.length;
+    var gap = totalLines > 0 ? duration / totalLines : 100;
+
+    // Random pick: B (slide) or D (ink bleed)
+    var useSlide = Math.random() > 0.5;
+
+    function animateLine(line, delay) {
+      line.style.transform = 'translateY(8px)';
+      line.style.transition = 'opacity 0.35s ease, transform 0.45s ease, filter 0.5s ease';
+      if (useSlide) {
+        line.style.transform = 'translateX(-14px) translateY(8px)';
+      } else {
+        line.style.filter = 'blur(3px)';
+      }
+      setTimeout(function() {
+        line.style.opacity = '1';
+        line.style.transform = 'translateX(0) translateY(0)';
+        line.style.filter = 'blur(0)';
+      }, delay);
+    }
+
+    // Animate all lines with even spacing
+    commentLines.forEach(function(line, i) {
+      animateLine(line, i * gap);
+    });
+    codeLines.forEach(function(line, i) {
+      animateLine(line, (commentLines.length + i) * gap);
+    });
+  })();
+</script>
