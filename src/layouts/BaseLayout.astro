@@ -57,12 +57,12 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     (function() {
       var x = 0, y = 0, tx = 0, ty = 0;
       document.addEventListener('mousemove', function(e) {
-        x = (e.clientX / window.innerWidth - 0.5) * 8;
-        y = (e.clientY / window.innerHeight - 0.5) * 8;
+        x = (e.clientX / window.innerWidth - 0.5) * 24;
+        y = (e.clientY / window.innerHeight - 0.5) * 24;
       });
       function tick() {
-        tx += (x - tx) * 0.05;
-        ty += (y - ty) * 0.05;
+        tx += (x - tx) * 0.08;
+        ty += (y - ty) * 0.08;
         var el = document.querySelector('body');
         if (el) el.style.setProperty('--dot-x', tx + 'px');
         if (el) el.style.setProperty('--dot-y', ty + 'px');
@@ -78,12 +78,26 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       var dot = document.createElement('div');
       dot.className = 'cursor-dot';
       document.body.appendChild(dot);
-      var mx = 0, my = 0;
+
+      var trail = document.createElement('div');
+      trail.className = 'cursor-trail';
+      document.body.appendChild(trail);
+
+      var mx = 0, my = 0, tx = 0, ty = 0;
       document.addEventListener('mousemove', function(e) {
         mx = e.clientX; my = e.clientY;
         dot.style.left = mx + 'px';
         dot.style.top = my + 'px';
       });
+
+      function trailTick() {
+        tx += (mx - tx) * 0.15;
+        ty += (my - ty) * 0.15;
+        trail.style.left = tx + 'px';
+        trail.style.top = ty + 'px';
+        requestAnimationFrame(trailTick);
+      }
+      trailTick();
       // Hover detection
       document.querySelectorAll('a, button, .card-hover, .filter-tab, .pill-link, .heatmap-day').forEach(function(el) {
         el.addEventListener('mouseenter', function() { dot.classList.add('hovering'); });
