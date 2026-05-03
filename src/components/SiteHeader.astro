@@ -8,7 +8,6 @@ const navItems = [
   { href: 'about/', label: '关于', match: currentPath.startsWith(base + 'about') },
 ];
 
-const isHome = currentPath === base || currentPath === base.slice(0, -1);
 ---
 
 <header class="site-header">
@@ -25,11 +24,6 @@ const isHome = currentPath === base || currentPath === base.slice(0, -1);
   </nav>
 </header>
 
-{isHome && (
-<div class="greeting">
-  <span class="greeting-text">你好，这里是 {siteConfig.title} 的个人站点</span>
-</div>
-)}
 
 <style>
   .site-header {
@@ -62,6 +56,4 @@ const isHome = currentPath === base || currentPath === base.slice(0, -1);
     padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.15s;
   }
   .nav a:hover, .nav a.active { color: var(--text); border-bottom-color: var(--text-muted); }
-  .greeting { margin-bottom: 40px; }
-  .greeting-text { font-size: 20px; font-weight: 600; color: var(--text); }
 </style>
