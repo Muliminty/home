@@ -17,8 +17,8 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/home/favicon.svg" />
-  <link rel="icon" type="image/x-icon" href="/home/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/home/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="128x128" href="/home/favicon-128.png" />
   <title>{fullTitle}</title>
   <meta name="description" content={description || '一个前端开发者的公开时间线'} />
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
