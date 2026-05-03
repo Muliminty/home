@@ -65,7 +65,6 @@ body::before {
   --dot-color: rgba(0,0,0,0.09);
   background-image: radial-gradient(circle at center, var(--dot-color) var(--dot-size), transparent var(--dot-size));
   background-size: var(--dot-spacing) var(--dot-spacing);
-  mask-image: radial-gradient(ellipse 90% 70% at 50% 10%, black 55%, transparent 85%);
   will-change: transform;
   transition: transform 0.3s ease-out;
   transform: translate(var(--dot-x, 0), var(--dot-y, 0));
