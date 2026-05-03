@@ -1,0 +1,37 @@
+---
+interface Props {
+  issueNumber: number;
+}
+
+const { issueNumber } = Astro.props;
+---
+
+<div class="giscus" data-issue-number={issueNumber}></div>
+
+<style>
+  .giscus { margin-top: 48px; }
+</style>
+
+<script is:inline>
+  (function() {
+    var container = document.querySelector('.giscus');
+    if (!container) return;
+    var script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'muliminty/home');
+    script.setAttribute('data-repo-id', '841959043');
+    script.setAttribute('data-category', 'General');
+    script.setAttribute('data-category-id', 'DIC_kwDOMi9Gg84C8Quh');
+    script.setAttribute('data-mapping', 'number');
+    script.setAttribute('data-term', container.dataset.issueNumber || '');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    container.appendChild(script);
+  })();
+</script>

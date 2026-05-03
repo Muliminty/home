@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import MomentImages from '../../components/MomentImages.astro';
-import CommentSection from '../../components/CommentSection.astro';
+import GiscusComments from '../../components/GiscusComments.astro';
 import IssueSource from '../../components/IssueSource.astro';
 import { loadAllContent } from '../../lib/content/loadContent';
 import type { MomentUpdate } from '../../lib/content/types';
@@ -37,7 +37,7 @@ if (!moment) return Astro.redirect(base + '404');
     <MomentImages images={moment.images} />
 
     <IssueSource issueUrl={moment.issueUrl} issueNumber={moment.number} />
-    <CommentSection owner="muliminty" repo="home" issueNumber={moment.number} issueUrl={moment.issueUrl} />
+    <GiscusComments issueNumber={moment.number} />
   </div>
 </BaseLayout>
 

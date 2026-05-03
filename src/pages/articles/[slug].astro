@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
-import CommentSection from '../../components/CommentSection.astro';
+import GiscusComments from '../../components/GiscusComments.astro';
 import IssueSource from '../../components/IssueSource.astro';
 import { loadAllContent } from '../../lib/content/loadContent';
 import type { ArticleUpdate } from '../../lib/content/types';
@@ -79,7 +79,7 @@ const cover = article.cover;
       </div>
 
       <IssueSource issueUrl={article.issueUrl} issueNumber={article.number} />
-      <CommentSection owner="muliminty" repo="home" issueNumber={article.number} issueUrl={article.issueUrl} />
+      <GiscusComments issueNumber={article.number} />
     </div>
   </div>
 </BaseLayout>
