@@ -8,7 +8,7 @@ interface Props {
 const { moment } = Astro.props;
 ---
 
-<div class="moment-card card-hover">
+<div class="moment-card card-hover card-tilt">
   <div class="time">{moment.publishedAt.slice(0, 10)}</div>
   <div class="body">{moment.text}</div>
   {moment.images.length > 0 && (

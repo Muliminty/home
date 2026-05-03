@@ -145,21 +145,15 @@ button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: none; }
    Animations & Transitions
    ============================================ */
 
-/* Content entrance — staggered children */
-.entrance-container > * {
+/* Scroll reveal */
+.reveal {
   opacity: 0;
-  transform: translateY(12px);
-  animation: entrance-in 0.4s ease forwards;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.entrance-container > *:nth-child(1) { animation-delay: 0s; }
-.entrance-container > *:nth-child(2) { animation-delay: 0.05s; }
-.entrance-container > *:nth-child(3) { animation-delay: 0.1s; }
-.entrance-container > *:nth-child(4) { animation-delay: 0.15s; }
-.entrance-container > *:nth-child(5) { animation-delay: 0.2s; }
-.entrance-container > *:nth-child(n+6) { animation-delay: 0.25s; }
-
-@keyframes entrance-in {
-  to { opacity: 1; transform: translateY(0); }
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Fade-in only (for single items) */
@@ -206,14 +200,11 @@ button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: none; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-/* Greeting text entrance */
-.greeting-text {
-  display: inline-block;
-  animation: greeting-in 0.5s ease both;
-}
-@keyframes greeting-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* 3D tilt */
+.card-tilt {
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  perspective: 800px;
 }
 
 /* Skeleton loading (for dynamic content) */

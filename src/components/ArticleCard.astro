@@ -11,7 +11,7 @@ interface Props {
 const { article, showPinned = false } = Astro.props;
 ---
 
-<article class="article-card card-hover" class:list={{ pinned: showPinned && article.pinned }}>
+<article class="article-card card-hover card-tilt" class:list={{ pinned: showPinned && article.pinned }}>
   <div class="time">{article.publishedAt.slice(0, 10)}</div>
   <h3><a href={`${base}articles/${article.slug}`}>{article.title}</a></h3>
   <p class="desc">{article.description}</p>

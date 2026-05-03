@@ -131,5 +131,46 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       }
     })();
   </script>
+
+  <!-- Scroll reveal -->
+  <script>
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var items = entry.target.querySelectorAll(':scope > *');
+            items.forEach(function(item, i) {
+              item.classList.add('reveal');
+              setTimeout(function() {
+                item.classList.add('visible');
+              }, i * 60);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.entrance-container').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- 3D card tilt -->
+  <script>
+    (function() {
+      document.querySelectorAll('.card-tilt').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+          var rect = card.getBoundingClientRect();
+          var x = (e.clientX - rect.left) / rect.width - 0.5;
+          var y = (e.clientY - rect.top) / rect.height - 0.5;
+          card.style.transform = 'perspective(800px) rotateY(' + (x * 6) + 'deg) rotateX(' + (-y * 4) + 'deg)';
+        });
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

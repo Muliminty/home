@@ -123,16 +123,32 @@ if (allWeeks.length > 0) {
         </div>
       </div>
     )}
+    <div class="heatmap-shimmer"></div>
   </div>
 </section>
 
 <style>
   .heatmap-section { margin-bottom: 48px; }
   .heatmap-container {
+    position: relative;
+    overflow: hidden;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 16px;
+  }
+  .heatmap-shimmer {
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    pointer-events: none;
+    animation: shimmer-sweep 1.2s ease-out 0.3s forwards;
+  }
+  @keyframes shimmer-sweep {
+    0% { left: -100%; }
+    80% { left: 100%; }
+    100% { left: 100%; }
   }
 
   /* Month labels — same column count as grid */
