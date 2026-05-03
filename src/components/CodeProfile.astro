@@ -1,0 +1,155 @@
+---
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { createHighlighter } from 'shiki';
+import { siteConfig } from '../config';
+
+const { themes, language, filepath, techs, sites, categories } = siteConfig.codeProfile;
+
+let highlighted = '';
+let error = false;
+
+try {
+  const filePath = resolve(process.cwd(), filepath);
+  const code = readFileSync(filePath, 'utf-8');
+
+  const highlighter = await createHighlighter({
+    themes: [themes.light, themes.dark],
+    langs: [language],
+  });
+
+  let html = highlighter.codeToHtml(code, {
+    lang: language,
+    themes: { light: themes.light, dark: themes.dark },
+    defaultColor: false,
+  });
+
+  // Post-process: wrap URLs in clickable <a> tags
+  html = html.replace(
+    /(https?:\/\/[\w./\-_~?#@!$&()*+,;=%]+)/g,
+    '<a href="$1" target="_blank" rel="noopener" class="code-link">$1</a>',
+  );
+
+  // Post-process: site favicons — insert before links matching known domains
+  for (const [name, domain] of Object.entries(sites)) {
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match site key as object property name (e.g., "  github:" or "github:")
+    const keyRegex = new RegExp(`(\\s)(${name})(\\s*[:])`, 'g');
+    html = html.replace(keyRegex, (_m, before, _name, after) => {
+      return `${before}<span class="code-site">${_name} <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=16" class="site-icon" alt="${name}" /></span>${after}`;
+    });
+  }
+
+  // Post-process: logo + colored underline for tech names (only if SVG exists)
+  for (const [name, color] of Object.entries(techs)) {
+    const iconFile = resolve(process.cwd(), 'public/tech-icons', `${name}.svg`);
+    let iconExists = false;
+    try { iconExists = readFileSync(iconFile, 'utf-8').length > 0; } catch {}
+
+    if (!iconExists) continue;
+
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(?<![\\w>])(${escaped})(?![\\w<])`, 'g');
+    const iconPath = `/home/tech-icons/${name}.svg`;
+    html = html.replace(regex, () => {
+      return `<span class="code-tech" style="--tc:${color}"><img src="${iconPath}" class="tech-logo" alt="${name}" />${name}</span>`;
+    });
+  }
+
+  // Post-process: bold category labels inside comment lines
+  for (const label of categories) {
+    const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const catRegex = new RegExp(`(\\*\\s*)(${escaped})`, 'g');
+    html = html.replace(catRegex, (_m, prefix, text) => {
+      return `${prefix}<span class="code-category">${text}</span>`;
+    });
+  }
+
+  highlighted = html;
+} catch {
+  error = true;
+}
+---
+
+<section class="code-profile-section">
+  {error ? (
+    <p class="code-fallback">个人配置加载失败</p>
+  ) : (
+    <div class="code-card">
+      <Fragment set:html={highlighted} />
+    </div>
+  )}
+</section>
+
+<style>
+  .code-profile-section { margin-bottom: 48px; }
+
+  .code-card {
+    border-left: 2px solid var(--border);
+    padding-left: 16px;
+  }
+
+  .code-card :global(pre) {
+    margin: 0; padding: 0;
+    overflow-x: auto;
+    font-size: 14px; line-height: 1.9;
+    background: transparent !important;
+    font-family: var(--font-mono);
+  }
+
+  /* Shiki CSS variable resolution */
+  .code-card :global(pre.shiki),
+  .code-card :global(.shiki code) { color: var(--shiki-light); }
+  .code-card :global(.shiki span) { color: var(--shiki-light, inherit); }
+  @media (prefers-color-scheme: dark) {
+    .code-card :global(pre.shiki),
+    .code-card :global(.shiki code) { color: var(--shiki-dark); }
+    .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
+  }
+
+  /* Clickable links */
+  .code-card :global(.code-link) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+  }
+  .code-card :global(.code-link:hover) { text-decoration-color: currentColor; }
+
+  /* Site icon + name */
+  .code-card :global(.code-site) {
+    display: inline-flex; align-items: center; gap: 4px; vertical-align: middle;
+  }
+  .code-card :global(.site-icon) {
+    width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0;
+  }
+
+  /* Category label (技术栈 / 正在学习 / ...) */
+  .code-card :global(.code-category) {
+    font-weight: 600;
+  }
+
+  /* Tech name: logo + colored underline */
+  .code-card :global(.code-tech) {
+    display: inline-flex; align-items: center; gap: 5px;
+    vertical-align: middle;
+    border-bottom: 1.5px dashed var(--tc);
+    padding-bottom: 2px;
+    transition: border-color 0.15s;
+  }
+  .code-card :global(.code-tech:hover) {
+    border-bottom-style: solid;
+  }
+  .code-card :global(.tech-logo) {
+    width: 15px; height: 15px;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+
+  .code-fallback { font-size: 12px; color: var(--text-muted); padding: 8px 0; }
+
+  @media (max-width: 600px) {
+    .code-card { padding-left: 12px; }
+    .code-card :global(pre) { font-size: 12px; }
+  }
+</style>

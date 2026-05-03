@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import MomentCard from '../../components/MomentCard.astro';
+import { loadAllContent } from '../../lib/content/loadContent';
+
+const base = import.meta.env.BASE_URL;
+const { items } = await loadAllContent();
+
+// Read filter from query param: ?filter=articles | ?filter=moments
+const filter = Astro.url.searchParams.get('filter') || 'all';
+
+const filtered = filter === 'all'
+  ? items
+  : items.filter(i => i.kind === filter);
+
+const filterTabs = [
+  { key: 'all', label: '全部' },
+  { key: 'article', label: '文章' },
+  { key: 'moment', label: '瞬间' },
+];
+
+// Group by date
+const grouped = new Map<string, typeof filtered>();
+for (const item of filtered) {
+  const date = item.publishedAt.slice(0, 10);
+  if (!grouped.has(date)) grouped.set(date, []);
+  grouped.get(date)!.push(item);
+}
+---
+
+<BaseLayout title="近况">
+  <div class="container entrance-container">
+    <SiteHeader />
+
+    <div class="filter-tabs">
+      {filterTabs.map(tab => (
+        <a
+          href={tab.key === 'all' ? `${base}updates/` : `${base}updates/?filter=${tab.key}`}
+          class:list={['filter-tab', { active: filter === tab.key }]}
+        >
+          {tab.label}
+        </a>
+      ))}
+    </div>
+
+    {Array.from(grouped.entries()).map(([date, dayItems]) => (
+      <div>
+        <div class="day-sep">{date}</div>
+        {dayItems.map(item => (
+          item.kind === 'article'
+            ? <ArticleCard article={item} showPinned />
+            : <MomentCard moment={item} />
+        ))}
+      </div>
+    ))}
+
+    {filtered.length === 0 && (
+      <p class="empty-text">暂无内容</p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .filter-tabs {
+    display: flex; gap: 4px;
+    margin-bottom: 32px;
+  }
+  .filter-tab {
+    font-size: 13px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.15s;
+  }
+  .filter-tab:hover { color: var(--text); border-color: #c4b5b0; text-decoration: none; }
+  .filter-tab.active { color: var(--bg-card); background: var(--text); border-color: var(--text); }
+
+  .day-sep {
+    font-size: 12px; color: var(--text-muted);
+    font-family: var(--font-mono);
+    padding: 16px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px; font-weight: 500;
+  }
+  .day-sep:first-child { padding-top: 0; }
+
+  .empty-text { font-size: 13px; color: var(--text-muted); text-align: center; padding: 40px 0; }
+</style>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C · 日式手帐风</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #fdfaf5;
+    --paper: #fefcf8;
+    --text: #3d3226;
+    --text-muted: #8c8276;
+    --border: #e8dfd2;
+    --accent: #c47b4b;
+    --accent-soft: #f0e4d6;
+    --tag-bg: #f5ede2;
+    --green: #6b8f71;
+  }
+
+  body {
+    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    /* Subtle paper texture via CSS gradient */
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(200,180,150,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(180,160,130,0.04) 0%, transparent 50%);
+  }
+
+  .container { max-width: 640px; margin: 0 auto; padding: 48px 20px 100px; }
+
+  /* Site header */
+  .site-header { text-align: center; margin-bottom: 52px; }
+  .site-title { font-size: 24px; font-weight: 700; color: var(--text); position: relative; display: inline-block; }
+  .site-title::after { content: ''; display: block; width: 24px; height: 2px; background: var(--accent); margin: 10px auto 0; border-radius: 1px; }
+  .site-desc { font-size: 13px; color: var(--text-muted); margin-top: 12px; font-family: 'Noto Sans SC', sans-serif; }
+
+  .nav { display: flex; justify-content: center; gap: 24px; margin-top: 20px; }
+  .nav a { font-size: 13px; color: var(--text-muted); text-decoration: none; font-family: 'Noto Sans SC', sans-serif; padding: 4px 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav a:hover, .nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* Decorative divider */
+  .ornament { text-align: center; margin: 8px 0 40px; color: var(--border); font-size: 12px; letter-spacing: 0.3em; }
+
+  /* Now — hand-drawn feel */
+  .now-section {
+    margin-bottom: 48px;
+    padding: 28px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    position: relative;
+  }
+  .now-section::before { content: '✦'; position: absolute; top: -10px; left: 24px; font-size: 12px; color: var(--accent); background: var(--bg); padding: 0 6px; }
+  .now-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; font-family: 'Noto Sans SC', sans-serif; }
+  .now-item { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; padding-left: 16px; position: relative; font-family: 'Noto Sans SC', sans-serif; }
+  .now-item::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .now-item:last-child { margin-bottom: 0; }
+  .now-item strong { color: var(--text); font-weight: 600; }
+
+  /* Section header */
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 36px;
+    font-family: 'Noto Sans SC', sans-serif;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title::before, .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .timeline { display: flex; flex-direction: column; gap: 36px; }
+
+  /* Article card */
+  .article-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+  }
+  .article-card.pinned { border-left: 3px solid var(--accent); }
+  .article-card .kind-badge { display: inline-block; font-size: 10px; letter-spacing: 0.06em; color: var(--accent); background: var(--accent-soft); padding: 3px 10px; border-radius: 12px; margin-bottom: 14px; font-family: 'Noto Sans SC', sans-serif; }
+  .article-card h2 { font-size: 19px; font-weight: 700; line-height: 1.5; margin-bottom: 8px; }
+  .article-card .desc { font-size: 13px; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+  .article-card .meta { font-size: 11px; color: #bbb; font-family: 'Noto Sans SC', sans-serif; display: flex; gap: 16px; align-items: center; }
+  .article-card .meta .pin-icon { color: var(--accent); }
+  .article-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
+  .article-card .tag { font-size: 11px; color: var(--green); text-decoration: none; font-family: 'Noto Sans SC', sans-serif; }
+
+  /* Moment card */
+  .moment-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .moment-card .moment-text { font-size: 14px; line-height: 1.9; }
+  .moment-card .moment-text .moment-badge { display: inline-block; font-size: 10px; color: var(--green); background: #edf5ee; padding: 2px 8px; border-radius: 10px; margin-bottom: 10px; font-family: 'Noto Sans SC', sans-serif; }
+  .moment-card .moment-images { display: grid; gap: 6px; }
+  .moment-card .moment-images.single { grid-template-columns: 1fr; }
+  .moment-card .moment-images.multi { grid-template-columns: 1fr 1fr; }
+  .moment-card .moment-img { width: 100%; aspect-ratio: 1; background: #f5ede2; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 10px; }
+  .moment-card .moment-meta { font-size: 11px; color: #ccc; margin-top: 8px; font-family: 'Noto Sans SC', sans-serif; text-align: right; }
+
+  /* Footer */
+  .page-footer { text-align: center; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .page-footer .copyright { font-size: 11px; color: var(--text-muted); font-family: 'Noto Sans SC', sans-serif; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="site-header">
+    <h1 class="site-title">漫游笔记</h1>
+    <p class="site-desc">一个前端开发者的公开时间线。写长文，也发瞬间。</p>
+    <nav class="nav">
+      <a href="#" class="active">近况</a>
+      <a href="#">文章</a>
+      <a href="#">瞬间</a>
+      <a href="#">关于</a>
+    </nav>
+  </header>
+
+  <div class="ornament">─ · ─ · ─</div>
+
+  <section class="now-section">
+    <div class="now-label">✦ 此刻</div>
+    <div class="now-item"><strong>在做</strong> &nbsp;用 Astro 重建个人站点，探索 GitHub Issues 作为 CMS 的可能性</div>
+    <div class="now-item"><strong>在读</strong> &nbsp;重读《建筑永恒之道》，思考软体结构与模式语言</div>
+    <div class="now-item"><strong>在听</strong> &nbsp;Nujabes 的 Modal Soul，循环了一整个春天</div>
+  </section>
+
+  <div class="section-title">最近近况</div>
+
+  <div class="timeline">
+
+    <!-- Pinned article -->
+    <article class="article-card pinned">
+      <span class="kind-badge">文章</span>
+      <h2>用 GitHub Issues 搭建个人公开时间线</h2>
+      <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+      <div class="meta"><span class="pin-icon">◆ 置顶</span><span>5月2日</span><span>阅读 6 分钟</span></div>
+      <div class="tags"><a class="tag" href="#">#frontend</a><a class="tag" href="#">#astro</a><a class="tag" href="#">#project</a></div>
+    </article>
+
+    <!-- Moment -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="moment-badge">瞬间</span>
+        <p>今天路过一家很好看的小店。门是蓝色的，门口摆了一排多肉。</p>
+      </div>
+      <div class="moment-images single">
+        <div class="moment-img">📷 小店门面</div>
+      </div>
+      <div class="moment-meta" style="grid-column: 1/-1;">4月28日</div>
+    </div>
+
+    <!-- Multi-image moment -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="moment-badge">瞬间</span>
+        <p>周末骑行，沿途的风很好。</p>
+      </div>
+      <div class="moment-images multi">
+        <div class="moment-img">📷 骑行</div>
+        <div class="moment-img">📷 公路</div>
+        <div class="moment-img">📷 日落</div>
+        <div class="moment-img">📷 营地</div>
+      </div>
+      <div class="moment-meta" style="grid-column: 1/-1;">4月25日</div>
+    </div>
+
+    <!-- Article 2 -->
+    <article class="article-card">
+      <span class="kind-badge">文章</span>
+      <h2>前端性能优化中容易被忽略的三个维度</h2>
+      <p class="desc">不只是 bundle size 和 lazy load。字体加载策略、关键 CSS 内联、以及图片 decoding 属性，是三个投入产出比极高但经常被跳过的优化点。</p>
+      <div class="meta"><span>4月20日</span><span>阅读 8 分钟</span></div>
+      <div class="tags"><a class="tag" href="#">#frontend</a><a class="tag" href="#">#performance</a></div>
+    </article>
+
+  </div>
+
+  <footer class="page-footer">
+    <p class="copyright">© 2026 漫游笔记 · 由 GitHub Issues 驱动</p>
+  </footer>
+</div>
+</body>
+</html>

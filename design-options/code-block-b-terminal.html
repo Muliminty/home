@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:400,500,600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #fafaf8;
+    color: #1c1917;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 24px 28px;
+    line-height: 1.9;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .prompt { color: #059669; }
+  .path   { color: #2563eb; }
+  .cmd    { color: #1c1917; }
+  .key    { color: #78716c; }
+  .val    { color: #1c1917; font-weight: 500; }
+  .comment { color: #a8a29e; }
+  .dim    { color: #d6d3d1; }
+</style>
+</head>
+<body>
+
+<div><span class="prompt">❯</span> <span class="path">~</span> <span class="cmd">cat ~/about.json</span></div>
+<div>{</div>
+<div>  <span class="key">"name"</span>: <span class="val">"Muliminty"</span>,</div>
+<div>  <span class="key">"bio"</span>:  <span class="val">"清醒，热爱，自由"</span>,</div>
+<div>  <span class="key">"github"</span>: <span class="val">"https://github.com/muliminty"</span></div>
+<div>}</div>
+<div></div>
+<div><span class="prompt">❯</span> <span class="path">~</span> <span class="cmd">cat ~/now.json</span></div>
+<div>{</div>
+<div>  <span class="key">"doing"</span>:     <span class="val">"用 Astro 重建个人站点"</span>,</div>
+<div>  <span class="key">"reading"</span>:   <span class="val">"《建筑永恒之道》"</span>,</div>
+<div>  <span class="key">"listening"</span>: <span class="val">"Nujabes · Modal Soul"</span></div>
+<div>}</div>
+<div></div>
+<div><span class="prompt">❯</span> <span class="path">~</span> <span class="dim">█</span></div>
+
+</body>
+</html>

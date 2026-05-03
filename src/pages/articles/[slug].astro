@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import CommentSection from '../../components/CommentSection.astro';
+import IssueSource from '../../components/IssueSource.astro';
+import { loadAllContent } from '../../lib/content/loadContent';
+import type { ArticleUpdate } from '../../lib/content/types';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+
+export async function getStaticPaths() {
+  const { items } = await loadAllContent();
+  return items
+    .filter(i => i.kind === 'article')
+    .map(a => ({ params: { slug: (a as ArticleUpdate).slug } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { slug } = Astro.params;
+const { items } = await loadAllContent();
+const article = items.find(i => i.kind === 'article' && (i as ArticleUpdate).slug === slug) as ArticleUpdate | undefined;
+
+if (!article) {
+  return Astro.redirect(base + '404');
+}
+
+const bodyHtml = await unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkRehype, { allowDangerousHtml: false })
+  .use(rehypePrettyCode, { theme: 'github-light' })
+  .use(rehypeSlug)
+  .use(rehypeStringify)
+  .process(article.body);
+
+// Extract headings from body for TOC
+const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+const headings: Array<{ id: string; text: string; level: number }> = [];
+let match;
+while ((match = headingRegex.exec(article.body)) !== null) {
+  const text = match[2];
+  const id = text.toLowerCase().replace(/[^\w\u4e00-\u9fff]+/g, '-').replace(/-+$/, '');
+  headings.push({ id, text, level: match[1].length });
+}
+
+const description = article.description;
+const cover = article.cover;
+---
+
+<BaseLayout title={article.title} description={description} ogImage={cover}>
+  <div class="container-wide">
+    <TableOfContents headings={headings} />
+    <div class="article-column">
+      <a class="back-link" href={`${base}updates/`}>&larr; 近况</a>
+
+      <header class="article-header">
+        <span class="kind-badge">ARTICLE</span>
+        <h1>{article.title}</h1>
+        <p class="desc">{description}</p>
+        <div class="meta">
+          <span>{article.publishedAt.slice(0, 10)}</span>
+          <span>&middot;</span>
+          <span>阅读 {article.readingTime} 分钟</span>
+        </div>
+        <div class="tags">
+          {article.tags.map(tag => <a href={`${base}tags/${tag}`} class="tag">#{tag}</a>)}
+        </div>
+      </header>
+
+      {cover && <img class="cover" src={cover} alt="" />}
+
+      <div class="article-body">
+        <Fragment set:html={bodyHtml.toString()} />
+      </div>
+
+      <IssueSource issueUrl={article.issueUrl} issueNumber={article.number} />
+      <CommentSection owner="muliminty" repo="home" issueNumber={article.number} issueUrl={article.issueUrl} />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .article-column { min-width: 0; max-width: 600px; }
+  .back-link { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 40px; }
+  .back-link:hover { color: var(--accent); }
+  .article-header { margin-bottom: 32px; }
+  .kind-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 3px; margin-bottom: 16px; }
+  .article-header h1 { font-size: 24px; font-weight: 700; line-height: 1.35; margin-bottom: 12px; }
+  .desc { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 20px; }
+  .meta { font-size: 13px; color: var(--text-muted); display: flex; gap: 16px; align-items: center; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .tag { font-size: 11px; color: var(--accent); text-decoration: none; }
+  .cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 32px; background: #f5f5f7; }
+  .article-body { font-size: 15px; line-height: 1.85; }
+  .article-body :global(h2) { font-size: 20px; font-weight: 700; margin: 48px 0 16px; }
+  .article-body :global(h3) { font-size: 17px; font-weight: 600; margin: 36px 0 12px; }
+  .article-body :global(p) { margin-bottom: 20px; }
+
+  @media (max-width: 600px) {
+    .article-header h1 { font-size: 20px; }
+    .article-body { font-size: 14px; }
+    .cover { border-radius: 4px; }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.toc-list a').forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-80px 0px -70% 0px' });
+  document.querySelectorAll('.article-body h2[id], .article-body h3[id]').forEach(h => observer.observe(h));
+</script>

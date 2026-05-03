@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MomentImages from '../../components/MomentImages.astro';
+import CommentSection from '../../components/CommentSection.astro';
+import IssueSource from '../../components/IssueSource.astro';
+import { loadAllContent } from '../../lib/content/loadContent';
+import type { MomentUpdate } from '../../lib/content/types';
+
+export async function getStaticPaths() {
+  const { items } = await loadAllContent();
+  return items
+    .filter(i => i.kind === 'moment')
+    .map(m => ({ params: { number: String(m.number) } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { number } = Astro.params;
+const { items } = await loadAllContent();
+const moment = items.find(i => i.kind === 'moment' && i.number === Number(number)) as MomentUpdate | undefined;
+
+if (!moment) return Astro.redirect(base + '404');
+---
+
+<BaseLayout title={moment.title || `瞬间 #${moment.number}`}>
+  <div class="container">
+    <a class="back-link" href={`${base}updates/`}>&larr; 近况</a>
+
+    <header class="moment-header">
+      <span class="kind-badge">MOMENT</span>
+      <div class="time">{moment.publishedAt.slice(0, 10)}</div>
+      <p class="body-text">{moment.text}</p>
+      <div class="tags">
+        {moment.tags.map(tag => <a href={`${base}tags/${tag}`} class="tag">#{tag}</a>)}
+      </div>
+    </header>
+
+    <MomentImages images={moment.images} />
+
+    <IssueSource issueUrl={moment.issueUrl} issueNumber={moment.number} />
+    <CommentSection owner="muliminty" repo="home" issueNumber={moment.number} issueUrl={moment.issueUrl} />
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 40px; }
+  .back-link:hover { color: var(--accent); }
+  .moment-header { margin-bottom: 32px; }
+  .kind-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: #3fb950; border: 1px solid #3fb950; padding: 2px 8px; border-radius: 3px; margin-bottom: 12px; }
+  .time { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 16px; }
+  .body-text { font-size: 16px; line-height: 1.8; }
+  .tags { display: flex; gap: 6px; margin-top: 14px; }
+  .tag { font-size: 11px; color: var(--accent); text-decoration: none; }
+</style>

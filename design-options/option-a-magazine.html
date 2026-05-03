@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A · 杂志编辑风</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500&display=swap');
+
+  :root {
+    --bg: #fafaf8;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --border: #e8e4dc;
+    --accent: #c44d34;
+    --tag-bg: #f3efe8;
+  }
+
+  body {
+    font-family: 'Noto Serif SC', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 680px; margin: 0 auto; padding: 80px 24px 120px; }
+
+  /* Site header */
+  .site-header {
+    margin-bottom: 72px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-title { font-size: 28px; font-weight: 700; letter-spacing: 0.02em; }
+  .site-desc { font-size: 15px; color: var(--text-muted); margin-top: 12px; font-family: 'Noto Sans SC', sans-serif; }
+
+  /* Nav */
+  .nav { display: flex; gap: 28px; margin-top: 24px; }
+  .nav a { font-size: 14px; color: var(--text-muted); text-decoration: none; font-family: 'Noto Sans SC', sans-serif; transition: color 0.2s; }
+  .nav a:hover, .nav a.active { color: var(--text); }
+
+  /* Now section */
+  .now-section {
+    margin-bottom: 64px;
+    padding: 32px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .now-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-family: 'Noto Sans SC', sans-serif; margin-bottom: 16px; }
+  .now-items { display: grid; gap: 10px; }
+  .now-item { font-size: 14px; color: var(--text-muted); font-family: 'Noto Sans SC', sans-serif; }
+  .now-item strong { color: var(--text); font-weight: 600; }
+
+  /* Timeline */
+  .section-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    font-family: 'Noto Sans SC', sans-serif;
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline { display: flex; flex-direction: column; gap: 48px; }
+
+  /* Article card */
+  .article-card { }
+  .article-card .kind-badge { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 2px; margin-bottom: 16px; font-family: 'Noto Sans SC', sans-serif; }
+  .article-card h2 { font-size: 22px; font-weight: 700; line-height: 1.4; margin-bottom: 8px; }
+  .article-card .desc { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.7; font-family: 'Noto Sans SC', sans-serif; }
+  .article-card .meta { font-size: 12px; color: #999; font-family: 'Noto Sans SC', sans-serif; display: flex; gap: 16px; }
+  .article-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .article-card .tag { font-size: 11px; color: var(--text-muted); background: var(--tag-bg); padding: 2px 8px; border-radius: 2px; text-decoration: none; font-family: 'Noto Sans SC', sans-serif; }
+
+  /* Moment card */
+  .moment-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+  }
+  .moment-card .moment-text { font-size: 14px; line-height: 1.8; }
+  .moment-card .moment-images { display: grid; gap: 8px; }
+  .moment-card .moment-images.single { grid-template-columns: 1fr; }
+  .moment-card .moment-images.multi { grid-template-columns: 1fr 1fr; }
+  .moment-card .moment-img { width: 100%; aspect-ratio: 4/3; background: #e8e4dc; border-radius: 2px; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 11px; }
+  .moment-card .moment-meta { font-size: 11px; color: #bbb; margin-top: 12px; font-family: 'Noto Sans SC', sans-serif; }
+  .moment-card .kind-badge-moment { display: inline-block; font-size: 10px; color: #888; border: 1px solid #ccc; padding: 1px 6px; border-radius: 2px; margin-bottom: 12px; font-family: 'Noto Sans SC', sans-serif; }
+
+  /* Pinned */
+  .pinned-marker { font-size: 10px; color: var(--accent); letter-spacing: 0.06em; margin-right: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="site-header">
+    <h1 class="site-title">漫游笔记</h1>
+    <p class="site-desc">一个前端开发者的公开时间线。写长文，也发瞬间。</p>
+    <nav class="nav">
+      <a href="#" class="active">近况</a>
+      <a href="#">文章</a>
+      <a href="#">瞬间</a>
+      <a href="#">关于</a>
+    </nav>
+  </header>
+
+  <section class="now-section">
+    <div class="now-label">Now</div>
+    <div class="now-items">
+      <div class="now-item"><strong>在做</strong> &nbsp;用 Astro 重建个人站点，探索 GitHub Issues 作为 CMS 的可能性</div>
+      <div class="now-item"><strong>在读</strong> &nbsp;重读《建筑永恒之道》，思考软体结构与模式语言</div>
+      <div class="now-item"><strong>在听</strong> &nbsp;Nujabes 的 Modal Soul，循环了一整个春天</div>
+    </div>
+  </section>
+
+  <div class="section-title">最近近况</div>
+
+  <div class="timeline">
+
+    <!-- Article -->
+    <article class="article-card">
+      <span class="kind-badge">文章</span>
+      <h2>用 GitHub Issues 搭建个人公开时间线</h2>
+      <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。这是我的方案。</p>
+      <div class="meta">
+        <span><span class="pinned-marker">◆</span>5月2日</span>
+        <span>阅读时间 6 分钟</span>
+      </div>
+      <div class="tags"><span class="tag">frontend</span><span class="tag">astro</span><span class="tag">project</span></div>
+    </article>
+
+    <!-- Moment -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="kind-badge-moment">瞬间</span>
+        <p>今天路过一家很好看的小店。门是蓝色的，门口摆了一排多肉。</p>
+        <div class="moment-meta">4月28日</div>
+      </div>
+      <div class="moment-images single">
+        <div class="moment-img">📷 小店门面</div>
+      </div>
+    </div>
+
+    <!-- Moment 2 -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="kind-badge-moment">瞬间</span>
+        <p>周末骑行拍的几张。</p>
+        <div class="moment-meta">4月25日</div>
+      </div>
+      <div class="moment-images multi">
+        <div class="moment-img">📷 骑行 1</div>
+        <div class="moment-img">📷 骑行 2</div>
+        <div class="moment-img">📷 骑行 3</div>
+        <div class="moment-img">📷 骑行 4</div>
+      </div>
+    </div>
+
+    <!-- Article 2 -->
+    <article class="article-card">
+      <span class="kind-badge">文章</span>
+      <h2>前端性能优化中容易被忽略的三个维度</h2>
+      <p class="desc">不只是 bundle size 和 lazy load。字体加载策略、关键 CSS 内联、以及图片 decoding 属性，是三个投入产出比极高但经常被跳过的优化点。</p>
+      <div class="meta"><span>4月20日</span><span>阅读时间 8 分钟</span></div>
+      <div class="tags"><span class="tag">frontend</span><span class="tag">performance</span></div>
+    </article>
+
+  </div>
+</div>
+</body>
+</html>

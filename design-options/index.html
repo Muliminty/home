@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计方案对比 — 个人公开时间线</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; }
+  .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; max-width: 1600px; margin: 0 auto; }
+  .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .card header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+  .card header h2 { font-size: 16px; font-weight: 600; }
+  .card header span { font-size: 12px; color: #999; padding: 2px 8px; background: #f0f0f0; border-radius: 4px; }
+  .card iframe { width: 100%; height: 700px; border: none; }
+  .card:nth-child(1) iframe { height: 750px; }
+  .card:nth-child(2) iframe { height: 750px; }
+  .card:nth-child(3) iframe { height: 750px; }
+  .card:nth-child(4) iframe { height: 750px; }
+
+  @media (max-width: 1000px) { .gallery { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="gallery">
+  <div class="card">
+    <header><h2>A · 杂志编辑风</h2><span>Magazine Editorial</span></header>
+    <iframe src="option-a-magazine.html"></iframe>
+  </div>
+  <div class="card">
+    <header><h2>B · 极简日志风</h2><span>Minimal Feed</span></header>
+    <iframe src="option-b-feed.html"></iframe>
+  </div>
+  <div class="card">
+    <header><h2>C · 日式手帐风</h2><span>Warm Handbook</span></header>
+    <iframe src="option-c-warm.html"></iframe>
+  </div>
+  <div class="card">
+    <header><h2>D · 暗色终端基因</h2><span>Dark Terminal DNA</span></header>
+    <iframe src="option-d-dark.html"></iframe>
+  </div>
+</div>
+</body>
+</html>

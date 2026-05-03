@@ -1,0 +1,23 @@
+.about-page {
+  a {
+    transition: all 0.3s;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 255, 0, 0.2);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 20px 10px !important;
+    
+    h1 {
+      font-size: 28px !important;
+    }
+    
+    p {
+      font-size: 14px !important;
+    }
+  }
+}
+

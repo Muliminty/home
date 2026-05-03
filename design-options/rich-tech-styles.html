@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>渲染方案</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:400,500,600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fafaf8; font-family: 'JetBrains Mono', monospace; padding: 40px 20px; color: #1c1917; }
+  h2 { font-size: 14px; margin: 40px 0 16px; color: #78716c; font-weight: 400; }
+  h2:first-child { margin-top: 0; }
+  .card { max-width: 600px; margin: 0 auto 32px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 24px 28px; }
+  pre { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9; }
+
+  /* ── A: 彩色文字 ── */
+  .tech-text-React { color: #61dafb; font-weight: 500; }
+  .tech-text-Vue { color: #42b883; font-weight: 500; }
+  .tech-text-Astro { color: #ff5d01; font-weight: 500; }
+  .tech-text-TypeScript { color: #3178c6; font-weight: 500; }
+  .tech-text-Node\.js { color: #5fa04e; font-weight: 500; }
+  .tech-text-Tailwind { color: #06b6d4; font-weight: 500; }
+  .tech-text-Vite { color: #646cff; font-weight: 500; }
+  .link-text-github { color: #333; }
+  .link-text-zhihu { color: #0066ff; }
+
+  /* ── B: 彩色徽章 ── */
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; margin: 0 1px; }
+  .badge-React { background: rgba(97,218,251,0.15); color: #0d9ed9; border: 1px solid rgba(97,218,251,0.4); }
+  .badge-Vue { background: rgba(66,184,131,0.12); color: #2d8a5e; border: 1px solid rgba(66,184,131,0.4); }
+  .badge-Astro { background: rgba(255,93,1,0.1); color: #d14d00; border: 1px solid rgba(255,93,1,0.4); }
+  .badge-TypeScript { background: rgba(49,120,198,0.1); color: #1a5a9e; border: 1px solid rgba(49,120,198,0.3); }
+  .badge-Node\.js { background: rgba(95,160,78,0.1); color: #3d6b32; border: 1px solid rgba(95,160,78,0.3); }
+  .badge-Tailwind { background: rgba(6,182,212,0.1); color: #058a9e; border: 1px solid rgba(6,182,212,0.3); }
+  .badge-Vite { background: rgba(100,108,255,0.1); color: #4549d4; border: 1px solid rgba(100,108,255,0.3); }
+  .link-badge-github { background: rgba(0,0,0,0.06); color: #333; border: 1px solid rgba(0,0,0,0.15); }
+  .link-badge-zhihu { background: rgba(0,102,255,0.08); color: #06f; border: 1px solid rgba(0,102,255,0.3); }
+
+  /* ── C: 渐光圆点 + 颜色下划线 ── */
+  .glow-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: middle; box-shadow: 0 0 6px currentColor; }
+  .underline-tech { border-bottom: 2px solid; padding-bottom: 1px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+<h2>A · 彩色文字</h2>
+<pre><span class="comment">// links</span>
+const links = {
+  github: <a class="link-text-github">'https://github.com/muliminty'</a>,
+};
+
+<span class="comment">// stack</span>
+const stack = {
+  languages: [<span class="tech-text-TypeScript">'TypeScript'</span>, <span class="tech-text-React">'JavaScript'</span>],
+  frameworks: [<span class="tech-text-React">'React'</span>, <span class="tech-text-Vue">'Vue'</span>, <span class="tech-text-Astro">'Astro'</span>],
+  runtime: [<span class="tech-text-Node\.js">'Node.js'</span>, <span class="tech-text-React">'Hono'</span>, <span class="tech-text-React">'Express'</span>],
+  styling: [<span class="tech-text-Tailwind">'Tailwind'</span>, <span class="tech-text-React">'CSS Modules'</span>],
+  tools: [<span class="tech-text-Vite">'Vite'</span>, <span class="tech-text-React">'Git'</span>, <span class="tech-text-React">'ESLint'</span>, <span class="tech-text-React">'Prettier'</span>],
+};</pre>
+</div>
+
+<div class="card">
+<h2>B · 彩色微徽章</h2>
+<pre><span class="comment">// links</span>
+const links = {
+  github: <span class="badge link-badge-github">'https://github.com/muliminty'</span>,
+};
+
+<span class="comment">// stack</span>
+const stack = {
+  languages: [<span class="badge badge-TypeScript">TypeScript</span>, <span class="badge badge-React">JavaScript</span>],
+  frameworks: [<span class="badge badge-React">React</span>, <span class="badge badge-Vue">Vue</span>, <span class="badge badge-Astro">Astro</span>],
+  runtime: [<span class="badge badge-Node\.js">Node.js</span>, <span class="badge badge-React">Hono</span>, <span class="badge badge-React">Express</span>],
+  styling: [<span class="badge badge-Tailwind">Tailwind</span>, <span class="badge badge-React">CSS Modules</span>],
+  tools: [<span class="badge badge-Vite">Vite</span>, <span class="badge badge-React">Git</span>, <span class="badge badge-React">ESLint</span>],
+};</pre>
+</div>
+
+<div class="card">
+<h2>C · 渐光圆点 + 颜色下划线</h2>
+<pre><span class="comment">// links</span>
+const links = {
+  github: <span class="underline-tech" style="color:#333;border-color:#333"><span class="glow-dot" style="background:#333"></span>'https://github.com/muliminty'</span>,
+};
+
+<span class="comment">// stack</span>
+const stack = {
+  languages: [<span class="underline-tech" style="color:#3178c6;border-color:#3178c6"><span class="glow-dot" style="background:#3178c6"></span>TypeScript</span>, <span class="underline-tech" style="color:#61dafb;border-color:#61dafb"><span class="glow-dot" style="background:#61dafb"></span>JavaScript</span>],
+  frameworks: [<span class="underline-tech" style="color:#61dafb;border-color:#61dafb"><span class="glow-dot" style="background:#61dafb"></span>React</span>, <span class="underline-tech" style="color:#42b883;border-color:#42b883"><span class="glow-dot" style="background:#42b883"></span>Vue</span>, <span class="underline-tech" style="color:#ff5d01;border-color:#ff5d01"><span class="glow-dot" style="background:#ff5d01"></span>Astro</span>],
+  tools: [<span class="underline-tech" style="color:#646cff;border-color:#646cff"><span class="glow-dot" style="background:#646cff"></span>Vite</span>, <span class="underline-tech" style="color:#f05032;border-color:#f05032"><span class="glow-dot" style="background:#f05032"></span>Git</span>],
+};</pre>
+</div>
+
+</body>
+</html>

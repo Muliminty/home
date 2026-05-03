@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小店 · 瞬间 — 漫游笔记</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:400,500,600&family=JetBrains+Mono:400,500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #fff; --text: #1d1d1f; --text-muted: #86868b; --border: #f0f0f0;
+    --accent: #0071e3; --tag-bg: #f5f5f7; --code-font: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 600px; margin: 0 auto; padding: 48px 16px 80px; }
+
+  .back-link { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 40px; }
+  .back-link:hover { color: var(--accent); }
+
+  /* Moment Header */
+  .moment-header { margin-bottom: 32px; }
+  .moment-header .kind-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: #3fb950; border: 1px solid #3fb950; padding: 2px 8px; border-radius: 3px; margin-bottom: 12px; }
+  .moment-header .time { font-size: 12px; color: var(--text-muted); font-family: var(--code-font); margin-bottom: 16px; }
+  .moment-header .body-text { font-size: 16px; line-height: 1.8; color: var(--text); }
+  .moment-header .tags { display: flex; gap: 6px; margin-top: 14px; }
+  .moment-header .tag { font-size: 11px; color: var(--accent); text-decoration: none; }
+
+  /* Images */
+  .moment-images { margin-bottom: 48px; }
+  .moment-images.grid-single .moment-img { width: 100%; aspect-ratio: 4/3; background: #f5f5f7; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 14px; }
+  .moment-images.grid-multi { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .moment-images.grid-multi .moment-img { width: 100%; aspect-ratio: 1; background: #f5f5f7; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 12px; }
+
+  /* Issue source */
+  .issue-source { margin-top: 32px; padding: 16px 20px; background: #fafafa; border-radius: 8px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+  .issue-source a { color: var(--accent); text-decoration: none; }
+  .issue-source a:hover { text-decoration: underline; }
+
+  /* ═══ Comments ═══ */
+  .comments-section { margin-top: 48px; }
+  .comments-title { font-size: 14px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 8px; }
+  .comments-title .count { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+
+  .comment { margin-bottom: 24px; }
+  .comment-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .comment-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #aaa; }
+  .comment-author { font-size: 13px; font-weight: 600; }
+  .comment-time { font-size: 11px; color: var(--text-muted); }
+  .comment-time a { color: var(--text-muted); text-decoration: none; }
+  .comment-body { margin-left: 42px; font-size: 14px; line-height: 1.7; }
+  .comment-body p { margin-bottom: 12px; }
+  .comment-body p:last-child { margin-bottom: 0; }
+  .comment-body a { color: var(--accent); text-decoration: none; }
+  .comment-border { height: 1px; background: var(--border); margin: 20px 0 20px 42px; }
+
+  .comment-box { margin-top: 32px; margin-left: 42px; }
+  .comment-login-hint { padding: 16px 20px; border: 1px dashed var(--border); border-radius: 8px; text-align: center; font-size: 13px; color: var(--text-muted); }
+  .comment-login-hint a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .comment-login-hint a:hover { text-decoration: underline; }
+
+  .page-footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .page-footer .copy { font-size: 11px; color: var(--text-muted); }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    .comment-body { margin-left: 0; }
+    .comment-border { margin-left: 0; }
+    .comment-box { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="#">← 瞬间</a>
+
+  <header class="moment-header">
+    <span class="kind-badge">MOMENT</span>
+    <div class="time">2026-04-28</div>
+    <p class="body-text">今天路过一家很好看的小店。门是蓝色的，门口摆了一排多肉。🌿</p>
+    <div class="tags"><a class="tag" href="#">#life</a><a class="tag" href="#">#photo</a></div>
+  </header>
+
+  <div class="moment-images grid-single">
+    <div class="moment-img">📷 小店门面</div>
+  </div>
+
+  <div class="issue-source">
+    <span>💡</span>
+    <span>由 GitHub Issue <a href="#">#15</a> 生成</span>
+  </div>
+
+  <!-- ═══ Comments ═══ -->
+  <section class="comments-section">
+    <h3 class="comments-title">评论 <span class="count">1</span></h3>
+
+    <div class="comment">
+      <div class="comment-header">
+        <div class="comment-avatar">B</div>
+        <span class="comment-author">bob-42</span>
+        <span class="comment-time"><a href="#">3 天前</a></span>
+      </div>
+      <div class="comment-body">
+        <p>好喜欢这种随手记录的风格！这家店在哪里？</p>
+      </div>
+    </div>
+
+    <div class="comment-border"></div>
+
+    <div class="comment-box">
+      <div class="comment-login-hint">
+        通过 <a href="#">GitHub</a> 登录后即可评论
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p class="copy">© 2026 漫游笔记 · 由 GitHub Issues 驱动</p>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UpdateItem from '../../components/UpdateItem.astro';
+import { loadAllContent } from '../../lib/content/loadContent';
+
+export async function getStaticPaths() {
+  const { items } = await loadAllContent();
+  const tagSet = new Set<string>();
+  for (const item of items) {
+    for (const tag of item.tags) tagSet.add(tag);
+  }
+  return Array.from(tagSet).map(tag => ({ params: { tag } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { tag } = Astro.params;
+const { items } = await loadAllContent();
+const filtered = items.filter(i => i.tags.includes(tag!));
+---
+
+<BaseLayout title={`#${tag}`}>
+  <div class="container">
+    <a class="back-link" href={`${base}updates/`}>&larr; 近况</a>
+    <div class="section-title">#{tag}</div>
+    {filtered.length === 0 && <p style="font-size:13px;color:var(--text-muted)">暂无相关内容</p>}
+    {filtered.map(item => <UpdateItem item={item} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link { display: inline-block; font-size: 13px; color: var(--text-muted); text-decoration: none; margin-bottom: 40px; }
+  .back-link:hover { color: var(--accent); }
+</style>

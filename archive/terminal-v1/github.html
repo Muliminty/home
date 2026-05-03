@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Terminal | Developer Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#007ACC', // GitHub blue
+            secondary: '#238636', // GitHub green
+            accent: '#58A6FF', // GitHub light blue
+            dark: '#0D1117', // GitHub dark bg
+            'dark-lighter': '#161B22', // GitHub lighter dark
+            'border-gray': '#30363D', // GitHub border gray
+            'text-gray': '#C9D1D9', // GitHub text gray
+            'link-blue': '#0066CC', // GitHub link blue
+          },
+          fontFamily: {
+            code: ['"Fira Code"', 'monospace'],
+            inter: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'typing': 'typing 3.5s steps(40, end)',
+            'cursor': 'blink-caret .75s step-end infinite',
+          },
+          keyframes: {
+            typing: {
+              'from': { width: '0' },
+              'to': { width: '100%' },
+            },
+            blinkCaret: {
+              'from, to': { borderColor: 'transparent' },
+              '50%': { borderColor: '#007ACC' },
+            },
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .github-terminal {
+                background-color: #0D1117;
+                border: 1px solid #30363D;
+                border-radius: 6px;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .github-header {
+                background-color: #161B22;
+                border-bottom: 1px solid #30363D;
+                padding: 8px 16px;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .github-title {
+                font-family: 'Inter', sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+                color: #C9D1D9;
+            }
+            .github-controls {
+                display: flex;
+                gap: 8px;
+            }
+            .github-control {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }
+            .github-control-red {
+                background-color: #FF5F56;
+            }
+            .github-control-yellow {
+                background-color: #FFBD2E;
+            }
+            .github-control-green {
+                background-color: #27C93F;
+            }
+            .github-body {
+                padding: 16px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .github-code-line {
+                display: flex;
+                margin-bottom: 8px;
+                font-family: 'Fira Code', monospace;
+                font-size: 14px;
+                color: #C9D1D9;
+            }
+            .github-prompt {
+                color: #58A6FF;
+                margin-right: 8px;
+            }
+            .github-command {
+                color: #C9D1D9;
+            }
+            .github-output {
+                color: #8B949E;
+                margin-left: 24px;
+                margin-bottom: 8px;
+                white-space: pre-wrap;
+            }
+            .github-link {
+                color: #58A6FF;
+                text-decoration: none;
+            }
+            .github-link:hover {
+                text-decoration: underline;
+            }
+            .github-button {
+                background-color: #238636;
+                color: white;
+                border: 1px solid rgba(240, 246, 252, 0.1);
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-family: 'Inter', sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+            .github-button:hover {
+                background-color: #2EA043;
+            }
+            .github-button:active {
+                background-color: #238636;
+            }
+            .typing-animation {
+                overflow: hidden;
+                white-space: nowrap;
+                margin: 0;
+                letter-spacing: 0.05em;
+                animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+            }
+            .terminal-cursor {
+                border-right: 2px solid #007ACC;
+                animation: blink-caret 0.75s step-end infinite;
+            }
+            .grid-bg {
+                background-size: 20px 20px;
+                background-image: 
+                    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-dark font-code text-text-gray overflow-x-hidden grid-bg">
+  <!-- 页面标题栏 -->
+  <header class="fixed w-full top-0 z-50 bg-dark-lighter/90 backdrop-blur-md border-b border-border-gray">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <i class="fa fa-github text-2xl text-white mr-3"></i>
+        <h1 class="text-xl font-inter font-bold text-white">github-terminal</h1>
+      </div>
+
+      <!-- 导航 -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="#about" class="text-sm hover:text-accent transition-colors">About</a>
+        <a href="#projects" class="text-sm hover:text-accent transition-colors">Projects</a>
+        <a href="#skills" class="text-sm hover:text-accent transition-colors">Skills</a>
+        <a href="#contact" class="text-sm hover:text-accent transition-colors">Contact</a>
+        <a href="https://github.com" target="_blank" class="github-button">
+          <i class="fa fa-github mr-2"></i> GitHub
+        </a>
+      </nav>
+
+      <!-- 移动端菜单按钮 -->
+      <button class="md:hidden text-white text-xl" id="menuBtn">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- 移动端导航菜单 -->
+    <div
+      class="md:hidden bg-dark-lighter border-b border-border-gray absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none"
+      id="mobileMenu">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+        <a href="#about" class="text-sm hover:text-accent transition-colors py-2">About</a>
+        <a href="#projects" class="text-sm hover:text-accent transition-colors py-2">Projects</a>
+        <a href="#skills" class="text-sm hover:text-accent transition-colors py-2">Skills</a>
+        <a href="#contact" class="text-sm hover:text-accent transition-colors py-2">Contact</a>
+        <a href="https://github.com" target="_blank" class="github-button text-center">
+          <i class="fa fa-github mr-2"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-20"></div>
+
+    <div class="container mx-auto px-4 z-10">
+      <div class="max-w-4xl mx-auto">
+        <!-- GitHub风格终端 -->
+        <div class="github-terminal mb-8">
+          <div class="github-header">
+            <div class="github-controls">
+              <div class="github-control github-control-red"></div>
+              <div class="github-control github-control-yellow"></div>
+              <div class="github-control github-control-green"></div>
+            </div>
+            <div class="github-title">vscode ➜ ~/projects</div>
+          </div>
+
+          <div class="github-body">
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">ls</span>
+            </div>
+
+            <div class="github-output">
+              about<br>
+              projects<br>
+              skills<br>
+              contact<br>
+            </div>
+
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">cat about.md</span>
+            </div>
+
+            <div class="github-output typing-animation">
+              # About Me<br>
+              <br>
+              👋 Hello! I'm a full-stack developer passionate about creating efficient, scalable, and user-friendly
+              applications.<br>
+              <br>
+              💻 Tech Stack: JavaScript, TypeScript, React, Node.js, Express, MongoDB, PostgreSQL<br>
+              <br>
+              🚀 Currently working on open-source projects and contributing to the developer community.<br>
+              <br>
+              📫 How to reach me: <a href="mailto:contact@example.com" class="github-link">contact@example.com</a><br>
+            </div>
+
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="terminal-cursor"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="#projects" class="github-button inline-flex items-center">
+            <i class="fa fa-folder-open mr-2"></i> Explore Projects
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于区域 -->
+  <section id="about" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-10"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <div class="github-terminal">
+          <div class="github-header">
+            <div class="github-controls">
+              <div class="github-control github-control-red"></div>
+              <div class="github-control github-control-yellow"></div>
+              <div class="github-control github-control-green"></div>
+            </div>
+            <div class="github-title">vscode ➜ ~/projects/about</div>
+          </div>
+
+          <div class="github-body">
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">head -n 10 README.md</span>
+            </div>
+
+            <div class="github-output">
+              # About Me<br>
+              <br>
+              I'm a passionate developer with over 5 years of experience building web applications.<br>
+              My journey began with front-end development but quickly expanded to full-stack as I discovered<br>
+              the joy of building complete systems from the ground up.<br>
+              <br>
+              ## Skills<br>
+              - Front-end: HTML, CSS, JavaScript, TypeScript, React, Vue<br>
+              - Back-end: Node.js, Express, Django, RESTful APIs<br>
+              - Databases: MongoDB, PostgreSQL, MySQL<br>
+              - Tools: Git, GitHub, VS Code, Docker, CI/CD<br>
+            </div>
+
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">cat stats.json</span>
+            </div>
+
+            <div class="github-output">
+              {<br>
+              &nbsp;&nbsp;"years_of_experience": 5,<br>
+              &nbsp;&nbsp;"projects_completed": 42,<br>
+              &nbsp;&nbsp;"open_source_contributions": 18,<br>
+              &nbsp;&nbsp;"languages": ["JavaScript", "TypeScript", "Python", "HTML", "CSS"],<br>
+              &nbsp;&nbsp;"tools": ["Git", "GitHub", "VS Code", "Docker", "CI/CD"]<br>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目区域 -->
+  <section id="projects" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-10"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-6xl mx-auto">
+        <div class="github-terminal">
+          <div class="github-header">
+            <div class="github-controls">
+              <div class="github-control github-control-red"></div>
+              <div class="github-control github-control-yellow"></div>
+              <div class="github-control github-control-green"></div>
+            </div>
+            <div class="github-title">vscode ➜ ~/projects</div>
+          </div>
+
+          <div class="github-body">
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">ls -la</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+              <!-- 项目卡片 1 -->
+              <div
+                class="bg-dark-lighter border border-border-gray rounded-lg p-4 hover:border-accent transition-colors">
+                <div class="flex items-center mb-3">
+                  <i class="fa fa-github text-accent text-xl mr-2"></i>
+                  <h3 class="font-inter font-semibold text-white">react-dashboard</h3>
+                </div>
+                <p class="text-sm text-text-gray mb-3">A responsive dashboard built with React and TypeScript, featuring
+                  real-time data visualization.</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">React</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">TypeScript</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Chart.js</span>
+                </div>
+                <a href="#" class="text-xs github-link hover:underline">
+                  <i class="fa fa-external-link mr-1"></i> View on GitHub
+                </a>
+              </div>
+
+              <!-- 项目卡片 2 -->
+              <div
+                class="bg-dark-lighter border border-border-gray rounded-lg p-4 hover:border-accent transition-colors">
+                <div class="flex items-center mb-3">
+                  <i class="fa fa-github text-accent text-xl mr-2"></i>
+                  <h3 class="font-inter font-semibold text-white">node-api</h3>
+                </div>
+                <p class="text-sm text-text-gray mb-3">A RESTful API built with Node.js and Express, using MongoDB for
+                  data storage and JWT for authentication.</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Node.js</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Express</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">MongoDB</span>
+                </div>
+                <a href="#" class="text-xs github-link hover:underline">
+                  <i class="fa fa-external-link mr-1"></i> View on GitHub
+                </a>
+              </div>
+
+              <!-- 项目卡片 3 -->
+              <div
+                class="bg-dark-lighter border border-border-gray rounded-lg p-4 hover:border-accent transition-colors">
+                <div class="flex items-center mb-3">
+                  <i class="fa fa-github text-accent text-xl mr-2"></i>
+                  <h3 class="font-inter font-semibold text-white">portfolio-site</h3>
+                </div>
+                <p class="text-sm text-text-gray mb-3">My personal portfolio website built with Next.js and Tailwind
+                  CSS, showcasing my projects and skills.</p>
+                <div class="flex flex-wrap gap-2 mb-3">
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Next.js</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Tailwind CSS</span>
+                  <span class="text-xs bg-primary/20 text-accent px-2 py-1 rounded">Vercel</span>
+                </div>
+                <a href="#" class="text-xs github-link hover:underline">
+                  <i class="fa fa-external-link mr-1"></i> View on GitHub
+                </a>
+              </div>
+            </div>
+
+            <div class="github-code-line mt-6">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">git clone https://github.com/user/react-dashboard.git</span>
+            </div>
+
+            <div class="github-output mt-2">
+              Cloning into 'react-dashboard'...<br>
+              remote: Enumerating objects: 123, done.<br>
+              remote: Counting objects: 100% (123/123), done.<br>
+              remote: Compressing objects: 100% (78/78), done.<br>
+              remote: Total 123 (delta 45), reused 98 (delta 27), pack-reused 0<br>
+              Receiving objects: 100% (123/123), 2.34 MiB | 4.20 MiB/s, done.<br>
+              Resolving deltas: 100% (45/45), done.<br>
+              <br>
+              <span class="text-secondary">Successfully cloned project. Run 'cd react-dashboard && npm install' to get
+                started.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技能区域 -->
+  <section id="skills" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-10"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <div class="github-terminal">
+          <div class="github-header">
+            <div class="github-controls">
+              <div class="github-control github-control-red"></div>
+              <div class="github-control github-control-yellow"></div>
+              <div class="github-control github-control-green"></div>
+            </div>
+            <div class="github-title">vscode ➜ ~/skills</div>
+          </div>
+
+          <div class="github-body">
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">npm list --depth=0</span>
+            </div>
+
+            <div class="github-output">
+              <pre>
+skills@1.0.0 /Users/developer/skills
+├── react@18.2.0
+├── typescript@4.9.5
+├── node@16.17.0
+├── express@4.18.2
+├── mongodb@5.6.0
+├── postgresql@14.5
+├── docker@20.10.17
+├── git@2.37.1
+└── ci/cd@1.0.0
+                            </pre>
+            </div>
+
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">cat expertise.md</span>
+            </div>
+
+            <div class="github-output">
+              # Expertise<br>
+              <br>
+              ## Frontend Development<br>
+              - React.js, Next.js, Vue.js<br>
+              - TypeScript, JavaScript (ES6+)<br>
+              - HTML5, CSS3, Tailwind CSS, SCSS<br>
+              - Responsive Design, Accessibility<br>
+              <br>
+              ## Backend Development<br>
+              - Node.js, Express, Django<br>
+              - RESTful APIs, GraphQL<br>
+              - MongoDB, PostgreSQL, MySQL<br>
+              - Authentication & Authorization<br>
+              <br>
+              ## DevOps & Tools<br>
+              - Git, GitHub, GitLab<br>
+              - CI/CD pipelines (GitHub Actions, GitLab CI)<br>
+              - Docker, Kubernetes<br>
+              - Cloud platforms (AWS, GCP, Heroku)<br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系区域 -->
+  <section id="contact" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-10"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto">
+        <div class="github-terminal">
+          <div class="github-header">
+            <div class="github-controls">
+              <div class="github-control github-control-red"></div>
+              <div class="github-control github-control-yellow"></div>
+              <div class="github-control github-control-green"></div>
+            </div>
+            <div class="github-title">vscode ➜ ~/contact</div>
+          </div>
+
+          <div class="github-body">
+            <div class="github-code-line">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">echo "Send me a message" > contact.txt</span>
+            </div>
+
+            <form class="mt-6 space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-text-gray mb-1">Name:</label>
+                <input type="text" id="name"
+                  class="w-full bg-dark border border-border-gray rounded-md px-3 py-2 text-text-gray focus:outline-none focus:border-accent"
+                  placeholder="Your name">
+              </div>
+
+              <div>
+                <label for="email" class="block text-sm font-medium text-text-gray mb-1">Email:</label>
+                <input type="email" id="email"
+                  class="w-full bg-dark border border-border-gray rounded-md px-3 py-2 text-text-gray focus:outline-none focus:border-accent"
+                  placeholder="Your email">
+              </div>
+
+              <div>
+                <label for="subject" class="block text-sm font-medium text-text-gray mb-1">Subject:</label>
+                <input type="text" id="subject"
+                  class="w-full bg-dark border border-border-gray rounded-md px-3 py-2 text-text-gray focus:outline-none focus:border-accent"
+                  placeholder="Subject">
+              </div>
+
+              <div>
+                <label for="message" class="block text-sm font-medium text-text-gray mb-1">Message:</label>
+                <textarea id="message" rows="4"
+                  class="w-full bg-dark border border-border-gray rounded-md px-3 py-2 text-text-gray focus:outline-none focus:border-accent"
+                  placeholder="Your message"></textarea>
+              </div>
+
+              <button type="submit" class="github-button">
+                <i class="fa fa-paper-plane mr-2"></i> Send Message
+              </button>
+            </form>
+
+            <div class="github-code-line mt-8">
+              <span class="github-prompt">developer@machine:</span>
+              <span class="github-command">cat contact_info.json</span>
+            </div>
+
+            <div class="github-output mt-2">
+              {<br>
+              &nbsp;&nbsp;"email": "contact@example.com",<br>
+              &nbsp;&nbsp;"github": "https://github.com/yourusername",<br>
+              &nbsp;&nbsp;"linkedin": "https://linkedin.com/in/yourusername",<br>
+              &nbsp;&nbsp;"twitter": "https://twitter.com/yourusername"<br>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="py-10 relative overflow-hidden border-t border-border-gray">
+    <div class="absolute inset-0 grid-bg opacity-5"></div>
+
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="https://github.com" target="_blank" class="text-text-gray hover:text-accent transition-colors">
+          <i class="fa fa-github text-2xl"></i>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="text-text-gray hover:text-accent transition-colors">
+          <i class="fa fa-linkedin text-2xl"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" class="text-text-gray hover:text-accent transition-colors">
+          <i class="fa fa-twitter text-2xl"></i>
+        </a>
+        <a href="mailto:contact@example.com" target="_blank" class="text-text-gray hover:text-accent transition-colors">
+          <i class="fa fa-envelope text-2xl"></i>
+        </a>
+      </div>
+
+      <p class="text-sm text-gray-500">
+        <i class="fa fa-code text-accent mr-1"></i> with <i class="fa fa-heart text-red-500"></i> by Developer
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('shadow-md');
+      } else {
+        navbar.classList.remove('shadow-md');
+      }
+    });
+
+    // 移动端菜单
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('opacity-0')) {
+        mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+        mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        menuBtn.innerHTML = '<i class="fa fa-times"></i>';
+      } else {
+        mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+        mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        menuBtn.innerHTML = '<i class="fa fa-bars"></i>';
+      }
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // 关闭移动菜单（如果打开）
+        if (!mobileMenu.classList.contains('opacity-0')) {
+          mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+          mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+          menuBtn.innerHTML = '<i class="fa fa-bars"></i>';
+        }
+
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // 模拟表单提交
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // 创建一个简单的终端输出效果
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'github-output mt-4 bg-dark-lighter p-3 rounded';
+        messageContainer.innerHTML = `
+                    <p>Message sent successfully!</p>
+                    <p class="text-secondary">Thank you for reaching out. I'll get back to you soon.</p>
+                `;
+
+        // 在表单后面插入消息
+        form.parentNode.insertBefore(messageContainer, form.nextSibling);
+
+        // 重置表单
+        form.reset();
+
+        // 3秒后移除消息
+        setTimeout(() => {
+          messageContainer.remove();
+        }, 5000);
+      });
+    }
+
+    // 打字机效果
+    const terminalElements = document.querySelectorAll('.typing-animation');
+    terminalElements.forEach(element => {
+      // 简单的打字机效果实现
+      const text = element.textContent;
+      element.textContent = '';
+
+      let i = 0;
+      const typeWriter = () => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(typeWriter, 50);
+        }
+      }
+
+      // 延迟启动动画
+      setTimeout(typeWriter, 500);
+    });
+  </script>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D · 暗色终端基因</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --text: #c9d1d9;
+    --text-bright: #e6edf3;
+    --text-muted: #8b949e;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-orange: #d2991d;
+    --tag-bg: #1c2533;
+    --code-font: 'JetBrains Mono', 'Noto Sans SC', monospace;
+  }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Scanline effect — subtle terminal vibe */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);
+    pointer-events: none; z-index: 999;
+  }
+
+  .container { max-width: 660px; margin: 0 auto; padding: 60px 20px 100px; position: relative; z-index: 1; }
+
+  /* Site header — terminal prompt style */
+  .site-header { margin-bottom: 52px; }
+  .prompt-line { font-family: var(--code-font); font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+  .prompt-line .prompt { color: var(--accent-green); }
+  .prompt-line .tilde { color: var(--accent); }
+  .site-title { font-size: 26px; font-weight: 600; color: var(--text-bright); margin-top: 4px; font-family: var(--code-font); letter-spacing: -0.02em; }
+  .site-desc { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-family: var(--code-font); }
+  .site-desc .comment { color: #545d68; }
+
+  .nav { display: flex; gap: 20px; margin-top: 20px; }
+  .nav a { font-size: 13px; color: var(--text-muted); text-decoration: none; font-family: var(--code-font); transition: color 0.15s; }
+  .nav a::before { content: '['; color: #545d68; }
+  .nav a::after { content: ']'; color: #545d68; }
+  .nav a:hover, .nav a.active { color: var(--accent); }
+
+  /* Now section */
+  .now-section {
+    margin-bottom: 48px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .now-label { font-family: var(--code-font); font-size: 11px; color: var(--accent); margin-bottom: 14px; }
+  .now-label .arrow { color: var(--accent-green); }
+  .now-item { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; display: flex; gap: 10px; font-family: 'Noto Sans SC', sans-serif; }
+  .now-item:last-child { margin-bottom: 0; }
+  .now-item .key { color: var(--accent-orange); font-family: var(--code-font); font-size: 11px; min-width: 24px; }
+
+  /* Section title */
+  .section-title {
+    font-family: var(--code-font);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .hash { color: #545d68; }
+
+  .timeline { display: flex; flex-direction: column; gap: 32px; }
+
+  /* Article card */
+  .article-card {
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+  .article-card:hover { border-color: #484f58; }
+  .article-card.pinned { border-left: 2px solid var(--accent-orange); }
+  .article-card .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .article-card .kind-badge { font-family: var(--code-font); font-size: 10px; color: var(--accent); border: 1px solid var(--accent); padding: 1px 8px; border-radius: 3px; }
+  .article-card .kind-badge.moment { color: var(--accent-green); border-color: var(--accent-green); }
+  .article-card .date-str { font-family: var(--code-font); font-size: 11px; color: var(--text-muted); }
+  .article-card h2 { font-size: 17px; font-weight: 500; line-height: 1.5; margin-bottom: 6px; color: var(--text-bright); }
+  .article-card .desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+  .article-card .meta { font-family: var(--code-font); font-size: 11px; color: #545d68; display: flex; gap: 16px; }
+  .article-card .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .article-card .tag { font-family: var(--code-font); font-size: 10px; color: var(--accent); background: var(--tag-bg); padding: 2px 8px; border-radius: 3px; text-decoration: none; }
+
+  /* Moment card */
+  .moment-card {
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .moment-card .moment-text { font-size: 14px; line-height: 1.8; }
+  .moment-card .moment-text .moment-badge { font-family: var(--code-font); font-size: 10px; color: var(--accent-green); border: 1px solid var(--accent-green); padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 10px; }
+  .moment-card .moment-images { display: grid; gap: 6px; }
+  .moment-card .moment-images.single { grid-template-columns: 1fr; }
+  .moment-card .moment-images.multi { grid-template-columns: 1fr 1fr; }
+  .moment-card .moment-img { width: 100%; aspect-ratio: 4/3; background: #21262d; border-radius: 4px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: #545d68; font-size: 10px; }
+  .moment-card .moment-time { font-family: var(--code-font); font-size: 11px; color: #545d68; }
+
+  /* Status bar at bottom */
+  .status-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 6px 16px;
+    font-family: var(--code-font); font-size: 10px; color: var(--text-muted);
+    display: flex; justify-content: space-between;
+    z-index: 1000;
+  }
+  .status-bar .left { display: flex; gap: 16px; }
+  .status-bar .blink { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="site-header">
+    <div class="prompt-line"><span class="prompt">❯</span> <span class="tilde">~</span> cat /home/漫游笔记/README.md</div>
+    <h1 class="site-title">漫游笔记</h1>
+    <p class="site-desc"><span class="comment">//</span> 一个前端开发者的公开时间线。写长文，也发瞬间。</p>
+    <nav class="nav">
+      <a href="#" class="active">updates</a>
+      <a href="#">articles</a>
+      <a href="#">moments</a>
+      <a href="#">about</a>
+    </nav>
+  </header>
+
+  <section class="now-section">
+    <div class="now-label"><span class="arrow">→</span> now.json</div>
+    <div class="now-item"><span class="key">doing:</span>用 Astro 重建个人站点，探索 GitHub Issues 作为 CMS 的可能性</div>
+    <div class="now-item"><span class="key">reading:</span>重读《建筑永恒之道》，思考软体结构与模式语言</div>
+    <div class="now-item"><span class="key">listening:</span>Nujabes · Modal Soul，循环了一整个春天</div>
+  </section>
+
+  <div class="section-title"><span class="hash">##</span> 最近近况</div>
+
+  <div class="timeline">
+
+    <!-- Pinned article -->
+    <article class="article-card pinned">
+      <div class="card-header">
+        <span class="kind-badge">article</span>
+        <span class="date-str">2026-05-02</span>
+      </div>
+      <h2>用 GitHub Issues 搭建个人公开时间线</h2>
+      <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+      <div class="meta"><span>◆ pinned</span><span>6 min read</span></div>
+      <div class="tags"><a class="tag" href="#">frontend</a><a class="tag" href="#">astro</a><a class="tag" href="#">project</a></div>
+    </article>
+
+    <!-- Moment -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="moment-badge">moment</span>
+        <p>今天路过一家很好看的小店。门是蓝色的，门口摆了一排多肉。</p>
+        <div class="moment-time" style="margin-top: 10px;">2026-04-28</div>
+      </div>
+      <div class="moment-images single">
+        <div class="moment-img">📷 小店门面</div>
+      </div>
+    </div>
+
+    <!-- Multi-image moment -->
+    <div class="moment-card">
+      <div class="moment-text">
+        <span class="moment-badge">moment</span>
+        <p>周末骑行，沿途的风很好。</p>
+        <div class="moment-time" style="margin-top: 10px;">2026-04-25</div>
+      </div>
+      <div class="moment-images multi">
+        <div class="moment-img">📷 IMG_4201</div>
+        <div class="moment-img">📷 IMG_4202</div>
+        <div class="moment-img">📷 IMG_4203</div>
+        <div class="moment-img">📷 IMG_4204</div>
+      </div>
+    </div>
+
+    <!-- Article 2 -->
+    <article class="article-card">
+      <div class="card-header">
+        <span class="kind-badge">article</span>
+        <span class="date-str">2026-04-20</span>
+      </div>
+      <h2>前端性能优化中容易被忽略的三个维度</h2>
+      <p class="desc">不只是 bundle size 和 lazy load。字体加载策略、关键 CSS 内联、以及图片 decoding 属性。</p>
+      <div class="meta"><span>8 min read</span></div>
+      <div class="tags"><a class="tag" href="#">frontend</a><a class="tag" href="#">performance</a></div>
+    </article>
+
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="left">
+    <span>main</span>
+    <span>5 articles</span>
+    <span>12 moments</span>
+  </div>
+  <span>build: 2026-05-03 <span class="blink">█</span></span>
+</div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { siteConfig } from '../../config';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="关于">
+  <div class="container">
+    <SiteHeader />
+
+    <section class="about-section">
+      <div class="section-title">关于我</div>
+      <p class="about-text">
+        一个前端开发者，喜欢简洁克制的设计，也追求扎实的工程实现。
+      </p>
+      <p class="about-text">
+        这个站点是个人公开时间线——用 GitHub Issues 写作，Astro 生成静态页面，GitHub Pages 部署。
+        写长文也发瞬间，记录技术、阅读和生活。
+      </p>
+    </section>
+
+    <section class="tech-section">
+      <div class="section-title">技术栈</div>
+      <div class="tech-list">
+        <span class="tech-tag">Astro</span>
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">React</span>
+        <span class="tech-tag">GitHub Issues</span>
+        <span class="tech-tag">GitHub Actions</span>
+        <span class="tech-tag">GitHub Pages</span>
+      </div>
+    </section>
+
+    <section class="social-section">
+      <div class="section-title">找到我</div>
+      <div class="social-links">
+        <a href={siteConfig.github} target="_blank" class="pill-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href={`mailto:${siteConfig.email}`} class="pill-link">Email</a>
+        <a href={`${base}rss.xml`} class="pill-link">RSS</a>
+      </div>
+    </section>
+  </div>
+
+  <footer class="page-footer">
+    <div class="container">
+      <p class="copy">&copy; {new Date().getFullYear()} {siteConfig.title} &middot; 由 GitHub Issues 驱动</p>
+    </div>
+  </footer>
+</BaseLayout>
+
+<style>
+  .about-section { margin-bottom: 40px; }
+  .about-text { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 12px; }
+
+  .tech-section { margin-bottom: 40px; }
+  .tech-list { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tech-tag {
+    font-size: 12px; padding: 3px 10px;
+    border-radius: 4px; background: var(--tag-bg);
+    color: var(--text-muted);
+  }
+
+  .social-section { margin-bottom: 40px; }
+  .social-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .page-footer { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--border); }
+  .copy { font-size: 11px; color: var(--text-muted); }
+</style>
