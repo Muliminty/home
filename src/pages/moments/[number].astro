@@ -37,7 +37,7 @@ if (!moment) return Astro.redirect(base + '404');
     <MomentImages images={moment.images} />
 
     <IssueSource issueUrl={moment.issueUrl} issueNumber={moment.number} />
-    <GiscusComments issueNumber={moment.number} />
+    <GiscusComments />
   </div>
 </BaseLayout>
 

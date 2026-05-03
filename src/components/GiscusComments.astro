@@ -1,12 +1,4 @@
----
-interface Props {
-  issueNumber: number;
-}
-
-const { issueNumber } = Astro.props;
----
-
-<div class="giscus" data-issue-number={issueNumber}></div>
+<div class="giscus"></div>
 
 <style>
   .giscus { margin-top: 48px; }
@@ -22,8 +14,7 @@ const { issueNumber } = Astro.props;
     script.setAttribute('data-repo-id', '841959043');
     script.setAttribute('data-category', 'General');
     script.setAttribute('data-category-id', 'DIC_kwDOMi9Gg84C8Quh');
-    script.setAttribute('data-mapping', 'number');
-    script.setAttribute('data-term', container.dataset.issueNumber || '');
+    script.setAttribute('data-mapping', 'pathname');
     script.setAttribute('data-strict', '0');
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
