@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:400,500,600&family=JetBrains+Mono:400,500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 
 :root {
-  /* Color — warm stone palette */
-  --bg: #fafaf8;
-  --bg-card: #fff;
-  --text: #1c1917;
-  --text-muted: #78716c;
-  --text-secondary: #57534e;
-  --border: #e7e5e4;
-  --accent: #2563eb;
-  --tag-bg: #f5f5f4;
+  /* Color — warm stone dark palette (夜间模式为默认) */
+  --bg: #1c1917;
+  --bg-card: #292524;
+  --text: #e7e5e4;
+  --text-muted: #a8a29e;
+  --text-secondary: #d6d3d1;
+  --border: #44403c;
+  --accent: #60a5fa;
+  --tag-bg: #292524;
 
   /* Typography */
   --font-sans: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
@@ -25,24 +25,28 @@
   --space-3xl: 64px;
 }
 
-/* Dark mode — system preference */
-@media (prefers-color-scheme: dark) {
+body::before {
+  --dot-color: rgba(255,255,255,0.04);
+}
+
+/* Light mode — system preference */
+@media (prefers-color-scheme: light) {
   :root {
-    --bg: #1c1917;
-    --bg-card: #292524;
-    --text: #e7e5e4;
-    --text-muted: #a8a29e;
-    --text-secondary: #d6d3d1;
-    --border: #44403c;
-    --accent: #60a5fa;
-    --tag-bg: #292524;
+    --bg: #fafaf8;
+    --bg-card: #fff;
+    --text: #1c1917;
+    --text-muted: #78716c;
+    --text-secondary: #57534e;
+    --border: #e7e5e4;
+    --accent: #2563eb;
+    --tag-bg: #f5f5f4;
   }
   body::before {
-    --dot-color: rgba(255,255,255,0.04);
+    --dot-color: rgba(0,0,0,0.09);
   }
 }
 
-/* Dark mode — user override (higher specificity than :root in media query) */
+/* Dark mode — user override */
 html[data-theme="dark"] {
   --bg: #1c1917;
   --bg-card: #292524;
@@ -57,7 +61,7 @@ html[data-theme="dark"] body::before {
   --dot-color: rgba(255,255,255,0.04);
 }
 
-/* Light mode — user override (needed when system prefers dark) */
+/* Light mode — user override */
 html[data-theme="light"] {
   --bg: #fafaf8;
   --bg-card: #fff;

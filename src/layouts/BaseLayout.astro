@@ -261,7 +261,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       function resolveTheme() {
         var stored = localStorage.getItem(KEY);
         if (stored === 'dark' || stored === 'light') return stored;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return 'dark';
       }
 
       function setDOM(theme) {
