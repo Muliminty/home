@@ -1,0 +1,14 @@
+<script>
+  import { createLightbox } from '../lib/lightbox.js';
+
+  const imgs = document.querySelectorAll('.article-body img:not(.cover)');
+  if (imgs.length) {
+    const images = Array.from(imgs).map(img => ({
+      src: img.src,
+      alt: img.alt || '',
+    }));
+
+    const lb = createLightbox(images);
+    lb.bindToImages('.article-body img:not(.cover)');
+  }
+</script>

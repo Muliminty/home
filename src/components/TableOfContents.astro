@@ -15,29 +15,43 @@ const { headings } = Astro.props;
 {headings.length > 0 && (
   <aside class="toc-sidebar">
     <div class="toc-label">目录</div>
-    <ul class="toc-list">
-      {headings.map(h => (
-        <li class:list={[`toc-h${h.level}`]}>
-          <a href={`#${h.id}`}>{h.text}</a>
-        </li>
-      ))}
-    </ul>
+    <nav id="toc-nav">
+      <ul class="toc-list">
+        {headings.map(h => (
+          <li class:list={[`toc-h${h.level}`]}>
+            <a href={`#${h.id}`}>{h.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </aside>
 )}
 
 <style>
   .toc-sidebar { position: sticky; top: 48px; }
+  #toc-nav { position: relative; }
   .toc-label { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; }
   .toc-list { list-style: none; }
   .toc-list li { margin-bottom: 6px; }
-  .toc-list a { font-size: 12px; color: var(--text-muted); text-decoration: none; line-height: 1.5; transition: color 0.15s; display: block; padding: 2px 0; }
+  .toc-list a { font-size: 12px; color: var(--text-muted); text-decoration: none; line-height: 1.5; transition: color 0.2s; display: block; padding: 2px 0; }
   .toc-list a:hover, .toc-list a.active { color: var(--accent); }
   .toc-h3 a { padding-left: 14px; font-size: 11px; }
+
+  /* Pill indicator: 真实 DOM 元素，JS 驱动定位 */
+  .toc-pill {
+    position: absolute; left: -10px;
+    width: 3px; height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: top 0.2s ease;
+    pointer-events: none;
+  }
 
   @media (max-width: 960px) {
     .toc-sidebar { position: static; margin-bottom: 32px; }
     .toc-list { display: flex; flex-wrap: wrap; gap: 4px 16px; }
     .toc-list li { margin-bottom: 0; }
     .toc-h3 { display: none; }
+    .toc-pill { display: none; }
   }
 </style>

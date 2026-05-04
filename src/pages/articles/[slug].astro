@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
 import IssueSource from '../../components/IssueSource.astro';
+import ArticleLightbox from '../../components/ArticleLightbox.astro';
 import { loadAllContent } from '../../lib/content/loadContent';
 import type { ArticleUpdate } from '../../lib/content/types';
 import { unified } from 'unified';
@@ -79,6 +80,7 @@ const cover = article.cover;
       </div>
 
       <IssueSource issueUrl={article.issueUrl} issueNumber={article.number} />
+      <ArticleLightbox />
       <GiscusComments />
     </div>
   </div>
@@ -109,14 +111,78 @@ const cover = article.cover;
 </style>
 
 <script>
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.toc-list a').forEach(l => l.classList.remove('active'));
-        const link = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
-        if (link) link.classList.add('active');
+  // TOC 滚动联动：基于滚动位置找"当前章节"（最近经过的标题）
+  const tocLinks = document.querySelectorAll('.toc-list a');
+  const headings = document.querySelectorAll('.article-body h2[id], .article-body h3[id]');
+  if (tocLinks.length && headings.length) {
+    const THRESHOLD = 120; // 固定 header 高度 + 一点余量
+    let pill = null;
+    let userScrolling = false;
+    let userScrollTimer = 0;
+
+    // Pill 指示器仅在桌面端创建
+    if (window.matchMedia('(min-width: 961px)').matches) {
+      const nav = document.getElementById('toc-nav');
+      if (nav) {
+        pill = document.createElement('div');
+        pill.className = 'toc-pill';
+        nav.appendChild(pill);
       }
+    }
+
+    // 点击 TOC 链接时临时禁用自动跟踪
+    tocLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        userScrolling = true;
+        clearTimeout(userScrollTimer);
+        userScrollTimer = setTimeout(() => { userScrolling = false; }, 2000);
+      });
     });
-  }, { rootMargin: '-80px 0px -70% 0px' });
-  document.querySelectorAll('.article-body h2[id], .article-body h3[id]').forEach(h => observer.observe(h));
+
+    function update() {
+      // 找最近经过 threshold 的标题（倒序遍历）
+      let active = null;
+      for (let i = headings.length - 1; i >= 0; i--) {
+        if (headings[i].getBoundingClientRect().top <= THRESHOLD) {
+          active = headings[i];
+          break;
+        }
+      }
+      // 清除所有高亮
+      tocLinks.forEach(l => l.classList.remove('active'));
+      // 高亮当前章节
+      if (active) {
+        const link = document.querySelector(`.toc-list a[href="#${active.id}"]`);
+        if (link) {
+          link.classList.add('active');
+          // Pill 定位
+          if (pill && !userScrolling) {
+            const linkRect = link.getBoundingClientRect();
+            const navRect = document.getElementById('toc-nav').getBoundingClientRect();
+            pill.style.top = (linkRect.top - navRect.top + linkRect.height / 2 - 9) + 'px';
+          }
+          // TOC 容器自动滚动跟随（仅在非用户点击时）
+          if (!userScrolling) {
+            const nav = document.getElementById('toc-nav');
+            const linkTop = link.getBoundingClientRect().top - nav.getBoundingClientRect().top;
+            if (linkTop < 0 || linkTop > nav.clientHeight - 30) {
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+          }
+        }
+      }
+    }
+
+    let rafPending = false;
+    window.addEventListener('scroll', () => {
+      if (!rafPending) {
+        requestAnimationFrame(() => {
+          update();
+          rafPending = false;
+        });
+        rafPending = true;
+      }
+    }, { passive: true });
+    update();
+  }
 </script>

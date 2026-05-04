@@ -107,87 +107,18 @@ const imagesJson = JSON.stringify(images);
 </style>
 
 <script>
-  (function() {
-    var container = document.querySelector('.moment-images');
-    if (!container) return;
-    var raw = container.getAttribute('data-moment-images');
-    if (!raw) return;
-    var images = JSON.parse(raw);
-    if (!images.length) return;
-
-    // Build lightbox DOM once (shared singleton)
-    var lb = document.querySelector('.moment-lightbox');
-    if (!lb) {
-      lb = document.createElement('div');
-      lb.className = 'moment-lightbox';
-      lb.innerHTML =
-        '<button class="lb-close" aria-label="关闭">&times;</button>' +
-        '<button class="lb-nav lb-prev" aria-label="上一张">&lsaquo;</button>' +
-        '<button class="lb-nav lb-next" aria-label="下一张">&rsaquo;</button>' +
-        '<div class="lb-img-wrap"><img class="lb-img" src="" alt="" /></div>' +
-        '<span class="lb-counter"></span>';
-      document.body.appendChild(lb);
+  import { createLightbox } from '../lib/lightbox.js';
+  const container = document.querySelector('.moment-images');
+  if (container) {
+    const raw = container.getAttribute('data-moment-images');
+    if (raw) {
+      try {
+        const images = JSON.parse(raw);
+        if (images.length) {
+          const lb = createLightbox(images);
+          lb.bindToImages('.moment-images .moment-img');
+        }
+      } catch (_) {}
     }
-
-    var imgEl = lb.querySelector('.lb-img');
-    var closeBtn = lb.querySelector('.lb-close');
-    var prevBtn = lb.querySelector('.lb-prev');
-    var nextBtn = lb.querySelector('.lb-next');
-    var counter = lb.querySelector('.lb-counter');
-    var cursorDot = null;
-    var cursorTrail = null;
-    var currentIdx = 0;
-
-    function show(idx) {
-      currentIdx = idx;
-      var img = images[idx];
-      if (!img) return;
-      imgEl.src = img.src;
-      imgEl.alt = img.alt;
-      lb.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      cursorDot = document.querySelector('.cursor-dot');
-      cursorTrail = document.querySelector('.cursor-trail');
-      if (cursorDot) cursorDot.style.display = 'none';
-      if (cursorTrail) cursorTrail.style.display = 'none';
-      updateNav();
-    }
-
-    function hide() {
-      lb.classList.remove('open');
-      document.body.style.overflow = '';
-      if (cursorDot) cursorDot.style.display = '';
-      if (cursorTrail) cursorTrail.style.display = '';
-    }
-
-    function nav(delta) {
-      var next = currentIdx + delta;
-      if (next >= 0 && next < images.length) show(next);
-    }
-
-    function updateNav() {
-      prevBtn.classList.toggle('hidden', currentIdx === 0);
-      nextBtn.classList.toggle('hidden', currentIdx === images.length - 1);
-      counter.textContent = images.length > 1 ? (currentIdx + 1) + ' / ' + images.length : '';
-    }
-
-    closeBtn.addEventListener('click', hide);
-    prevBtn.addEventListener('click', function() { nav(-1); });
-    nextBtn.addEventListener('click', function() { nav(1); });
-    lb.addEventListener('click', function(e) {
-      if (e.target === lb) hide();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape') hide();
-      if (e.key === 'ArrowLeft') nav(-1);
-      if (e.key === 'ArrowRight') nav(1);
-    });
-
-    // Attach click handlers to moment images
-    document.querySelectorAll('.moment-images .moment-img').forEach(function(el, i) {
-      el.addEventListener('click', function() { show(i); });
-    });
-  })();
+  }
 </script>
