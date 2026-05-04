@@ -27,3 +27,4 @@ dist-ssr
 *.sw?
 .claude/settings.local.json
 .gstack/
+.claude/scheduled_tasks.json
