@@ -95,6 +95,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   <!-- Dot grid parallax -->
   <script>
     (function() {
+      if (window.matchMedia('(max-width: 600px)').matches) return;
       var x = 0, y = 0, tx = 0, ty = 0;
       document.addEventListener('mousemove', function(e) {
         x = (e.clientX / window.innerWidth - 0.5) * 24;
@@ -115,6 +116,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   <!-- Custom cursor -->
   <script>
     (function() {
+      if (window.matchMedia('(max-width: 600px)').matches) return;
       var dot = document.createElement('div');
       dot.className = 'cursor-dot';
       document.body.appendChild(dot);
