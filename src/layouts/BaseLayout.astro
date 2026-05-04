@@ -56,11 +56,13 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   .curtain-layer {
     position: fixed; inset: 0; z-index: 9998; pointer-events: none;
     display: flex; flex-direction: column;
+    /* mix-blend-mode 放在 layer 上，因为 slat 的 transform 会创建独立 stacking context，
+       导致 slat 上的 difference 无法穿透到 body 内容层 */
+    mix-blend-mode: difference;
   }
   .curtain-slat {
     flex: 1;
     background: #fff;
-    mix-blend-mode: difference;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -250,9 +252,11 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         var goingDark = resolveTheme() === 'light';
         busy = true;
 
-        // mix-blend-mode: difference + 白色条纹 → 两个方向共用 expand→switch→reset 流程
+        // 白色条纹 + layer 的 mix-blend-mode: difference 自动反色：
+        //   白天→夜间：白条 over 浅色背景 → 视觉变暗 → 从左扫到右
+        //   夜间→白天：白条 over 深色背景 → 视觉变亮 → 从右扫到左
         slats.forEach(function(s) {
-          s.style.transformOrigin = 'left';
+          s.style.transformOrigin = goingDark ? 'left' : 'right';
           s.style.transform = 'scaleX(1)';
         });
 
@@ -261,7 +265,11 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
           last.removeEventListener('transitionend', handler);
           setDOM(goingDark ? 'dark' : 'light');
           // 瞬间缩回 scaleX(0)：关 transition → 设 transform → 开 transition
-          slats.forEach(function(s) { s.style.transition = 'none'; s.style.transform = 'scaleX(0)'; });
+          slats.forEach(function(s) {
+            s.style.transition = 'none';
+            s.style.transform = 'scaleX(0)';
+            s.style.transformOrigin = '';
+          });
           layer.offsetHeight;
           // 恢复 transition 和 delay（setProperty('transition','none') 覆盖了 delay）
           slats.forEach(function(s, i) {
