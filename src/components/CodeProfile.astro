@@ -50,7 +50,7 @@ try {
 
     const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(?<![\\w>])(${escaped})(?![\\w<])`, 'g');
-    const iconPath = `/home/tech-icons/${name}.svg`;
+    const iconPath = `/tech-icons/${name}.svg`;
     html = html.replace(regex, () => {
       return `<span class="code-tech" style="--tc:${color}"><img src="${iconPath}" class="tech-logo" alt="${name}" />${name}</span>`;
     });

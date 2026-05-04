@@ -88,7 +88,7 @@ export const terminalConfig = {
   
   links: [
     { name: 'GitHub', url: 'https://github.com/Muliminty', icon: '🐱' },
-    { name: '主页', url: 'https://muliminty.github.io/home/', icon: '📝' },
+    { name: '主页', url: 'https://muliminty.site/', icon: '📝' },
     { name: '笔记', url: 'https://muliminty.github.io/Muliminty-Note/', icon: '📝' },
     { name: '博客', url: 'https://muliminty.github.io/', icon: '📖' },
     { name: '邮箱', url: 'mailto:muliminty@qq.com', icon: '📧' },
@@ -153,7 +153,7 @@ export const terminalConfig = {
   
   deploy: {
     // GitHub Pages 部署路径（如果是根目录则设为 '/'）
-    basePath: '/home/',
+    basePath: '/',
     // 构建输出目录
     outputDir: 'dist',
   },

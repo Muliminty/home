@@ -4,7 +4,7 @@ export const siteConfig = {
   author: 'muliminty',
   github: 'https://github.com/muliminty',
   email: 'muliminty@example.com',
-  defaultOgImage: '/home/default-og.png',
+  defaultOgImage: '/default-og.png',
   projects: [
     { name: 'home', url: 'https://github.com/muliminty/home', description: '个人公开时间线站点' },
     { name: 'dotfiles', url: 'https://github.com/muliminty/dotfiles', description: 'macOS 开发环境配置' },
