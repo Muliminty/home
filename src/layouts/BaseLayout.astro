@@ -56,9 +56,6 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   .curtain-layer {
     position: fixed; inset: 0; z-index: 9998; pointer-events: none;
     display: flex; flex-direction: column;
-    /* mix-blend-mode 放在 layer 上，因为 slat 的 transform 会创建独立 stacking context，
-       导致 slat 上的 difference 无法穿透到 body 内容层 */
-    mix-blend-mode: difference;
   }
   .curtain-slat {
     flex: 1;
@@ -252,10 +249,10 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         var goingDark = resolveTheme() === 'light';
         busy = true;
 
-        // 白色条纹 + layer 的 mix-blend-mode: difference 自动反色：
-        //   白天→夜间：白条 over 浅色背景 → 视觉变暗 → 从左扫到右
-        //   夜间→白天：白条 over 深色背景 → 视觉变亮 → 从右扫到左
+        // 幕布颜色 = 目标主题背景色，slat 覆盖全屏后 setDOM 切换，
+        //   颜色完全一致 → 无闪烁
         slats.forEach(function(s) {
+          s.style.background = goingDark ? '#1c1917' : '#fafaf8';
           s.style.transformOrigin = goingDark ? 'left' : 'right';
           s.style.transform = 'scaleX(1)';
         });
@@ -268,6 +265,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
           slats.forEach(function(s) {
             s.style.transition = 'none';
             s.style.transform = 'scaleX(0)';
+            s.style.background = '';
             s.style.transformOrigin = '';
           });
           layer.offsetHeight;
