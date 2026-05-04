@@ -294,4 +294,5 @@ html[data-theme="light"] .article-body :global(.shiki span) { color: var(--shiki
   body { font-size: 14px; cursor: auto; }
   a, button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: auto; }
   .cursor-dot { display: none; }
+  body::before { content: none; }
 }
