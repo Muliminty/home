@@ -13,6 +13,7 @@ import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
+import GithubSlugger from 'github-slugger';
 
 export async function getStaticPaths() {
   const { items } = await loadAllContent();
@@ -40,12 +41,13 @@ const bodyHtml = await unified()
   .process(article.body);
 
 // Extract headings from body for TOC
+const slugger = new GithubSlugger();
 const headingRegex = /^(#{2,3})\s+(.+)$/gm;
 const headings: Array<{ id: string; text: string; level: number }> = [];
 let match;
 while ((match = headingRegex.exec(article.body)) !== null) {
   const text = match[2];
-  const id = text.toLowerCase().replace(/[^\w\u4e00-\u9fff]+/g, '-').replace(/-+$/, '');
+  const id = slugger.slug(text);
   headings.push({ id, text, level: match[1].length });
 }
 
