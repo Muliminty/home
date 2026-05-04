@@ -5,9 +5,10 @@ export interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  showReadingProgress?: boolean;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, showReadingProgress = false } = Astro.props;
 const siteTitle = 'Muliminty';
 const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 ---
@@ -89,7 +90,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   </style>
 </head>
 <body>
-  <div id="loading-bar"></div>
+  <div id="loading-bar" data-reading={showReadingProgress ? "true" : "false"}></div>
   <div class="curtain-layer" id="curtain-layer" aria-hidden="true"></div>
   <slot />
 
@@ -167,7 +168,12 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         setTimeout(function() {
           if (bar.parentNode) {
           bar.classList.remove('done', 'reading');
-          bar.classList.add('reading');
+          if (bar.getAttribute('data-reading') === 'true') {
+            bar.classList.remove('done');
+            bar.classList.add('reading');
+          } else {
+            bar.parentNode.removeChild(bar);
+          }
         }
         }, 400);
       }

@@ -55,7 +55,7 @@ const description = article.description;
 const cover = article.cover;
 ---
 
-<BaseLayout title={article.title} description={description} ogImage={cover}>
+<BaseLayout title={article.title} description={description} ogImage={cover} showReadingProgress={true}>
   <div class="container-wide">
     <TableOfContents headings={headings} />
     <div class="article-column">
