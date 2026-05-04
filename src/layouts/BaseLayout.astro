@@ -17,6 +17,8 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/home/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="128x128" href="/home/favicon-128.png" />
   <title>{fullTitle}</title>
   <meta name="description" content={description || '一个前端开发者的公开时间线'} />
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
@@ -46,10 +48,27 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     }
     #loading-bar.phased { width: 70%; transition: width 2s ease-out; }
     #loading-bar.done { width: 100%; opacity: 0; transition: width 0.3s ease, opacity 0.3s ease; }
+
+  </style>
+
+  <!-- Curtain styles must be global (slats created dynamically by JS) -->
+  <style is:global>
+  .curtain-layer {
+    position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+    display: flex; flex-direction: column;
+  }
+  .curtain-slat {
+    flex: 1;
+    background: #fff;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
   </style>
 </head>
 <body>
   <div id="loading-bar"></div>
+  <div class="curtain-layer" id="curtain-layer" aria-hidden="true"></div>
   <slot />
 
   <!-- Dot grid parallax -->
@@ -183,6 +202,86 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         card.addEventListener('mouseleave', function() {
           card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
         });
+      });
+    })();
+  </script>
+
+  <!-- Curtain theme toggle -->
+  <script>
+    (function() {
+      var N = 8;
+      var layer = document.getElementById('curtain-layer');
+      if (!layer) return;
+
+      for (var i = 0; i < N; i++) {
+        var s = document.createElement('div');
+        s.className = 'curtain-slat';
+        s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        s.style.transform = 'scaleX(0)';
+        s.style.transformOrigin = 'left';
+        s.style.transitionDelay = (i * 0.05) + 's';
+        layer.appendChild(s);
+      }
+
+      var btn = document.getElementById('theme-toggle');
+      var icon = btn ? btn.querySelector('.theme-icon') : null;
+      var KEY = 'theme';
+      var slats = layer.querySelectorAll('.curtain-slat');
+      var busy = false;
+
+      function resolveTheme() {
+        var stored = localStorage.getItem(KEY);
+        if (stored === 'dark' || stored === 'light') return stored;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      function setDOM(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (icon) icon.textContent = theme === 'dark' ? '\uD83C\uDF19' : '\u2600\uFE0F';
+        localStorage.setItem(KEY, theme);
+      }
+
+      // Init — no animation
+      setDOM(resolveTheme());
+
+      btn.addEventListener('click', function() {
+        if (busy) return;
+        var goingDark = resolveTheme() === 'light';
+        busy = true;
+
+        // 幕布颜色 = 目标主题背景色，slat 覆盖全屏后 setDOM 切换，
+        //   颜色完全一致 → 无闪烁
+        slats.forEach(function(s) {
+          s.style.background = goingDark ? '#1c1917' : '#fafaf8';
+          s.style.transformOrigin = goingDark ? 'left' : 'right';
+          s.style.transform = 'scaleX(1)';
+        });
+
+        var last = slats[slats.length - 1];
+        last.addEventListener('transitionend', function handler() {
+          last.removeEventListener('transitionend', handler);
+          setDOM(goingDark ? 'dark' : 'light');
+          // 瞬间缩回 scaleX(0)：关 transition → 设 transform → 开 transition
+          slats.forEach(function(s) {
+            s.style.transition = 'none';
+            s.style.transform = 'scaleX(0)';
+            s.style.background = '';
+            s.style.transformOrigin = '';
+          });
+          layer.offsetHeight;
+          // 恢复 transition 和 delay（setProperty('transition','none') 覆盖了 delay）
+          slats.forEach(function(s, i) {
+            s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            s.style.transitionDelay = (i * 0.05) + 's';
+          });
+          busy = false;
+        });
+      });
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem(KEY) && !busy) {
+          setDOM(e.matches ? 'dark' : 'light');
+        }
       });
     })();
   </script>

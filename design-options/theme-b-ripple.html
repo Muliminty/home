@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B · 波纹扩散</title>
+<style>
+  :root {
+    --bg: #fafaf8; --text: #1c1917; --text-muted: #78716c;
+    --border: #e7e5e4; --accent: #2563eb;
+    --font-sans: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    height: 100vh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 32px; transition: color 0.4s;
+    overflow: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: -10px; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(circle at center, rgba(0,0,0,0.09) 1.5px, transparent 1.5px);
+    background-size: 16px 16px; transition: opacity 0.4s;
+  }
+
+  /* 波纹 overlay */
+  .ripple-overlay {
+    position: fixed; z-index: 10; pointer-events: none;
+    border-radius: 50%;
+    width: 0; height: 0;
+    transform: scale(0);
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .ripple-overlay.expand {
+    clip-path: circle(150% at 50% 50%);
+  }
+
+  .content { position: relative; z-index: 20; text-align: center; }
+  h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+  p { font-size: 14px; margin-bottom: 32px; transition: color 0.4s; }
+  p.sub { color: var(--text-muted); }
+
+  .toggle-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: #fff;
+    font-size: 24px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: transform 0.2s, box-shadow 0.2s, background 0.4s, border-color 0.4s;
+    position: relative; z-index: 30;
+  }
+  .toggle-btn:hover { transform: scale(1.1); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+  /* 暗色状态 */
+  body.dark { background: #1c1917; color: #e7e5e4; }
+  body.dark::before {
+    background-image: radial-gradient(circle at center, rgba(255,255,255,0.04) 1.5px, transparent 1.5px);
+  }
+  body.dark p.sub { color: #a8a29e; }
+  body.dark .toggle-btn { background: #292524; border-color: #44403c; }
+
+  .hint { font-size: 11px; color: var(--text-muted); margin-top: 16px; transition: color 0.4s; }
+
+  /* 内层内容区 — 配合 body 渐变 */
+  .content-wrapper {
+    position: relative; z-index: 15;
+    padding: 48px; border-radius: 16px;
+    background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.05);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    transition: background 0.6s, border-color 0.6s;
+  }
+  body.dark .content-wrapper { background: rgba(41,37,36,0.5); border-color: rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+  <div class="ripple-overlay" id="ripple" style="background:#1c1917"></div>
+  <div class="content-wrapper">
+    <div class="content">
+      <h1>Hello World</h1>
+      <p class="sub">点击按钮看波纹扩散效果</p>
+      <button class="toggle-btn" id="toggle" title="切换主题">☀️</button>
+      <div class="hint">波纹从按钮向外扩散 → 暗色；反向收缩 ← 亮色</div>
+    </div>
+  </div>
+
+<script>
+  var btn = document.getElementById('toggle');
+  var ripple = document.getElementById('ripple');
+  var isDark = false;
+
+  function posRipple(el) {
+    var r = el.getBoundingClientRect();
+    var cx = r.left + r.width / 2;
+    var cy = r.top + r.height / 2;
+    var maxDim = Math.max(
+      Math.hypot(cx, cy),
+      Math.hypot(window.innerWidth - cx, cy),
+      Math.hypot(cx, window.innerHeight - cy),
+      Math.hypot(window.innerWidth - cx, window.innerHeight - cy)
+    );
+    ripple.style.width = ripple.style.height = (maxDim * 2) + 'px';
+    ripple.style.left = (cx - maxDim) + 'px';
+    ripple.style.top = (cy - maxDim) + 'px';
+  }
+
+  btn.addEventListener('click', function() {
+    posRipple(btn);
+    isDark = !isDark;
+
+    if (isDark) {
+      // 亮→暗：波纹从按钮扩散
+      ripple.style.background = '#1c1917';
+      ripple.classList.add('expand');
+      ripple.addEventListener('transitionend', function handler() {
+        ripple.removeEventListener('transitionend', handler);
+        document.body.classList.add('dark');
+        btn.textContent = '🌙';
+      });
+    } else {
+      // 暗→亮：先切换 body 颜色，然后波纹收缩（露出亮色背景）
+      document.body.classList.remove('dark');
+      btn.textContent = '☀️';
+      ripple.style.background = '#fafaf8';
+      ripple.classList.remove('expand');
+    }
+  });
+</script>
+</body>
+</html>

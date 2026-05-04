@@ -130,6 +130,26 @@ const { article, showPinned = false } = Astro.props;
         calc((var(--mx) - 0.5) * 16px) calc((var(--my) - 0.5) * 12px) 28px rgba(0, 0, 0, 0.35);
     }
   }
+  html[data-theme="dark"] .article-card {
+    background: rgba(41, 37, 36, 0.45);
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  html[data-theme="dark"] .article-card:hover {
+    background: rgba(41, 37, 36, 0.82);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  html[data-theme="dark"] .article-card::before {
+    background: radial-gradient(
+      400px circle at var(--sx) var(--sy),
+      rgba(96, 165, 250, 0.08),
+      transparent 50%
+    );
+  }
+  html[data-theme="dark"] .article-card::after {
+    box-shadow:
+      calc((var(--mx) - 0.5) * 16px) calc((var(--my) - 0.5) * 12px) 28px rgba(0, 0, 0, 0.35);
+  }
 </style>
 
 <script>
