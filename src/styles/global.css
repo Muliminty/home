@@ -265,6 +265,23 @@ button, .card-hover, .filter-tab, .pill-link, .heatmap-day { cursor: none; }
 
 /* ============================================ */
 
+/* Shiki dual-theme code blocks */
+.article-body :global(pre.shiki),
+.article-body :global(.shiki code) { color: var(--shiki-light); }
+.article-body :global(.shiki span) { color: var(--shiki-light, inherit); }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .article-body :global(pre.shiki),
+  html:not([data-theme]) .article-body :global(.shiki code) { color: var(--shiki-dark); }
+  html:not([data-theme]) .article-body :global(.shiki span) { color: var(--shiki-dark, inherit); }
+}
+html[data-theme="dark"] .article-body :global(pre.shiki),
+html[data-theme="dark"] .article-body :global(.shiki code) { color: var(--shiki-dark); }
+html[data-theme="dark"] .article-body :global(.shiki span) { color: var(--shiki-dark, inherit); }
+html[data-theme="light"] .article-body :global(pre.shiki),
+html[data-theme="light"] .article-body :global(.shiki code) { color: var(--shiki-light); }
+html[data-theme="light"] .article-body :global(.shiki span) { color: var(--shiki-light, inherit); }
+
 /* Responsive */
 @media (max-width: 960px) {
   .container-wide { grid-template-columns: 1fr; max-width: 640px; gap: 0; }

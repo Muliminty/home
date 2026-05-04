@@ -200,23 +200,24 @@ const imagesJson = JSON.stringify(moment.images);
 </style>
 <style>
   @media (prefers-color-scheme: dark) {
-    .moment-card {
+    /* 仅在用户未手动设置主题时生效 */
+    html:not([data-theme]) .moment-card {
       background: rgba(41, 37, 36, 0.45);
       border-color: rgba(255, 255, 255, 0.06);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    .moment-card:hover {
+    html:not([data-theme]) .moment-card:hover {
       background: rgba(41, 37, 36, 0.82);
       border-color: rgba(255, 255, 255, 0.12);
     }
-    .moment-card::before {
+    html:not([data-theme]) .moment-card::before {
       background: radial-gradient(
         400px circle at var(--sx) var(--sy),
         rgba(96, 165, 250, 0.08),
         transparent 50%
       );
     }
-    .moment-card::after {
+    html:not([data-theme]) .moment-card::after {
       box-shadow:
         calc((var(--mx) - 0.5) * 16px) calc((var(--my) - 0.5) * 12px) 28px rgba(0, 0, 0, 0.35);
     }

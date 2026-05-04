@@ -106,13 +106,17 @@ try {
   .code-card :global(.shiki code) { color: var(--shiki-light); }
   .code-card :global(.shiki span) { color: var(--shiki-light, inherit); }
   @media (prefers-color-scheme: dark) {
-    .code-card :global(pre.shiki),
-    .code-card :global(.shiki code) { color: var(--shiki-dark); }
-    .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
+    /* 仅在用户未手动设置主题时生效 */
+    html:not([data-theme]) .code-card :global(pre.shiki),
+    html:not([data-theme]) .code-card :global(.shiki code) { color: var(--shiki-dark); }
+    html:not([data-theme]) .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
   }
   html[data-theme="dark"] .code-card :global(pre.shiki),
   html[data-theme="dark"] .code-card :global(.shiki code) { color: var(--shiki-dark); }
   html[data-theme="dark"] .code-card :global(.shiki span) { color: var(--shiki-dark, inherit); }
+  html[data-theme="light"] .code-card :global(pre.shiki),
+  html[data-theme="light"] .code-card :global(.shiki code) { color: var(--shiki-light); }
+  html[data-theme="light"] .code-card :global(.shiki span) { color: var(--shiki-light, inherit); }
 
   /* Clickable links */
   .code-card :global(.code-link) {
