@@ -132,12 +132,23 @@ const cover = article.cover;
       }
     }
 
+    const isMobile = !window.matchMedia('(min-width: 961px)').matches;
+
     // 点击 TOC 链接时临时禁用自动跟踪
     tocLinks.forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
         userScrolling = true;
         clearTimeout(userScrollTimer);
         userScrollTimer = setTimeout(() => { userScrolling = false; }, 2000);
+        // 移动端用 JS 控制滚动，避免原生锚点跳转干扰用户手势
+        if (isMobile) {
+          e.preventDefault();
+          const id = link.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
       });
     });
 
@@ -157,14 +168,14 @@ const cover = article.cover;
         const link = document.querySelector(`.toc-list a[href="#${active.id}"]`);
         if (link) {
           link.classList.add('active');
-          // Pill 定位
+          // Pill 定位（仅桌面端）
           if (pill && !userScrolling) {
             const linkRect = link.getBoundingClientRect();
             const navRect = document.getElementById('toc-nav').getBoundingClientRect();
             pill.style.top = (linkRect.top - navRect.top + linkRect.height / 2 - 9) + 'px';
           }
-          // TOC 容器自动滚动跟随（仅在非用户点击时）
-          if (!userScrolling) {
+          // 桌面端 sticky 侧栏自动滚动跟随
+          if (!isMobile && !userScrolling) {
             const nav = document.getElementById('toc-nav');
             const linkTop = link.getBoundingClientRect().top - nav.getBoundingClientRect().top;
             if (linkTop < 0 || linkTop > nav.clientHeight - 30) {
