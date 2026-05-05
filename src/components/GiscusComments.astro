@@ -8,6 +8,10 @@
   (function() {
     var container = document.querySelector('.giscus');
     if (!container) return;
+
+    // data-theme 已由 <head> 同步脚本保证存在，直接读
+    var currentTheme = document.documentElement.getAttribute('data-theme');
+
     var script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.setAttribute('data-repo', 'muliminty/home');
@@ -19,25 +23,36 @@
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
-    // 读取项目主题（默认夜间），不与系统 prefers-color-scheme 绑定
-	    var giscusTheme = document.documentElement.getAttribute('data-theme');
-	    script.setAttribute('data-theme', giscusTheme === 'light' ? 'light' : 'dark');
+    script.setAttribute('data-theme', currentTheme === 'light' ? 'light' : 'dark');
     script.setAttribute('data-lang', 'zh-CN');
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
     container.appendChild(script);
 
-	    // 主题切换时通过 postMessage 同步 Giscus
-	    new MutationObserver(function() {
-	      var t = document.documentElement.getAttribute('data-theme');
-	      var theme = t === 'light' ? 'light' : 'dark';
-	      var iframe = document.querySelector('.giscus-frame') || document.querySelector('iframe[src*="giscus"]');
-	      if (iframe && iframe.contentWindow) {
-	        iframe.contentWindow.postMessage(
-	          { giscus: { setConfig: { theme: theme } } },
-	          'https://giscus.app'
-	        );
-	      }
-	    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    // 主题切换时通过 postMessage 同步 Giscus，带重试（iframe 可能尚未加载）
+    function syncGiscusTheme() {
+      var t = document.documentElement.getAttribute('data-theme');
+      var theme = t === 'light' ? 'light' : 'dark';
+      var iframe = document.querySelector('.giscus-frame') || document.querySelector('iframe[src*="giscus"]');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          'https://giscus.app'
+        );
+        return true;
+      }
+      return false;
+    }
+
+    new MutationObserver(function() {
+      if (syncGiscusTheme()) return;
+      var retries = 0;
+      var timer = setInterval(function() {
+        retries++;
+        if (syncGiscusTheme() || retries >= 5) {
+          clearInterval(timer);
+        }
+      }, 1000);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   })();
 </script>

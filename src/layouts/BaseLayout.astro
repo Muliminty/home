@@ -18,6 +18,17 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 同步设置 data-theme，确保 Giscus 等下游脚本读到正确的初始值 -->
+  <script is:inline>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.setAttribute('data-theme', theme);
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="128x128" href="/favicon-128.png" />
   <title>{fullTitle}</title>
@@ -283,39 +294,41 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       // Init — no animation
       setDOM(resolveTheme());
 
-      btn.addEventListener('click', function() {
-        if (busy) return;
-        var goingDark = resolveTheme() === 'light';
-        busy = true;
+      if (btn) {
+        btn.addEventListener('click', function() {
+          if (busy) return;
+          var goingDark = resolveTheme() === 'light';
+          busy = true;
 
-        // 幕布颜色 = 目标主题背景色，slat 覆盖全屏后 setDOM 切换，
-        //   颜色完全一致 → 无闪烁
-        slats.forEach(function(s) {
-          s.style.background = goingDark ? '#1c1917' : '#fafaf8';
-          s.style.transformOrigin = goingDark ? 'left' : 'right';
-          s.style.transform = 'scaleX(1)';
-        });
-
-        var last = slats[slats.length - 1];
-        last.addEventListener('transitionend', function handler() {
-          last.removeEventListener('transitionend', handler);
-          setDOM(goingDark ? 'dark' : 'light');
-          // 瞬间缩回 scaleX(0)：关 transition → 设 transform → 开 transition
+          // 幕布颜色 = 目标主题背景色，slat 覆盖全屏后 setDOM 切换，
+          //   颜色完全一致 → 无闪烁
           slats.forEach(function(s) {
-            s.style.transition = 'none';
-            s.style.transform = 'scaleX(0)';
-            s.style.background = '';
-            s.style.transformOrigin = '';
+            s.style.background = goingDark ? '#1c1917' : '#fafaf8';
+            s.style.transformOrigin = goingDark ? 'left' : 'right';
+            s.style.transform = 'scaleX(1)';
           });
-          layer.offsetHeight;
-          // 恢复 transition 和 delay（setProperty('transition','none') 覆盖了 delay）
-          slats.forEach(function(s, i) {
-            s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            s.style.transitionDelay = (i * 0.05) + 's';
+
+          var last = slats[slats.length - 1];
+          last.addEventListener('transitionend', function handler() {
+            last.removeEventListener('transitionend', handler);
+            setDOM(goingDark ? 'dark' : 'light');
+            // 瞬间缩回 scaleX(0)：关 transition → 设 transform → 开 transition
+            slats.forEach(function(s) {
+              s.style.transition = 'none';
+              s.style.transform = 'scaleX(0)';
+              s.style.background = '';
+              s.style.transformOrigin = '';
+            });
+            layer.offsetHeight;
+            // 恢复 transition 和 delay（setProperty('transition','none') 覆盖了 delay）
+            slats.forEach(function(s, i) {
+              s.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+              s.style.transitionDelay = (i * 0.05) + 's';
+            });
+            busy = false;
           });
-          busy = false;
         });
-      });
+      }
 
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
         if (!localStorage.getItem(KEY) && !busy) {
