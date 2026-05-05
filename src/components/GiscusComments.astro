@@ -19,10 +19,25 @@
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', 'preferred_color_scheme');
+    // 读取项目主题（默认夜间），不与系统 prefers-color-scheme 绑定
+	    var giscusTheme = document.documentElement.getAttribute('data-theme');
+	    script.setAttribute('data-theme', giscusTheme === 'light' ? 'light' : 'dark');
     script.setAttribute('data-lang', 'zh-CN');
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
     container.appendChild(script);
+
+	    // 主题切换时通过 postMessage 同步 Giscus
+	    new MutationObserver(function() {
+	      var t = document.documentElement.getAttribute('data-theme');
+	      var theme = t === 'light' ? 'light' : 'dark';
+	      var iframe = document.querySelector('.giscus-frame') || document.querySelector('iframe[src*="giscus"]');
+	      if (iframe && iframe.contentWindow) {
+	        iframe.contentWindow.postMessage(
+	          { giscus: { setConfig: { theme: theme } } },
+	          'https://giscus.app'
+	        );
+	      }
+	    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   })();
 </script>
