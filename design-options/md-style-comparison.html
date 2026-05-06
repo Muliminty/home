@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD 样式方案对比 · 昼夜模式</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:400,500,600&family=JetBrains+Mono:400,500&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ═══════════════════════ Global: light default ═══════════════════════ */
+  body {
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    background: #fafaf8;
+    color: #1c1917;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  body.dark {
+    background: #1c1917;
+    color: #e7e5e4;
+  }
+
+  /* ═══════════════════════ Top Bar ═══════════════════════ */
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 20px;
+    background: inherit;
+    border-bottom: 1px solid #e7e5e4;
+    backdrop-filter: blur(8px);
+    flex-wrap: wrap;
+    transition: border-color 0.3s;
+  }
+  body.dark .top-bar { border-bottom-color: #44403c; }
+  .top-bar h1 { font-size: 15px; font-weight: 600; white-space: nowrap; }
+
+  .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  .scheme-tabs, .theme-toggle-btn {
+    display: flex; border-radius: 8px; overflow: hidden;
+    border: 1px solid #e7e5e4;
+    transition: border-color 0.3s;
+  }
+  body.dark .scheme-tabs, body.dark .theme-toggle-btn { border-color: #44403c; }
+
+  .scheme-tab, .theme-btn {
+    padding: 6px 14px; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none; background: transparent;
+    color: #78716c; font-family: inherit;
+    transition: all 0.15s;
+  }
+  body.dark .scheme-tab, body.dark .theme-btn { color: #a8a29e; }
+  .scheme-tab + .scheme-tab, .theme-btn + .theme-btn { border-left: 1px solid #e7e5e4; }
+  body.dark .scheme-tab + .scheme-tab, body.dark .theme-btn + .theme-btn { border-left-color: #44403c; }
+
+  .scheme-tab.active { background: #fff; color: #1c1917; }
+  body.dark .scheme-tab.active { background: #292524; color: #e7e5e4; }
+  .theme-btn.active { background: #fff; color: #1c1917; }
+  body.dark .theme-btn.active { background: #292524; color: #e7e5e4; }
+
+  /* ═══════════════════════ Preview Container ═══════════════════════ */
+  .preview {
+    max-width: 680px; margin: 0 auto; padding: 40px 20px 80px;
+    background: var(--s-bg);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ═══════════════════════
+     Scheme A: 暖石色 · 温润书籍感
+     Light: warm paper tones    Dark: warm dark stone
+     ═══════════════════════ */
+  .scheme-a {
+    --s-bg: #fafaf8;
+    --s-text: #1c1917;
+    --s-text-secondary: #57534e;
+    --s-text-muted: #78716c;
+    --s-border: #e7e5e4;
+    --s-accent: #b45309;
+    --s-code-bg: #f5f5f4;
+    --s-pre-bg: #fafaf9;
+    --s-pre-border: #e7e5e4;
+    --s-blockquote-border: #d97706;
+    --s-blockquote-bg: #fffbeb;
+    --s-hr: #d6d3d1;
+    --s-table-border: #e7e5e4;
+    --s-table-head-bg: #fafaf9;
+    --s-table-stripe: #fafaf8;
+    --s-heading: #1c1917;
+    --s-strong: #0c0a09;
+    --s-badge-color: #b45309;
+    --s-desc: #57534e;
+    --s-meta: #78716c;
+    --s-back-link: #78716c;
+    --s-back-link-hover: #b45309;
+  }
+  body.dark .scheme-a {
+    --s-bg: #1c1917;
+    --s-text: #e7e5e4;
+    --s-text-secondary: #a8a29e;
+    --s-text-muted: #78716c;
+    --s-border: #44403c;
+    --s-accent: #fbbf24;
+    --s-code-bg: #292524;
+    --s-pre-bg: #1c1917;
+    --s-pre-border: #44403c;
+    --s-blockquote-border: #f59e0b;
+    --s-blockquote-bg: #292524;
+    --s-hr: #44403c;
+    --s-table-border: #44403c;
+    --s-table-head-bg: #292524;
+    --s-table-stripe: #1c1917;
+    --s-heading: #f5f5f4;
+    --s-strong: #fafaf9;
+    --s-badge-color: #fbbf24;
+    --s-desc: #a8a29e;
+    --s-meta: #78716c;
+    --s-back-link: #a8a29e;
+    --s-back-link-hover: #fbbf24;
+  }
+
+  /* ═══════════════════════
+     Scheme B: 冷墨色 · 极简文档感
+     Light: pure white, crisp      Dark: deep blue-black
+     ═══════════════════════ */
+  .scheme-b {
+    --s-bg: #fff;
+    --s-text: #18181b;
+    --s-text-secondary: #52525b;
+    --s-text-muted: #71717a;
+    --s-border: #e4e4e7;
+    --s-accent: #2563eb;
+    --s-code-bg: #f4f4f5;
+    --s-pre-bg: #fafafa;
+    --s-pre-border: #e4e4e7;
+    --s-blockquote-border: #3b82f6;
+    --s-blockquote-bg: #f8fafc;
+    --s-hr: #d4d4d8;
+    --s-table-border: #e4e4e7;
+    --s-table-head-bg: #fafafa;
+    --s-table-stripe: #fafafa;
+    --s-heading: #09090b;
+    --s-strong: #09090b;
+    --s-badge-color: #2563eb;
+    --s-desc: #52525b;
+    --s-meta: #71717a;
+    --s-back-link: #71717a;
+    --s-back-link-hover: #2563eb;
+  }
+  body.dark .scheme-b {
+    --s-bg: #0a0a0f;
+    --s-text: #e4e4e7;
+    --s-text-secondary: #a1a1aa;
+    --s-text-muted: #71717a;
+    --s-border: #27272a;
+    --s-accent: #60a5fa;
+    --s-code-bg: #18181b;
+    --s-pre-bg: #0f0f14;
+    --s-pre-border: #27272a;
+    --s-blockquote-border: #3b82f6;
+    --s-blockquote-bg: #0f0f14;
+    --s-hr: #27272a;
+    --s-table-border: #27272a;
+    --s-table-head-bg: #18181b;
+    --s-table-stripe: #131319;
+    --s-heading: #fafafa;
+    --s-strong: #fff;
+    --s-badge-color: #60a5fa;
+    --s-desc: #a1a1aa;
+    --s-meta: #71717a;
+    --s-back-link: #71717a;
+    --s-back-link-hover: #60a5fa;
+  }
+
+  /* ═══════════════════════
+     Scheme C: GitHub · 开发者原生
+     Light: GitHub light    Dark: GitHub dark dimmed
+     ═══════════════════════ */
+  .scheme-c {
+    --s-bg: #ffffff;
+    --s-text: #1f2328;
+    --s-text-secondary: #59636e;
+    --s-text-muted: #656d76;
+    --s-border: #d0d7de;
+    --s-accent: #0969da;
+    --s-code-bg: #afb8c133;
+    --s-pre-bg: #f6f8fa;
+    --s-pre-border: #d0d7de;
+    --s-blockquote-border: #0969da;
+    --s-blockquote-bg: #ffffff;
+    --s-hr: #d0d7de;
+    --s-table-border: #d0d7de;
+    --s-table-head-bg: #f6f8fa;
+    --s-table-stripe: #ffffff;
+    --s-heading: #1f2328;
+    --s-strong: #1f2328;
+    --s-badge-color: #0969da;
+    --s-desc: #59636e;
+    --s-meta: #656d76;
+    --s-back-link: #656d76;
+    --s-back-link-hover: #0969da;
+  }
+  body.dark .scheme-c {
+    --s-bg: #22272e;
+    --s-text: #adbac7;
+    --s-text-secondary: #768390;
+    --s-text-muted: #636e7b;
+    --s-border: #444c56;
+    --s-accent: #539bf5;
+    --s-code-bg: #2d333b;
+    --s-pre-bg: #2d333b;
+    --s-pre-border: #444c56;
+    --s-blockquote-border: #539bf5;
+    --s-blockquote-bg: #2d333b;
+    --s-hr: #444c56;
+    --s-table-border: #444c56;
+    --s-table-head-bg: #2d333b;
+    --s-table-stripe: #22272e;
+    --s-heading: #cdd9e5;
+    --s-strong: #cdd9e5;
+    --s-badge-color: #539bf5;
+    --s-desc: #768390;
+    --s-meta: #636e7b;
+    --s-back-link: #636e7b;
+    --s-back-link-hover: #539bf5;
+  }
+
+  /* ═══════════════════════ Shared MD Body ═══════════════════════ */
+  .md-body {
+    font-size: 15px; line-height: 1.85;
+    color: var(--s-text);
+    transition: color 0.3s;
+  }
+  .md-body h2 {
+    font-size: 20px; font-weight: 700; line-height: 1.35;
+    margin: 48px 0 16px; padding-bottom: 8px;
+    color: var(--s-heading);
+    border-bottom: 1px solid var(--s-border);
+  }
+  .md-body h3 {
+    font-size: 17px; font-weight: 600; line-height: 1.4;
+    margin: 36px 0 12px;
+    color: var(--s-heading);
+  }
+  .md-body h4 {
+    font-size: 15px; font-weight: 600;
+    margin: 24px 0 8px;
+    color: var(--s-heading);
+  }
+  .md-body p { margin-bottom: 20px; }
+  .md-body a { color: var(--s-accent); text-decoration: none; }
+  .md-body a:hover { text-decoration: underline; }
+  .md-body strong { font-weight: 600; color: var(--s-strong); }
+  .md-body ul, .md-body ol { margin: 16px 0 16px 20px; }
+  .md-body li { margin-bottom: 8px; }
+  .md-body li > ul, .md-body li > ol { margin-top: 8px; margin-bottom: 0; }
+  .md-body blockquote {
+    margin: 24px 0; padding: 12px 16px;
+    border-left: 4px solid var(--s-blockquote-border);
+    background: var(--s-blockquote-bg);
+    border-radius: 0 6px 6px 0;
+    color: var(--s-text-secondary);
+  }
+  .md-body blockquote p:last-child { margin-bottom: 0; }
+  .md-body hr {
+    border: none; height: 1px;
+    background: var(--s-hr);
+    margin: 48px 0;
+  }
+  .md-body code {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    background: var(--s-code-bg); padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .md-body pre {
+    background: var(--s-pre-bg);
+    border: 1px solid var(--s-pre-border);
+    border-radius: 8px; padding: 20px;
+    overflow-x: auto; margin: 24px 0;
+    font-size: 13px; line-height: 1.7;
+  }
+  .md-body pre code { background: none; padding: 0; font-size: inherit; border-radius: 0; }
+  .md-body table {
+    width: 100%; border-collapse: collapse;
+    margin: 24px 0; font-size: 14px;
+  }
+  .md-body th, .md-body td {
+    padding: 8px 12px; text-align: left;
+    border: 1px solid var(--s-table-border);
+  }
+  .md-body th { background: var(--s-table-head-bg); font-weight: 600; }
+  .md-body tr:nth-child(even) td { background: var(--s-table-stripe); }
+  .md-body img { max-width: 100%; border-radius: 8px; margin: 16px 0; }
+  .md-body del { color: var(--s-text-muted); }
+
+  /* ═══════════════════════ Article Header ═══════════════════════ */
+  .article-header { margin-bottom: 32px; }
+  .kind-badge {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px;
+    margin-bottom: 16px;
+    color: var(--s-badge-color);
+    border: 1px solid var(--s-badge-color);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .article-header h1 {
+    font-size: 24px; font-weight: 700; line-height: 1.35; margin-bottom: 12px;
+    transition: color 0.3s;
+  }
+  .desc {
+    font-size: 15px; line-height: 1.6; margin-bottom: 20px;
+    color: var(--s-desc);
+    transition: color 0.3s;
+  }
+  .meta {
+    font-size: 13px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+    color: var(--s-meta);
+    transition: color 0.3s;
+  }
+  .back-link {
+    display: inline-block; font-size: 13px; text-decoration: none; margin-bottom: 24px;
+    color: var(--s-back-link);
+    transition: color 0.3s;
+  }
+  .back-link:hover { color: var(--s-back-link-hover); }
+
+  /* ═══════════════════════ Responsive ═══════════════════════ */
+  @media (max-width: 600px) {
+    .top-bar { padding: 10px 16px; }
+    .top-bar h1 { font-size: 13px; }
+    .scheme-tab, .theme-btn { padding: 5px 10px; font-size: 11px; }
+    .preview { padding: 24px 16px 60px; }
+    .article-header h1 { font-size: 20px; }
+    .md-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body class="dark">
+
+<div class="top-bar">
+  <h1>MD 样式方案对比</h1>
+  <div class="controls">
+    <div class="scheme-tabs">
+      <button class="scheme-tab active" data-scheme="a">A · 暖石温润</button>
+      <button class="scheme-tab" data-scheme="b">B · 冷墨极简</button>
+      <button class="scheme-tab" data-scheme="c">C · GitHub 原生</button>
+    </div>
+    <div class="theme-toggle-btn">
+      <button class="theme-btn active" data-theme="dark">暗色</button>
+      <button class="theme-btn" data-theme="light">亮色</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ Content template ═══════════════════ -->
+<div class="preview scheme-a" id="scheme-a">
+  <a class="back-link" href="#">← 近况</a>
+  <header class="article-header">
+    <span class="kind-badge">ARTICLE</span>
+    <h1>用 GitHub Issues 搭建个人公开时间线</h1>
+    <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+    <div class="meta">
+      <span>2026-05-02</span><span>·</span><span>阅读 6 分钟</span>
+    </div>
+  </header>
+
+  <div class="md-body">
+    <p>我一直想要一个完全属于自己的内容空间。不是微信公众号那样的封闭平台，也不是 Medium 那种越来越重的写作工具。我希望它<strong>轻、快、属于我</strong>，并且能长期维护下去。</p>
+    <p>这个想法断断续续想了很久，直到最近重新审视 GitHub Issues 的时候，突然意识到——<strong>它几乎是一个完美的轻量级 CMS</strong>。</p>
+
+    <h2 id="why">为什么是 GitHub Issues</h2>
+    <p>GitHub Issues 有几个特性让它天然适合做内容管理：</p>
+    <ul>
+      <li><strong>免费的 Markdown 编辑器</strong>，支持图片拖拽上传</li>
+      <li><strong>Label 体系</strong>可以充当分类和状态管理 — <code>type:article</code>、<code>type:moment</code></li>
+      <li><strong>REST API</strong> 稳定、文档完善、有分页</li>
+      <li><strong>不需要额外服务器</strong>，数据跟着仓库走</li>
+      <li><strong>版本历史</strong>天然保留，编辑有迹可循</li>
+    </ul>
+
+    <blockquote>
+      <p>GitHub Issues 不是一个完美的 CMS，但它是一个「足够好」的 CMS。对于个人内容站点来说，够用就是最好的技术决策。</p>
+    </blockquote>
+
+    <h2 id="stack">技术选型</h2>
+    <p>数据在 GitHub，展示层我选了 <strong>Astro 6</strong>。原因很简单：GitHub Pages 只能托管静态文件，而 Astro 是目前最好的静态站点生成器之一。</p>
+
+    <h3 id="flow">数据流</h3>
+    <p>整个数据流非常简单：</p>
+    <pre><code>GitHub Issues API
+  ↓  fetchIssues.ts (分页拉取)
+  ↓  parseIssue.ts (label → type/tag/status)
+  ↓  parseArticle.ts — Zod schema 校验
+  ↓  Astro getStaticPaths
+  ↓  静态 HTML</code></pre>
+    <p>这套链路没有状态管理、没有运行时数据请求、没有缓存失效问题。<strong>构建一次，产出就是最终页面</strong>。</p>
+
+    <h2 id="model">内容模型</h2>
+    <p>我定义了两种内容形态——<strong>文章</strong>和<strong>动态</strong>：</p>
+
+    <table>
+      <thead><tr><th>类型</th><th>Label</th><th>特点</th></tr></thead>
+      <tbody>
+        <tr><td>文章</td><td><code>type:article</code></td><td>长文、标题、阅读时间</td></tr>
+        <tr><td>动态</td><td><code>type:moment</code></td><td>短内容、图片、不强制标题</td></tr>
+      </tbody>
+    </table>
+
+    <p>两种形态在 <code>/updates</code> 页面混合展示，按时间线排列。读者看到的不再是分门别类的博客列表，而是一个<strong>人的近况流</strong>。</p>
+
+    <h3 id="more">更多细节</h3>
+    <p>图片处理：GitHub Issues 拖拽上传的图片自动存到 <code>user-attachments</code> 仓库，永久存储，无过期时间。单个文件限制 25MB，对博客图片完全够用。</p>
+    <p><del>之前还考虑过用 Notion 做 CMS</del> ——但 API 不稳定，放弃了。GitHub Issues 的 API 十年没变过，稳定性完全不用担心。</p>
+    <hr>
+    <p>这个项目还在持续迭代中。如果你对用 GitHub Issues 做 CMS 感兴趣，欢迎关注后续更新。</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ Scheme B ═══════════════════ -->
+<div class="preview scheme-b" id="scheme-b" style="display:none">
+  <a class="back-link" href="#">← 近况</a>
+  <header class="article-header">
+    <span class="kind-badge">ARTICLE</span>
+    <h1>用 GitHub Issues 搭建个人公开时间线</h1>
+    <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+    <div class="meta">
+      <span>2026-05-02</span><span>·</span><span>阅读 6 分钟</span>
+    </div>
+  </header>
+  <div class="md-body">
+    <p>我一直想要一个完全属于自己的内容空间。不是微信公众号那样的封闭平台，也不是 Medium 那种越来越重的写作工具。我希望它<strong>轻、快、属于我</strong>，并且能长期维护下去。</p>
+    <p>这个想法断断续续想了很久，直到最近重新审视 GitHub Issues 的时候，突然意识到——<strong>它几乎是一个完美的轻量级 CMS</strong>。</p>
+    <h2 id="why-b">为什么是 GitHub Issues</h2>
+    <p>GitHub Issues 有几个特性让它天然适合做内容管理：</p>
+    <ul>
+      <li><strong>免费的 Markdown 编辑器</strong>，支持图片拖拽上传</li>
+      <li><strong>Label 体系</strong>可以充当分类和状态管理 — <code>type:article</code>、<code>type:moment</code></li>
+      <li><strong>REST API</strong> 稳定、文档完善、有分页</li>
+      <li><strong>不需要额外服务器</strong>，数据跟着仓库走</li>
+      <li><strong>版本历史</strong>天然保留，编辑有迹可循</li>
+    </ul>
+    <blockquote>
+      <p>GitHub Issues 不是一个完美的 CMS，但它是一个「足够好」的 CMS。对于个人内容站点来说，够用就是最好的技术决策。</p>
+    </blockquote>
+    <h2 id="stack-b">技术选型</h2>
+    <p>数据在 GitHub，展示层我选了 <strong>Astro 6</strong>。原因很简单：GitHub Pages 只能托管静态文件，而 Astro 是目前最好的静态站点生成器之一。</p>
+    <h3 id="flow-b">数据流</h3>
+    <p>整个数据流非常简单：</p>
+    <pre><code>GitHub Issues API
+  ↓  fetchIssues.ts (分页拉取)
+  ↓  parseIssue.ts (label → type/tag/status)
+  ↓  parseArticle.ts — Zod schema 校验
+  ↓  Astro getStaticPaths
+  ↓  静态 HTML</code></pre>
+    <p>这套链路没有状态管理、没有运行时数据请求、没有缓存失效问题。<strong>构建一次，产出就是最终页面</strong>。</p>
+    <h2 id="model-b">内容模型</h2>
+    <p>我定义了两种内容形态——<strong>文章</strong>和<strong>动态</strong>：</p>
+    <table>
+      <thead><tr><th>类型</th><th>Label</th><th>特点</th></tr></thead>
+      <tbody>
+        <tr><td>文章</td><td><code>type:article</code></td><td>长文、标题、阅读时间</td></tr>
+        <tr><td>动态</td><td><code>type:moment</code></td><td>短内容、图片、不强制标题</td></tr>
+      </tbody>
+    </table>
+    <p>两种形态在 <code>/updates</code> 页面混合展示，按时间线排列。读者看到的不再是分门别类的博客列表，而是一个<strong>人的近况流</strong>。</p>
+    <h3 id="more-b">更多细节</h3>
+    <p>图片处理：GitHub Issues 拖拽上传的图片自动存到 <code>user-attachments</code> 仓库，永久存储，无过期时间。单个文件限制 25MB，对博客图片完全够用。</p>
+    <p><del>之前还考虑过用 Notion 做 CMS</del> ——但 API 不稳定，放弃了。GitHub Issues 的 API 十年没变过，稳定性完全不用担心。</p>
+    <hr>
+    <p>这个项目还在持续迭代中。如果你对用 GitHub Issues 做 CMS 感兴趣，欢迎关注后续更新。</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ Scheme C ═══════════════════ -->
+<div class="preview scheme-c" id="scheme-c" style="display:none">
+  <a class="back-link" href="#">← 近况</a>
+  <header class="article-header">
+    <span class="kind-badge">ARTICLE</span>
+    <h1>用 GitHub Issues 搭建个人公开时间线</h1>
+    <p class="desc">不需要 CMS，不需要数据库。用 Issues 的 label 体系做内容分类，用 Astro 生成静态页面，用 GitHub Pages 免费部署。</p>
+    <div class="meta">
+      <span>2026-05-02</span><span>·</span><span>阅读 6 分钟</span>
+    </div>
+  </header>
+  <div class="md-body">
+    <p>我一直想要一个完全属于自己的内容空间。不是微信公众号那样的封闭平台，也不是 Medium 那种越来越重的写作工具。我希望它<strong>轻、快、属于我</strong>，并且能长期维护下去。</p>
+    <p>这个想法断断续续想了很久，直到最近重新审视 GitHub Issues 的时候，突然意识到——<strong>它几乎是一个完美的轻量级 CMS</strong>。</p>
+    <h2 id="why-c">为什么是 GitHub Issues</h2>
+    <p>GitHub Issues 有几个特性让它天然适合做内容管理：</p>
+    <ul>
+      <li><strong>免费的 Markdown 编辑器</strong>，支持图片拖拽上传</li>
+      <li><strong>Label 体系</strong>可以充当分类和状态管理 — <code>type:article</code>、<code>type:moment</code></li>
+      <li><strong>REST API</strong> 稳定、文档完善、有分页</li>
+      <li><strong>不需要额外服务器</strong>，数据跟着仓库走</li>
+      <li><strong>版本历史</strong>天然保留，编辑有迹可循</li>
+    </ul>
+    <blockquote>
+      <p>GitHub Issues 不是一个完美的 CMS，但它是一个「足够好」的 CMS。对于个人内容站点来说，够用就是最好的技术决策。</p>
+    </blockquote>
+    <h2 id="stack-c">技术选型</h2>
+    <p>数据在 GitHub，展示层我选了 <strong>Astro 6</strong>。原因很简单：GitHub Pages 只能托管静态文件，而 Astro 是目前最好的静态站点生成器之一。</p>
+    <h3 id="flow-c">数据流</h3>
+    <p>整个数据流非常简单：</p>
+    <pre><code>GitHub Issues API
+  ↓  fetchIssues.ts (分页拉取)
+  ↓  parseIssue.ts (label → type/tag/status)
+  ↓  parseArticle.ts — Zod schema 校验
+  ↓  Astro getStaticPaths
+  ↓  静态 HTML</code></pre>
+    <p>这套链路没有状态管理、没有运行时数据请求、没有缓存失效问题。<strong>构建一次，产出就是最终页面</strong>。</p>
+    <h2 id="model-c">内容模型</h2>
+    <p>我定义了两种内容形态——<strong>文章</strong>和<strong>动态</strong>：</p>
+    <table>
+      <thead><tr><th>类型</th><th>Label</th><th>特点</th></tr></thead>
+      <tbody>
+        <tr><td>文章</td><td><code>type:article</code></td><td>长文、标题、阅读时间</td></tr>
+        <tr><td>动态</td><td><code>type:moment</code></td><td>短内容、图片、不强制标题</td></tr>
+      </tbody>
+    </table>
+    <p>两种形态在 <code>/updates</code> 页面混合展示，按时间线排列。读者看到的不再是分门别类的博客列表，而是一个<strong>人的近况流</strong>。</p>
+    <h3 id="more-c">更多细节</h3>
+    <p>图片处理：GitHub Issues 拖拽上传的图片自动存到 <code>user-attachments</code> 仓库，永久存储，无过期时间。单个文件限制 25MB，对博客图片完全够用。</p>
+    <p><del>之前还考虑过用 Notion 做 CMS</del> ——但 API 不稳定，放弃了。GitHub Issues 的 API 十年没变过，稳定性完全不用担心。</p>
+    <hr>
+    <p>这个项目还在持续迭代中。如果你对用 GitHub Issues 做 CMS 感兴趣，欢迎关注后续更新。</p>
+  </div>
+</div>
+
+<script>
+  // Scheme switching
+  document.querySelectorAll('.scheme-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.scheme-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const scheme = tab.dataset.scheme;
+      ['a','b','c'].forEach(s => {
+        document.getElementById('scheme-' + s).style.display = s === scheme ? '' : 'none';
+      });
+    });
+  });
+
+  // Theme toggling
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const theme = btn.dataset.theme;
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+    });
+  });
+</script>
+</body>
+</html>
