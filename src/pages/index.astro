@@ -9,7 +9,7 @@ import { loadAllContent } from '../lib/content/loadContent';
 
 const base = import.meta.env.BASE_URL;
 const { items } = await loadAllContent();
-const recentItems = items.slice(0, 5);
+const recentItems = items.slice(0, 3);
 ---
 
 <BaseLayout title={siteConfig.title}>
