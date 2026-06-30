@@ -41,6 +41,8 @@ jobs:
       - name: Build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_OWNER: ${{ github.repository_owner }}
+          GH_REPO: ${{ github.event.repository.name }}
           CONTENT_SOURCE: live
         run: npm run build
 
