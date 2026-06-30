@@ -53,8 +53,12 @@ npm run preview
 ### 使用 Live 数据源
 
 ```bash
-# 创建 .env.local，填入 GitHub Personal Access Token
-echo 'GH_TOKEN=ghp_xxx' > .env.local
+# 创建 .env.local，填入 GitHub 仓库信息和 Personal Access Token
+cat > .env.local <<'EOF'
+GH_OWNER=muliminty
+GH_REPO=home
+GH_TOKEN=ghp_xxx
+EOF
 
 # 开启 live 模式
 CONTENT_SOURCE=live npm run dev

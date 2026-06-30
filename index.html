@@ -1,14 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link href="/src/index.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>home</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- Why: 遗留 Vite 入口会被 astro dev 的依赖扫描误扫，触发一串无关缺依赖报错。 -->
+    <p>This project is served by Astro routes under <code>src/pages</code>.</p>
   </body>
 </html>
