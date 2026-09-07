@@ -6,7 +6,7 @@ import { Buffer } from 'buffer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/home/', // GitHub Pages 子路径
+  base: '/', // GitHub Pages 子路径
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
