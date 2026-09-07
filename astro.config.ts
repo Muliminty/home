@@ -3,7 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://muliminty.site',
+  site: 'https://muliminty.online',
   output: 'static',
   integrations: [react(), sitemap()],
   prefetch: {
